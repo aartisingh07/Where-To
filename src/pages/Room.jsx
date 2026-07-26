@@ -562,15 +562,17 @@ const Room = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Invite Friends Button */}
-          <button
-            onClick={handleOpenInviteModal}
-            className="flex items-center gap-1.5 text-accent-300 hover:text-white text-xs px-2.5 py-1.5 rounded-xl bg-accent-500/15 hover:bg-accent-500/25 border border-accent-500/25 transition-all font-semibold cursor-pointer"
-            title="Invite chat friends to room"
-          >
-            <FiSend size={13} />
-            <span className="hidden sm:inline">Invite Friends</span>
-          </button>
+          {/* Invite Friends Button (Host Only) */}
+          {isHost && (
+            <button
+              onClick={handleOpenInviteModal}
+              className="flex items-center gap-1.5 text-accent-300 hover:text-white text-xs px-2.5 py-1.5 rounded-xl bg-accent-500/15 hover:bg-accent-500/25 border border-accent-500/25 transition-all font-semibold cursor-pointer"
+              title="Invite chat friends to room"
+            >
+              <FiSend size={13} />
+              <span className="hidden sm:inline">Invite Friends</span>
+            </button>
+          )}
 
           {/* Mobile toggles */}
           <button
