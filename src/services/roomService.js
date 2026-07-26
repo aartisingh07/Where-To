@@ -11,6 +11,11 @@ export const roomService = {
     return response.data;
   },
 
+  rejoinRoom: async (id) => {
+    const response = await api.post(`/rooms/${id}/rejoin`);
+    return response.data;
+  },
+
   getRoom: async (id) => {
     const response = await api.get(`/rooms/${id}`);
     return response.data;

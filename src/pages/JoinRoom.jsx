@@ -135,6 +135,18 @@ const JoinRoom = () => {
     }
   };
 
+  const handleSelectRecentRoom = async (room) => {
+    try {
+      if (room.isCurrentMember === false) {
+        await roomService.rejoinRoom(room._id);
+        toast.success('Rejoined lobby! 🎉');
+      }
+      navigate(`/room/${room._id}`);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Could not rejoin room');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-dark-900 bg-grid flex items-center justify-center px-4 pt-24 pb-12 text-left">
       <div className="fixed top-20 right-1/4 w-80 h-80 bg-accent-500/8 rounded-full blur-[100px] pointer-events-none" />
@@ -350,30 +362,47 @@ const JoinRoom = () => {
           {/* Recent My Rooms Section */}
           {!loadingRooms && activeRooms.length > 0 && (
             <div className="mt-8 border-t border-white/5 pt-6 text-left">
-              <h3 className="font-display font-semibold text-white/50 text-xs uppercase tracking-wider mb-4 pl-1 flex items-center gap-1.5">
-                <span>🏠</span> Your active lobbies
+              <h3 className="font-display font-semibold text-white/50 text-xs uppercase tracking-wider mb-4 pl-1 flex items-center justify-between">
+                <span className="flex items-center gap-1.5">
+                  <span>🏠</span> Your Recent Lobbies
+                </span>
+                <span className="text-[10px] text-white/30 lowercase font-normal">rejoin without code</span>
               </h3>
               <div className="space-y-3 max-h-48 overflow-y-auto pr-1">
-                {activeRooms.map((room) => (
-                  <button
-                    key={room._id}
-                    onClick={() => navigate(`/room/${room._id}`)}
-                    className="w-full text-left bg-white/3 border border-white/5 p-3.5 rounded-xl hover:border-primary-500/30 hover:bg-white/5 transition-all duration-300 flex items-center justify-between group cursor-pointer"
-                  >
-                    <div className="min-w-0 pr-3">
-                      <p className="font-display font-semibold text-white text-xs truncate">
-                        {room.name}
-                      </p>
-                      <p className="text-white/30 text-[10px] mt-1 truncate">
-                        Code: <span className="font-mono text-primary-300 font-bold">{room.code}</span> · Host: {room.host?.username || 'You'}
-                      </p>
-                    </div>
-                    <FiArrowRight
-                      className="text-white/20 group-hover:text-primary-300 group-hover:translate-x-1 transition-all flex-shrink-0"
-                      size={14}
-                    />
-                  </button>
-                ))}
+                {activeRooms.map((room) => {
+                  const isMember = room.isCurrentMember !== false;
+
+                  return (
+                    <button
+                      key={room._id}
+                      onClick={() => handleSelectRecentRoom(room)}
+                      className="w-full text-left bg-white/3 border border-white/5 p-3.5 rounded-xl hover:border-primary-500/30 hover:bg-white/5 transition-all duration-300 flex items-center justify-between group cursor-pointer"
+                    >
+                      <div className="min-w-0 pr-3">
+                        <div className="flex items-center gap-2">
+                          <p className="font-display font-semibold text-white text-xs truncate">
+                            {room.name}
+                          </p>
+                          {!isMember && (
+                            <span className="px-2 py-0.2 rounded bg-accent-500/15 border border-accent-500/25 text-accent-300 text-[9px] font-bold">
+                              Rejoin
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-white/30 text-[10px] mt-1 truncate">
+                          Code: <span className="font-mono text-primary-300 font-bold">{room.code}</span> · Host: {room.host?.username || 'You'}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1 text-[11px] text-primary-400 group-hover:text-primary-300 font-semibold flex-shrink-0">
+                        <span>{isMember ? 'Enter' : 'Rejoin'}</span>
+                        <FiArrowRight
+                          className="group-hover:translate-x-1 transition-all"
+                          size={14}
+                        />
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}

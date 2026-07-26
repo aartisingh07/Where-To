@@ -153,10 +153,10 @@ const Room = () => {
     try {
       await roomService.deleteRoom(id);
       socket?.emit('delete-room', { roomId: id });
-      toast.success("Room deleted successfully");
+      toast.success("Room deleted successfully", { toastId: 'room-deleted-success-toast' });
       navigate('/');
     } catch (err) {
-      toast.error("Failed to delete room");
+      toast.error("Failed to delete room", { toastId: 'room-deleted-error-toast' });
     }
   };
 
@@ -233,7 +233,7 @@ const Room = () => {
     socket.on('user-kicked', ({ userId }) => {
       if (userId === user?._id) {
         socket.emit('leave-room', { roomId: id });
-        toast.info('You have been removed from this room by the host.');
+        toast.info('You have been removed from this room by the host.', { toastId: 'user-kicked-toast' });
         navigate('/join-room');
       } else {
         roomService.getRoom(id).then(setRoom).catch(console.error);
@@ -241,7 +241,8 @@ const Room = () => {
     });
 
     socket.on('room-deleted', () => {
-      toast.info('This room has been deleted by the host.');
+      if (isHost) return;
+      toast.info('This room has been deleted by the host.', { toastId: 'room-deleted-toast' });
       navigate('/');
     });
 
@@ -256,7 +257,7 @@ const Room = () => {
       setMyVote(null);
       setVoteTallies(tallies || { yes: 0, no: 0, maybe: 0 });
       setVoteResult(null);
-      toast.info(`🗳️ Vote started: ${item.name || item.title}`);
+      toast.info(`🗳️ Vote started: ${item.name || item.title}`, { toastId: `vote-started-${item.id || item.name}` });
     });
 
     socket.on('vote-update', ({ votes, tallies }) => {
@@ -270,7 +271,7 @@ const Room = () => {
       setActiveVote(null);
       setVoteResult(result);
       if (result.result === 'approved') {
-        toast.success(`🎉 Passed: ${result.item.name || result.item.title}`);
+        toast.success(`🎉 Passed: ${result.item.name || result.item.title}`, { toastId: `vote-passed-${result.item.id || result.item.name}` });
         if (result.item?.type === 'activity' && isHost) {
           try {
             await roomService.setActivity(id, result.item.id);
@@ -282,7 +283,7 @@ const Room = () => {
           }
         }
       } else {
-        toast.error(`❌ Rejected: ${result.item.name || result.item.title}`);
+        toast.error(`❌ Rejected: ${result.item.name || result.item.title}`, { toastId: `vote-rejected-${result.item.id || result.item.name}` });
       }
     });
 
@@ -292,7 +293,7 @@ const Room = () => {
 
     socket.on('outing-plan-cancelled', () => {
       setScheduledPlan(null);
-      toast.info("The upcoming outing plan has been cancelled by the host.");
+      toast.info("The upcoming outing plan has been cancelled by the host.", { toastId: 'plan-cancelled-toast' });
     });
 
     socket.on(`chat-relationship-updated-${user?._id}`, ({ otherUserId, status, requestId }) => {
@@ -311,6 +312,8 @@ const Room = () => {
       socket.off('message-updated');
       socket.off('message-deleted');
       socket.off('room-users-update');
+      socket.off('user-kicked');
+      socket.off('room-deleted');
       socket.off('activity-changed');
       socket.off('vote-started');
       socket.off('vote-update');

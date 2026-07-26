@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
 import { toast } from 'react-toastify';
@@ -462,6 +462,7 @@ const GuestHome = () => {
 
 // ─── Logged-IN dashboard ────────────────────────────────────────
 const UserHome = ({ user }) => {
+  const navigate = useNavigate();
   const hour = new Date().getHours();
   const greeting =
     hour < 12 ? 'Good morning' :
@@ -476,6 +477,16 @@ const UserHome = ({ user }) => {
   const [unreadDMsCount, setUnreadDMsCount] = useState(0);
 
   const { socket } = useSocket();
+
+  const handleRejoinRoom = async (roomId) => {
+    try {
+      await roomService.rejoinRoom(roomId);
+      toast.success('Rejoined lobby successfully! 🎉');
+      navigate(`/room/${roomId}`);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to rejoin room');
+    }
+  };
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -673,48 +684,70 @@ const UserHome = ({ user }) => {
       {/* HANGOUT DASHBOARD */}
       <div className="max-w-4xl mx-auto px-4 pb-16 space-y-6">
         
-        {/* Active Lobbies */}
+        {/* Active & Recent Lobbies */}
         {!loading && activeRooms.length > 0 && (
           <div className="glass-card p-5 animate-slide-up">
-            <h2 className="font-display font-bold text-base text-white mb-4 flex items-center gap-2">
-              <span>🏠</span> Your Active Lobbies
+            <h2 className="font-display font-bold text-base text-white mb-4 flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <span>🏠</span> Your Recent & Active Lobbies
+              </span>
+              <span className="text-[10px] text-white/40 font-normal">Rejoin without code</span>
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {activeRooms.map((room) => (
-                <div key={room._id} className="p-4 rounded-xl border border-white/5 bg-white/3 hover:border-primary-500/20 hover:shadow-glow-purple-sm transition-all duration-300 relative overflow-hidden flex flex-col justify-between">
-                  <div>
-                    {/* Header */}
-                    <div className="flex justify-between items-start mb-2.5">
-                      <span className="text-[9px] uppercase font-bold tracking-widest text-primary-400">
-                        Active Room
-                      </span>
-                      <span className="text-[10px] text-white/40 font-medium">
-                        Code: <span className="font-mono text-primary-300 font-bold">{room.code}</span>
-                      </span>
+              {activeRooms.map((room) => {
+                const isMember = room.isCurrentMember !== false;
+
+                return (
+                  <div key={room._id} className="p-4 rounded-xl border border-white/5 bg-white/3 hover:border-primary-500/20 hover:shadow-glow-purple-sm transition-all duration-300 relative overflow-hidden flex flex-col justify-between">
+                    <div>
+                      {/* Header */}
+                      <div className="flex justify-between items-start mb-2.5">
+                        {isMember ? (
+                          <span className="text-[9px] uppercase font-bold tracking-widest text-primary-400">
+                            Active Member
+                          </span>
+                        ) : (
+                          <span className="text-[9px] uppercase font-bold tracking-widest text-accent-400 bg-accent-500/10 px-2 py-0.5 rounded border border-accent-500/20">
+                            Recently Left · Active
+                          </span>
+                        )}
+                        <span className="text-[10px] text-white/40 font-medium">
+                          Code: <span className="font-mono text-primary-300 font-bold">{room.code}</span>
+                        </span>
+                      </div>
+
+                      <h3 className="font-display font-bold text-white text-sm mb-1 truncate">
+                        {room.name}
+                      </h3>
+                      <p className="text-white/40 text-[10px] mb-3">
+                        Host: {room.host?.username || 'You'} · {room.members?.length || 1} member{room.members?.length !== 1 ? 's' : ''}
+                      </p>
                     </div>
 
-                    <h3 className="font-display font-bold text-white text-sm mb-1 truncate">
-                      {room.name}
-                    </h3>
-                    <p className="text-white/40 text-[10px] mb-3">
-                      Host: {room.host?.username || 'You'} · {room.members?.length || 1} member{room.members?.length !== 1 ? 's' : ''}
-                    </p>
+                    <div className="flex justify-between items-center pt-2.5 border-t border-white/5 mt-auto">
+                      <span className="text-[9px] text-white/30">
+                        Created: {new Date(room.createdAt).toLocaleDateString()}
+                      </span>
+                      {isMember ? (
+                        <Link
+                          to={`/room/${room._id}`}
+                          className="text-xs text-primary-400 hover:underline flex items-center gap-1 font-semibold"
+                        >
+                          Enter Room
+                          <FiArrowRight size={12} />
+                        </Link>
+                      ) : (
+                        <button
+                          onClick={() => handleRejoinRoom(room._id)}
+                          className="text-xs text-accent-300 hover:text-white bg-accent-500/15 hover:bg-accent-500/30 border border-accent-500/25 px-2.5 py-1 rounded-lg transition-all font-semibold flex items-center gap-1 cursor-pointer"
+                        >
+                          Rejoin Room ↻
+                        </button>
+                      )}
+                    </div>
                   </div>
-
-                  <div className="flex justify-between items-center pt-2.5 border-t border-white/5 mt-auto">
-                    <span className="text-[9px] text-white/30">
-                      Created: {new Date(room.createdAt).toLocaleDateString()}
-                    </span>
-                    <Link
-                      to={`/room/${room._id}`}
-                      className="text-xs text-primary-400 hover:underline flex items-center gap-1 font-semibold"
-                    >
-                      Enter Room
-                      <FiArrowRight size={12} />
-                    </Link>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

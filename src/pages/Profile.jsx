@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useSocket } from '../context/SocketContext';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { placeService } from '../services/placeService';
 import { authService } from '../services/authService';
@@ -14,6 +15,7 @@ import { handleAvatarError } from '../utils/avatarHelper';
 
 const Profile = () => {
   const { user, logout, updateUser } = useAuth();
+  const { socket } = useSocket();
   const navigate = useNavigate();
   const { userId } = useParams();
   
@@ -77,6 +79,9 @@ const Profile = () => {
 
       const updatedUser = await authService.updateProfile(formData);
       updateUser(updatedUser);
+      if (socket && socket.connected) {
+        socket.emit('update-user-profile');
+      }
       setProfileUser(updatedUser);
       toast.success('Profile updated successfully! 🎉');
       setIsEditModalOpen(false);
