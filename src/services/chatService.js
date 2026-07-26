@@ -6,6 +6,11 @@ export const chatService = {
     return response.data;
   },
 
+  getAcceptedFriends: async () => {
+    const response = await api.get('/chats/friends');
+    return response.data;
+  },
+
   searchUser: async (username) => {
     const response = await api.get(`/chats/search?username=${encodeURIComponent(username)}`);
     return response.data;

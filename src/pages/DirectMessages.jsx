@@ -657,14 +657,30 @@ const DirectMessages = () => {
                                 </button>
                               </div>
                             </div>
-                          ) : (
-                            <div>
-                              {msg.content}
-                              {msg.isEdited && (
-                                <span className="text-[9px] text-white/20 italic ml-1.5 font-normal" title="Edited message">(edited)</span>
-                              )}
-                            </div>
-                          )}
+                          ) : (() => {
+                            const roomMatch = msg.content.match(/\/room\/([a-fA-F0-9]{24})/);
+                            const roomId = roomMatch ? roomMatch[1] : null;
+
+                            return (
+                              <div>
+                                <span>{msg.content}</span>
+                                {msg.isEdited && (
+                                  <span className="text-[9px] text-white/20 italic ml-1.5 font-normal" title="Edited message">(edited)</span>
+                                )}
+                                {roomId && (
+                                  <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between gap-3">
+                                    <span className="text-[10px] text-primary-300 font-semibold">🏠 Room Invite</span>
+                                    <Link
+                                      to={`/room/${roomId}`}
+                                      className="px-3 py-1 rounded-lg bg-primary-500 hover:bg-primary-600 text-white text-xs font-bold transition-all shadow-md flex items-center gap-1 cursor-pointer"
+                                    >
+                                      Join Room &rarr;
+                                    </Link>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })()}
                         </div>
                       </div>
 

@@ -93,6 +93,35 @@ const Room = () => {
   // Chat Relationships State
   const [relationships, setRelationships] = useState({});
 
+  // DM Invite Modal State
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [friends, setFriends] = useState([]);
+  const [loadingFriends, setLoadingFriends] = useState(false);
+  const [invitedMap, setInvitedMap] = useState({});
+
+  const handleOpenInviteModal = async () => {
+    setShowInviteModal(true);
+    setLoadingFriends(true);
+    try {
+      const list = await chatService.getAcceptedFriends();
+      setFriends(list || []);
+    } catch (err) {
+      toast.error('Could not load chat friends');
+    } finally {
+      setLoadingFriends(false);
+    }
+  };
+
+  const handleSendInvite = async (friendId, friendName) => {
+    try {
+      await roomService.inviteFriend(id, friendId);
+      setInvitedMap((prev) => ({ ...prev, [friendId]: true }));
+      toast.success(`Invite sent to @${friendName} in DM! 📩`);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Could not send room invite');
+    }
+  };
+
   // Load chat relationships
   useEffect(() => {
     const fetchRelationships = async () => {
@@ -533,6 +562,16 @@ const Room = () => {
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Invite Friends Button */}
+          <button
+            onClick={handleOpenInviteModal}
+            className="flex items-center gap-1.5 text-accent-300 hover:text-white text-xs px-2.5 py-1.5 rounded-xl bg-accent-500/15 hover:bg-accent-500/25 border border-accent-500/25 transition-all font-semibold cursor-pointer"
+            title="Invite chat friends to room"
+          >
+            <FiSend size={13} />
+            <span className="hidden sm:inline">Invite Friends</span>
+          </button>
+
           {/* Mobile toggles */}
           <button
             onClick={() => setMembersOpen(!membersOpen)}
@@ -927,6 +966,85 @@ const Room = () => {
           </div>
         </div>
       </div>
+
+      {/* DM Invite Modal */}
+      {showInviteModal && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="glass-card max-w-sm w-full p-6 animate-scale-in relative text-left">
+            <button
+              onClick={() => setShowInviteModal(false)}
+              className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors cursor-pointer"
+            >
+              <FiX size={18} />
+            </button>
+
+            <div className="flex items-center gap-2 mb-2">
+              <FiUsers className="text-primary-400" size={20} />
+              <h3 className="font-display font-bold text-white text-base">Invite Friends via DM</h3>
+            </div>
+            <p className="text-white/40 text-xs mb-4">
+              Send a direct invite to your accepted chat friends to join this room.
+            </p>
+
+            {loadingFriends ? (
+              <div className="py-8 text-center text-white/30 text-xs">
+                <div className="w-6 h-6 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto mb-2" />
+                Loading your chat friends...
+              </div>
+            ) : friends.length === 0 ? (
+              <div className="py-6 text-center text-white/30 text-xs border border-white/5 rounded-xl bg-white/3">
+                <p className="mb-1">No accepted chat friends found.</p>
+                <p className="text-[10px] text-white/20">Send chat requests to people in profile or user cards!</p>
+              </div>
+            ) : (
+              <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
+                {friends.map((friend) => {
+                  const isInvited = invitedMap[friend._id];
+
+                  return (
+                    <div
+                      key={friend._id}
+                      className="p-3 rounded-xl bg-white/3 border border-white/5 flex items-center justify-between gap-3"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-full bg-primary-500/20 text-primary-300 font-bold flex items-center justify-center text-xs flex-shrink-0">
+                          {friend.username?.[0]?.toUpperCase() || 'U'}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-display font-semibold text-white text-xs truncate">
+                            {friend.name || friend.username}
+                          </p>
+                          <p className="text-[10px] text-white/40 truncate">@{friend.username}</p>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => handleSendInvite(friend._id, friend.username)}
+                        disabled={isInvited}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer ${
+                          isInvited
+                            ? 'bg-neon-green/15 text-neon-green border border-neon-green/30 cursor-not-allowed'
+                            : 'bg-primary-500 hover:bg-primary-600 text-white shadow-lg shadow-primary-500/20'
+                        }`}
+                      >
+                        {isInvited ? (
+                          <>
+                            <FiCheck size={12} /> Sent
+                          </>
+                        ) : (
+                          <>
+                            <FiSend size={12} /> Send DM
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

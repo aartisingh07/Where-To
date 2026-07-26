@@ -1,8 +1,8 @@
 import api from './api';
 
 export const roomService = {
-  createRoom: async (name, purpose) => {
-    const response = await api.post('/rooms/create', { name, purpose });
+  createRoom: async (name, purpose, isPublic = true) => {
+    const response = await api.post('/rooms/create', { name, purpose, isPublic });
     return response.data;
   },
 
@@ -63,6 +63,11 @@ export const roomService = {
 
   removeMember: async (id, memberId) => {
     const response = await api.post(`/rooms/${id}/remove-member`, { memberId });
+    return response.data;
+  },
+
+  inviteFriend: async (roomId, friendId) => {
+    const response = await api.post(`/rooms/${roomId}/invite-friend`, { friendId });
     return response.data;
   },
 };
