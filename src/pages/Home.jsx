@@ -716,9 +716,14 @@ const UserHome = ({ user }) => {
                         </span>
                       </div>
 
-                      <h3 className="font-display font-bold text-white text-sm mb-1 truncate">
+                      <h3 className="font-display font-bold text-white text-sm mb-0.5 truncate">
                         {room.name}
                       </h3>
+                      {room.purpose && (
+                        <p className="text-[11px] text-primary-300/90 italic truncate mb-1.5 font-medium">
+                          🎯 {room.purpose}
+                        </p>
+                      )}
                       <p className="text-white/40 text-[10px] mb-3">
                         Host: {room.host?.username || 'You'} · {room.members?.length || 1} member{room.members?.length !== 1 ? 's' : ''}
                       </p>

@@ -517,8 +517,18 @@ const Room = () => {
             <FiHash className="text-primary-400" size={16} />
           </div>
           <div>
-            <p className="font-display font-semibold text-white text-sm">{room?.name}</p>
-            <p className="text-white/30 text-xs">{room?.code} · {onlineUsers.length} online</p>
+            <div className="flex items-center gap-2">
+              <p className="font-display font-semibold text-white text-sm">{room?.name}</p>
+              {room?.purpose && (
+                <span className="hidden sm:inline-block text-[10px] text-primary-300 bg-primary-500/10 border border-primary-500/20 px-2 py-0.5 rounded-md italic font-normal max-w-xs truncate" title={`Purpose: ${room.purpose}`}>
+                  🎯 {room.purpose}
+                </span>
+              )}
+            </div>
+            <p className="text-white/30 text-xs font-mono">
+              {room?.code} · {onlineUsers.length} online
+              {room?.purpose && <span className="sm:hidden block text-[10px] text-primary-300/80 italic font-normal truncate max-w-[200px]">🎯 {room.purpose}</span>}
+            </p>
           </div>
         </div>
 

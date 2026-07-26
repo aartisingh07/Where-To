@@ -7,6 +7,7 @@ import { roomService } from '../services/roomService';
 const CreateRoom = () => {
   const navigate = useNavigate();
   const [name, setName] = useState('');
+  const [purpose, setPurpose] = useState('');
   const [loading, setLoading] = useState(false);
   const [created, setCreated] = useState(null);
   const [copied, setCopied] = useState(false);
@@ -14,7 +15,7 @@ const CreateRoom = () => {
   const handleCreate = async () => {
     setLoading(true);
     try {
-      const room = await roomService.createRoom(name);
+      const room = await roomService.createRoom(name, purpose);
       setCreated(room);
       toast.success('Room created! 🎉');
     } catch (err) {
@@ -43,7 +44,7 @@ const CreateRoom = () => {
 
       <div className="w-full max-w-md relative z-10">
         {!created ? (
-          /* Step 1 — Name + Create */
+          /* Step 1 — Name + Purpose + Create */
           <div className="glass-card p-8 animate-slide-up">
             <div className="text-center mb-8">
               <div className="text-5xl mb-4">🏠</div>
@@ -64,15 +65,31 @@ const CreateRoom = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   maxLength={40}
-                  onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
                   className="input-field w-full"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm text-white/40 mb-2 font-medium">
+                  Room Purpose / Description <span className="text-white/20">(optional)</span>
+                </label>
+                <textarea
+                  placeholder="e.g. Planning weekend trip to Goa, chill movie night, studying for exams..."
+                  value={purpose}
+                  onChange={(e) => setPurpose(e.target.value)}
+                  maxLength={200}
+                  rows={3}
+                  className="input-field w-full resize-none text-xs"
+                />
+                <span className="block text-[9px] text-white/30 text-right mt-1">
+                  {purpose.length} / 200 characters
+                </span>
               </div>
 
               <button
                 onClick={handleCreate}
                 disabled={loading}
-                className="btn-primary w-full flex items-center justify-center gap-2"
+                className="btn-primary w-full flex items-center justify-center gap-2 cursor-pointer mt-2"
               >
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -106,7 +123,12 @@ const CreateRoom = () => {
                   </div>
                 ))}
               </div>
-              <p className="text-white/20 text-xs">{created.name}</p>
+              <p className="text-white/40 text-xs font-semibold">{created.name}</p>
+              {created.purpose && (
+                <p className="text-primary-300/90 text-xs italic mt-2.5 bg-primary-500/10 py-2 px-3 rounded-xl border border-primary-500/20 text-left">
+                  🎯 <span className="font-semibold not-italic">Purpose:</span> {created.purpose}
+                </p>
+              )}
             </div>
 
             <div className="flex gap-3">

@@ -314,6 +314,11 @@ const JoinRoom = () => {
                         >
                           <div className="min-w-0 flex-1">
                             <h4 className="font-display font-semibold text-white text-sm truncate">{room.name}</h4>
+                            {room.purpose && (
+                              <p className="text-[11px] text-primary-300/90 italic truncate mt-0.5 font-medium">
+                                🎯 {room.purpose}
+                              </p>
+                            )}
                             <p className="text-[10px] text-white/30 mt-1 truncate">
                               Host: <span className="font-medium text-white/50">{hostName}</span>
                             </p>
@@ -389,7 +394,12 @@ const JoinRoom = () => {
                             </span>
                           )}
                         </div>
-                        <p className="text-white/30 text-[10px] mt-1 truncate">
+                        {room.purpose && (
+                          <p className="text-[10px] text-primary-300/80 italic truncate mt-0.5 font-medium">
+                            🎯 {room.purpose}
+                          </p>
+                        )}
+                        <p className="text-white/30 text-[10px] mt-0.5 truncate">
                           Code: <span className="font-mono text-primary-300 font-bold">{room.code}</span> · Host: {room.host?.username || 'You'}
                         </p>
                       </div>

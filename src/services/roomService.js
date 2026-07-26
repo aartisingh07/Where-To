@@ -1,8 +1,8 @@
 import api from './api';
 
 export const roomService = {
-  createRoom: async (name) => {
-    const response = await api.post('/rooms/create', { name });
+  createRoom: async (name, purpose) => {
+    const response = await api.post('/rooms/create', { name, purpose });
     return response.data;
   },
 
