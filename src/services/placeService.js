@@ -6,8 +6,13 @@ export const placeService = {
     return response.data;
   },
 
-  getAutocompleteSuggestions: async (text) => {
-    const response = await api.get('/places/autocomplete', { params: { text } });
+  getAutocompleteSuggestions: async (text, lat, lng) => {
+    const params = { text };
+    if (lat && lng) {
+      params.lat = lat;
+      params.lng = lng;
+    }
+    const response = await api.get('/places/autocomplete', { params });
     return response.data;
   },
 

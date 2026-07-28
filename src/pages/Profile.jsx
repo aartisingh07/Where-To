@@ -321,7 +321,7 @@ const Profile = () => {
                   <p className="text-white/40 text-xs truncate mb-3">{profileUser.email}</p>
                   <button
                     onClick={() => setIsEditModalOpen(true)}
-                    className="w-full py-2 px-4 rounded-xl border border-primary-500/20 bg-primary-500/10 hover:bg-primary-500/25 text-primary-300 font-semibold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer mb-2"
+                    className="w-full py-2 px-4 rounded-xl border border-primary-300 dark:border-primary-500/20 bg-primary-100 dark:bg-primary-500/10 hover:bg-primary-200 dark:hover:bg-primary-500/25 text-primary-700 dark:text-primary-300 hover:text-primary-800 dark:hover:text-primary-300 font-semibold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer mb-2 shadow-xs"
                   >
                     <FiUser size={14} />
                     Edit Profile
