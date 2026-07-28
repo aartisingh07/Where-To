@@ -1,11 +1,16 @@
 # 🗺️ Where To? — Frontend
 
-> React + Vite client for the **Where To?** platform — a real-time collaborative platform where users can explore nearby places solo or connect in group lobbies to chat, vote on games, discover movies, and sync Pomodoro study timers## ✨ Features
+> React + Vite client for the **Where To?** platform — a real-time collaborative platform where users can explore nearby places solo or connect in group lobbies to chat, vote on games, discover movies, and sync Pomodoro study timers.
+
+---
+
+## ✨ Features
 
 - 🔐 **Google & GitHub OAuth Integration** — Passwordless registration and login sessions handled securely via Google & GitHub. Traditional password register/login forms are disabled to prevent fake profile spams.
-- 🧭 **Explore Mode (Solo Place Finder)** — Browser geolocation capturing, mood filter selectors, radius indicator sliders, debounced location search autocomplete suggestions dropdown, visual category gradients for placeholder photos, and Google Maps direction integrations.
+- 🧭 **Explore Mode (Solo Place Finder)** — Real-time browser geolocation, mood filter selectors, distance radius toggles (`Nearby 2km`, `Mid-range 5km`, `Anywhere 10km`), direct location search bar with instant autocomplete, 1-click **Unfiltered Spots & Landmarks** option, and Google Maps direction integrations.
+- 📍 **Proximity Biasing & Tiered Results** — Prioritizes spots near the user's city (Tier 1: <100km, Tier 2: >100km in India, Tier 3: International) and ranks exact landmark matches (e.g., Marine Drive) above general address mentions.
 - 👤 **Saved Places Dashboard** — Dedicated, full-screen, responsive Saved Places dashboard accessible from the navbar, rendering all user-bookmarked locations with coordinate badges, direction planners, and deletion triggers.
-- 👤 **Profile Card & Account Actions** — Profile page displaying user info, public/private memories diary, and a clean **Account Actions** panel with Log out and Delete Account buttons grouped together.
+- 👤 **Profile Card & Account Actions** — Profile page displaying user info, public/private memories diary, dark mode / light mode optimized edit profile button, and a clean **Account Actions** panel with Log out and Delete Account buttons grouped together.
 - ✍️ **Profile Editing & Customizations** — Inline profile editor to update display name, avatar photo, bio description (supports emojis, lines, up to 300 words max with word counter), and custom username handle (Instagram format validation, restricted to one change per month with dynamic banner cooldown count).
 - 🎲 **DiceBear Client Fallbacks** — Automatic silhouette fallback helper mapping username strings to unique DiceBear SVG avatars if Google/GitHub profile photos fail to load.
 - 🏠 **Lobby Join & Lobbies Directory** — Tabbed page layout offering two ways to join: entering a 6-character room code, or browsing public active lobbies. Allows users to submit join requests containing a custom note explaining why they want to tag along.
@@ -18,7 +23,7 @@
 - 📍 **Outing Lounge (midpoint planning)** — Geolocation submissions, submission status rosters, midpoint centroid search aggregations, and results place voting.
 - 💬 **Private Direct Messaging (DM)** — Search for usernames (preventing self-search), send chat requests, approve pending incoming requests, and chat in real-time. Displays a pulsing red notification dot in the Navbar, an Unread Messages Banner on the Home dashboard, real-time DM toaster alerts, and automatic read tracking/synchronization.
 - 📸 **Interactive Community Feed** — Dedicated social feed page displaying public memories from all community members with Instagram-like styling. Features an active members story bar, togglable photo likes with pop micro-animations, and live comment threads.
-- 🎨 **Responsive Dual Theme & Brand Logo** — Sun/Moon live toggle selector shifting components and dashboards between custom navy-dark and slate-light styling variables. Features a custom SVG neon brand logo with zoom and spin hover dynamics in the Navbar.
+- 🎨 **Responsive Dual Theme & High-Contrast Styling** — Sun/Moon live toggle selector shifting components and dashboards between custom navy-dark and slate-light styling variables. Features darkened badges (**REAL-TIME**, **USE CODE**, **PRIVATE CHAT**, **YOUR LIST**) and neon brand logo dynamics.
 
 ---
 
@@ -49,7 +54,7 @@ frontend/
 │   │   ├── games/            # GameList, GameVoting modules
 │   │   ├── movies/           # MovieFilters, MovieCard, WatchLounge
 │   │   ├── outing/           # OutingFilters, OutingResults, OutingLounge
-│   │   └── places/           # PlaceCard list items
+│   │   └── places/           # PlaceCard list items & details modal
 │   ├── context/
 │   │   ├── AuthContext.jsx   # User authentication provider
 │   │   ├── SocketContext.jsx # Socket.io-client provider
@@ -57,9 +62,9 @@ frontend/
 │   ├── hooks/
 │   │   └── useGeolocation.js # Navigator geolocation hook
 │   ├── pages/
-│   │   ├── Home.jsx          # Mode selector landing page & user dashboard
+│   │   ├── Home.jsx          # Mode selector landing page, quick actions & dashboard
 │   │   ├── Login.jsx         # Login form
-             ├── Register.jsx      # Registration form
+│   │   ├── Register.jsx      # Registration form
 │   │   ├── Explore.jsx       # Solo place finder explorer
 │   │   ├── CreateRoom.jsx    # Room creator & code copy
 │   │   ├── JoinRoom.jsx      # Tabbed join code & public active lobbies directory
@@ -71,7 +76,7 @@ frontend/
 │   ├── services/
 │   │   ├── api.js            # Axios request configurations
 │   │   ├── authService.js    # Register/Login/Profile updates
-│   │   ├── placeService.js   # Save/Load place requests
+│   │   ├── placeService.js   # Save/Load/Autocomplete place requests
 │   │   ├── roomService.js    # Create/Join/Get/Request/Kick room endpoints
 │   │   ├── memoryService.js  # Upload/Fetch memories and feed
 │   │   └── chatService.js    # Search, request actions, and DM requests
@@ -91,14 +96,14 @@ frontend/
 
 ### Prerequisites
 - Node.js v18+
-- Backend API running locally or hosted (see [where-to-BE](https://github.com/aartisingh07/where-to-BE))
+- Backend API running locally or hosted (see [WhereTo-BE](https://github.com/aartisingh07/WhereTo-BE))
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/aartisingh07/where-to-FE.git
-cd where-to-FE
+git clone https://github.com/aartisingh07/WhereTo-FE.git
+cd WhereTo-FE
 
 # Install dependencies
 npm install
@@ -134,7 +139,7 @@ The production assets will be built into the `dist/` directory.
 
 ## 🔗 Related
 
-- 🔧 **Backend Repo**: [where-to-BE](https://github.com/aartisingh07/where-to-BE)
+- 🔧 **Backend Repo**: [WhereTo-BE](https://github.com/aartisingh07/WhereTo-BE)
 
 ---
 
