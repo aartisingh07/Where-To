@@ -21,6 +21,13 @@ const categoryStyle = {
   'Study Space':{ emoji: '🎓', color: 'from-blue-500/20 to-indigo-500/10',badge: 'bg-blue-500/20 text-blue-300' },
   Bakery:      { emoji: '🥐', color: 'from-yellow-500/20 to-amber-500/10', badge: 'bg-yellow-500/20 text-yellow-300' },
   'Lake / Water':{ emoji: '🏞️', color: 'from-cyan-500/20 to-blue-500/10', badge: 'bg-cyan-500/20 text-cyan-300' },
+  'Shopping Mall':{ emoji: '🛍️', color: 'from-purple-500/20 to-pink-500/10', badge: 'bg-purple-500/20 text-purple-300' },
+  'Zoo / Aquarium':{ emoji: '🦁', color: 'from-amber-500/20 to-green-500/10', badge: 'bg-amber-500/20 text-amber-300' },
+  'Museum & Gallery':{ emoji: '🏛️', color: 'from-stone-500/20 to-amber-500/10', badge: 'bg-stone-500/20 text-amber-300' },
+  'Concert & Live Event':{ emoji: '🎵', color: 'from-pink-500/20 to-purple-500/10', badge: 'bg-pink-500/20 text-pink-300' },
+  'Bar & Lounge':{ emoji: '🍸', color: 'from-violet-500/20 to-purple-500/10', badge: 'bg-violet-500/20 text-violet-300' },
+  'Pub & Club':{ emoji: '🍻', color: 'from-amber-500/20 to-red-500/10', badge: 'bg-amber-500/20 text-amber-300' },
+  'Forest Trail':{ emoji: '🌲', color: 'from-emerald-500/20 to-green-500/10', badge: 'bg-emerald-500/20 text-emerald-300' },
   Place:       { emoji: '📍', color: 'from-primary-500/20 to-accent-500/10', badge: 'bg-primary-500/20 text-primary-300' },
 };
 

@@ -468,12 +468,11 @@ const UserHome = ({ user }) => {
     hour < 12 ? 'Good morning' :
     hour < 17 ? 'Good afternoon' :
     'Good evening';
+  const greetingEmoji = hour < 12 ? '🌅' : hour < 17 ? '☀️' : '🌙';
 
   const [plans, setPlans] = useState([]);
   const [activeRooms, setActiveRooms] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // DM State
   const [unreadDMsCount, setUnreadDMsCount] = useState(0);
 
   const { socket } = useSocket();
@@ -541,11 +540,11 @@ const UserHome = ({ user }) => {
     const days = Math.floor(hours / 24);
 
     if (days > 0) {
-      return `Starts in ${days} day${days > 1 ? 's' : ''} ${hours % 24} hour${hours % 24 !== 1 ? 's' : ''}`;
+      return `Starts in ${days}d ${hours % 24}h`;
     } else if (hours > 0) {
-      return `Starts in ${hours} hour${hours > 1 ? 's' : ''} ${minutes % 60} minute${minutes % 60 !== 1 ? 's' : ''}`;
+      return `Starts in ${hours}h ${minutes % 60}m`;
     } else {
-      return `Starts in ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+      return `Starts in ${minutes}m`;
     }
   };
 
@@ -564,305 +563,374 @@ const UserHome = ({ user }) => {
   const quickActions = [
     {
       emoji: '📍',
-      label: 'Find a place',
-      desc: 'Discover spots near you right now',
+      label: 'Explore Outing Spots',
+      desc: 'Curated places for Friends, Couples & Family',
       to: '/explore',
-      color: 'hover:border-neon-teal/30 hover:shadow-glow-teal',
-      badge: <span className="badge-teal text-xs">No code needed</span>,
+      color: 'from-teal-500/20 to-cyan-500/10 hover:border-teal-500/40 hover:shadow-glow-teal',
+      badge: <span className="px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 text-[10px] font-extrabold uppercase border border-teal-500/30">India Spots</span>,
+      iconColor: 'bg-teal-500/20 text-teal-300',
     },
     {
       emoji: '🏠',
-      label: 'Create a room',
-      desc: 'Start a hangout, invite your squad',
+      label: 'Create Hangout Room',
+      desc: 'Start a room, invite squad & decide together',
       to: '/create-room',
-      color: 'hover:border-primary-500/30 hover:shadow-glow-purple',
-      badge: <span className="badge-purple text-xs">Real-time</span>,
+      color: 'from-purple-500/20 to-pink-500/10 hover:border-primary-500/40 hover:shadow-glow-purple',
+      badge: <span className="px-2 py-0.5 rounded-full bg-primary-500/20 text-primary-300 text-[10px] font-extrabold uppercase border border-primary-500/30">Real-time</span>,
+      iconColor: 'bg-primary-500/20 text-primary-300',
     },
     {
       emoji: '🔑',
-      label: 'Join a room',
-      desc: 'Enter a 6-digit code to join friends',
+      label: 'Join with Room Code',
+      desc: 'Enter a 6-digit code to join active lobby',
       to: '/join-room',
-      color: 'hover:border-accent-500/30 hover:shadow-glow-pink',
-      badge: <span className="badge-cyan text-xs">Use code</span>,
+      color: 'from-indigo-500/20 to-blue-500/10 hover:border-indigo-500/40 hover:shadow-glow-cyan',
+      badge: <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-extrabold uppercase border border-indigo-500/30">Use Code</span>,
+      iconColor: 'bg-indigo-500/20 text-indigo-300',
     },
     {
       emoji: '❤️',
-      label: 'Saved places',
-      desc: 'View your bookmarked spots',
-      to: '/profile',
-      color: 'hover:border-neon-orange/30',
-      badge: <span className="badge bg-neon-orange/20 text-neon-orange border border-neon-orange/20 text-xs">Your list</span>,
+      label: 'Saved Favorite Places',
+      desc: 'View & route to your bookmarked spots',
+      to: '/saved-places',
+      color: 'from-rose-500/20 to-amber-500/10 hover:border-rose-500/40 hover:shadow-glow-pink',
+      badge: <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-extrabold uppercase border border-rose-500/30">Your List</span>,
+      iconColor: 'bg-rose-500/20 text-rose-300',
     },
   ];
 
   return (
-    <div className="min-h-screen bg-dark-900 bg-grid">
-      {/* Greeting hero */}
-      <section className="relative pt-28 pb-12 px-4 overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/8 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute top-20 right-1/4 w-64 h-64 bg-accent-500/8 rounded-full blur-[120px] pointer-events-none" />
+    <div className="min-h-screen bg-dark-900 bg-grid pt-24 pb-16 px-4">
+      {/* Background Ambient Glows */}
+      <div className="fixed top-20 left-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="fixed top-40 right-1/4 w-96 h-96 bg-neon-teal/10 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="max-w-4xl mx-auto relative z-10">
-          {/* Greeting row */}
-          <div className="flex items-center gap-4 mb-6 animate-fade-in">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 p-0.5 flex-shrink-0">
-              <div className="w-full h-full rounded-full bg-dark-800 flex items-center justify-center overflow-hidden">
-                {user?.avatar
-                  ? <img 
-                      src={user.avatar} 
-                      alt="" 
-                      className="w-full h-full object-cover" 
-                      onError={(e) => handleAvatarError(e, user?.username)}
-                    />
-                  : <FiUser size={24} className="text-white/40" />}
+      <div className="max-w-5xl mx-auto relative z-10 space-y-8">
+
+        {/* Dynamic Welcome Hero Panel */}
+        <div className="glass-card p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-white/10 relative overflow-hidden shadow-2xl animate-fade-in">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+            
+            {/* User Greeting Profile */}
+            <div className="flex items-center gap-5">
+              <div className="relative group">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-primary-500 via-accent-500 to-neon-teal p-1 shadow-glow-purple flex-shrink-0">
+                  <div className="w-full h-full rounded-full bg-dark-800 flex items-center justify-center overflow-hidden">
+                    {user?.avatar ? (
+                      <img
+                        src={user.avatar}
+                        alt=""
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                        onError={(e) => handleAvatarError(e, user?.username)}
+                      />
+                    ) : (
+                      <FiUser size={30} className="text-white/40" />
+                    )}
+                  </div>
+                </div>
+                <span className="absolute bottom-1 right-1 w-4 h-4 bg-neon-green border-2 border-dark-900 rounded-full" title="Online" />
+              </div>
+
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-300 text-xs font-bold mb-2">
+                  <span>{greetingEmoji} {greeting}</span>
+                  <span>·</span>
+                  <span className="text-neon-teal font-extrabold">Where To?</span>
+                </div>
+                <h1 className="font-display font-extrabold text-2xl sm:text-4xl text-slate-900 dark:text-white">
+                  Welcome back, <span className="text-gradient">{user?.username || 'Explorer'}</span>! 👋
+                </h1>
+                <p className="text-slate-600 dark:text-white/50 text-sm mt-1">
+                  Ready to plan an outing, join a room, or explore spots nearby?
+                </p>
               </div>
             </div>
-            <div>
-              <div className="flex items-center gap-2 text-white/40 text-sm mb-1">
-                <FiSunrise size={14} />
-                <span>{greeting}</span>
-              </div>
-              <h1 className="font-display font-bold text-2xl sm:text-3xl text-white">
-                {user?.username} 👋
-              </h1>
+
+            {/* Quick Action Badge Bar */}
+            <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+              <Link
+                to="/explore"
+                className="btn-primary py-3 px-5 rounded-2xl text-sm font-bold shadow-glow-purple flex items-center gap-2 group cursor-pointer"
+              >
+                <FiCompass size={18} />
+                <span>Explore Spots</span>
+                <FiArrowRight className="group-hover:translate-x-1 transition-transform" size={16} />
+              </Link>
             </div>
           </div>
+        </div>
 
-          {/* Sub-heading */}
-          <p className="text-white/40 text-lg mb-2 animate-slide-up">
-            So... <span className="text-gradient font-semibold">where to?</span>
-          </p>
-          <p className="text-white/25 text-sm mb-10">Pick what you want to do today.</p>
+        {/* Unread DMs Alert Banner */}
+        {!loading && unreadDMsCount > 0 && (
+          <div className="animate-slide-up">
+            <div className="bg-gradient-to-r from-primary-500/20 via-accent-500/20 to-purple-500/10 border border-primary-500/30 p-4 sm:p-5 rounded-2xl flex items-center justify-between gap-4 shadow-glow-purple-sm">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl animate-bounce">💬</span>
+                <div className="text-left">
+                  <p className="text-xs text-primary-400 font-bold uppercase tracking-wider">Unread Direct Messages</p>
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white mt-0.5">
+                    You have <span className="text-neon-teal font-extrabold">{unreadDMsCount}</span> new unread chat message{unreadDMsCount !== 1 ? 's' : ''}!
+                  </h4>
+                </div>
+              </div>
+              <Link
+                to="/chats"
+                className="btn-primary py-2.5 px-4 rounded-xl text-xs font-bold flex items-center gap-1.5 flex-shrink-0 cursor-pointer shadow-sm"
+              >
+                <span>View Chats</span>
+                <FiArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+        )}
 
-          {/* Quick Actions grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-slide-up">
+        {/* Dynamic Interactive Quick Actions Grid */}
+        <div>
+          <h2 className="font-display font-bold text-xl text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+            <span>⚡ Quick Actions</span>
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {quickActions.map((action) => (
               <Link key={action.to} to={action.to} className="group block">
-                <div className={`glass-card p-6 flex items-center gap-4 transition-all duration-300 ${action.color} group-hover:-translate-y-1`}>
-                  <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform duration-200">
-                    {action.emoji}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <p className="font-display font-semibold text-white">{action.label}</p>
+                <div className={`glass-card p-5 rounded-2xl border border-slate-200 dark:border-white/10 bg-gradient-to-b ${action.color} transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-xl h-full flex flex-col justify-between`}>
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className={`w-12 h-12 rounded-xl ${action.iconColor} flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-200 shadow-sm`}>
+                        {action.emoji}
+                      </div>
                       {action.badge}
                     </div>
-                    <p className="text-white/40 text-sm truncate">{action.desc}</p>
+                    <h3 className="font-display font-bold text-slate-900 dark:text-white text-base mb-1 group-hover:text-primary-400 transition-colors">
+                      {action.label}
+                    </h3>
+                    <p className="text-slate-600 dark:text-white/40 text-xs leading-relaxed">
+                      {action.desc}
+                    </p>
                   </div>
-                  <FiArrowRight className="text-white/20 group-hover:text-white/60 group-hover:translate-x-1 transition-all flex-shrink-0" size={18} />
+                  <div className="mt-4 flex items-center justify-end text-slate-400 dark:text-white/30 group-hover:text-primary-400 transition-colors">
+                    <FiArrowRight className="group-hover:translate-x-1 transition-transform" size={18} />
+                  </div>
                 </div>
               </Link>
             ))}
           </div>
         </div>
-      </section>
 
-      {/* Unread DMs Alert Banner */}
-      {!loading && unreadDMsCount > 0 && (
-        <div className="max-w-4xl mx-auto mb-6 px-4 animate-slide-up">
-          <div className="bg-primary-500/10 border border-primary-500/25 p-4 rounded-2xl flex items-center justify-between gap-4 shadow-glow-purple-sm">
-            <div className="flex items-center gap-3">
-              <span className="text-xl">💬</span>
-              <div className="text-left">
-                <p className="text-xs text-primary-400 font-bold uppercase tracking-wider">Unread Messages</p>
-                <h4 className="text-sm font-bold text-white mt-0.5">
-                  You have {unreadDMsCount} unread direct message{unreadDMsCount !== 1 ? 's' : ''} waiting for you!
-                </h4>
-              </div>
+        {/* Explore Outings Categories Section */}
+        <div className="glass-card p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-white/10 animate-slide-up">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-neon-teal">Outing Recommendation Categories</span>
+              <h3 className="font-display font-bold text-xl sm:text-2xl text-slate-900 dark:text-white mt-0.5">
+                Who are you hanging out with today?
+              </h3>
             </div>
-            <Link
-              to="/messages"
-              className="text-xs text-primary-300 hover:text-white bg-primary-500/20 hover:bg-primary-500/30 border border-primary-500/20 px-3.5 py-2 rounded-xl transition-all font-semibold flex items-center gap-1 flex-shrink-0 cursor-pointer"
-            >
-              Go to Chats →
+            <Link to="/explore" className="text-xs text-primary-400 hover:text-primary-300 font-bold hidden sm:flex items-center gap-1">
+              Explore All <FiArrowRight size={14} />
             </Link>
           </div>
-        </div>
-      )}
 
-      {/* HANGOUT DASHBOARD */}
-      <div className="max-w-4xl mx-auto px-4 pb-16 space-y-6">
-        
-        {/* Active & Recent Lobbies */}
-        {!loading && activeRooms.length > 0 && (
-          <div className="glass-card p-5 animate-slide-up">
-            <h2 className="font-display font-bold text-base text-white mb-4 flex items-center justify-between">
-              <span className="flex items-center gap-2">
-                <span>🏠</span> Your Recent & Active Lobbies
-              </span>
-              <span className="text-[10px] text-white/40 font-normal">Rejoin without code</span>
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {activeRooms.map((room) => {
-                const isMember = room.isCurrentMember !== false;
-
-                return (
-                  <div key={room._id} className="p-4 rounded-xl border border-white/5 bg-white/3 hover:border-primary-500/20 hover:shadow-glow-purple-sm transition-all duration-300 relative overflow-hidden flex flex-col justify-between">
-                    <div>
-                      {/* Header */}
-                      <div className="flex justify-between items-start mb-2.5">
-                        {isMember ? (
-                          <span className="text-[9px] uppercase font-bold tracking-widest text-primary-400">
-                            Active Member
-                          </span>
-                        ) : (
-                          <span className="text-[9px] uppercase font-bold tracking-widest text-accent-400 bg-accent-500/10 px-2 py-0.5 rounded border border-accent-500/20">
-                            Recently Left · Active
-                          </span>
-                        )}
-                        <span className="text-[10px] text-white/40 font-medium">
-                          Code: <span className="font-mono text-primary-300 font-bold">{room.code}</span>
-                        </span>
-                      </div>
-
-                      <h3 className="font-display font-bold text-white text-sm mb-0.5 truncate">
-                        {room.name}
-                      </h3>
-                      {room.purpose && (
-                        <p className="text-[11px] text-primary-300/90 italic truncate mb-1.5 font-medium">
-                          🎯 {room.purpose}
-                        </p>
-                      )}
-                      <p className="text-white/40 text-[10px] mb-3">
-                        Host: {room.host?.username || 'You'} · {room.members?.length || 1} member{room.members?.length !== 1 ? 's' : ''}
-                      </p>
-                    </div>
-
-                    <div className="flex justify-between items-center pt-2.5 border-t border-white/5 mt-auto">
-                      <span className="text-[9px] text-white/30">
-                        Created: {new Date(room.createdAt).toLocaleDateString()}
-                      </span>
-                      {isMember ? (
-                        <Link
-                          to={`/room/${room._id}`}
-                          className="text-xs text-primary-400 hover:underline flex items-center gap-1 font-semibold"
-                        >
-                          Enter Room
-                          <FiArrowRight size={12} />
-                        </Link>
-                      ) : (
-                        <button
-                          onClick={() => handleRejoinRoom(room._id)}
-                          className="text-xs text-accent-300 hover:text-white bg-accent-500/15 hover:bg-accent-500/30 border border-accent-500/25 px-2.5 py-1 rounded-lg transition-all font-semibold flex items-center gap-1 cursor-pointer"
-                        >
-                          Rejoin Room ↻
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              {
+                id: 'friends',
+                emoji: '👥',
+                title: 'Friends Squad',
+                subtitle: 'Malls, Concerts, Trekking & Street Food',
+                color: 'from-teal-500/10 to-cyan-500/10 border-teal-500/30 hover:border-teal-500',
+                to: '/explore',
+              },
+              {
+                id: 'couples',
+                emoji: '❤️',
+                title: 'Couples Romantic',
+                subtitle: 'Beaches, Cozy Cafes, Fine Dining & Sunsets',
+                color: 'from-pink-500/10 to-rose-500/10 border-pink-500/30 hover:border-pink-500',
+                to: '/explore',
+              },
+              {
+                id: 'family',
+                emoji: '👨‍👩‍👧‍👦',
+                title: 'Family Outings',
+                subtitle: 'Theme Parks, Malls, Zoos & Picnic Lawns',
+                color: 'from-amber-500/10 to-yellow-500/10 border-amber-500/30 hover:border-amber-500',
+                to: '/explore',
+              },
+            ].map((cat) => (
+              <Link
+                key={cat.id}
+                to={cat.to}
+                className={`p-5 rounded-2xl border bg-gradient-to-br ${cat.color} transition-all duration-300 hover:-translate-y-1 group flex flex-col justify-between cursor-pointer`}
+              >
+                <div>
+                  <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">{cat.emoji}</div>
+                  <h4 className="font-display font-bold text-slate-900 dark:text-white text-lg mb-1">{cat.title}</h4>
+                  <p className="text-slate-600 dark:text-white/50 text-xs leading-relaxed">{cat.subtitle}</p>
+                </div>
+                <div className="mt-4 flex items-center justify-between text-xs font-bold text-primary-400 group-hover:translate-x-1 transition-transform">
+                  <span>Discover Spots</span>
+                  <FiArrowRight size={14} />
+                </div>
+              </Link>
+            ))}
           </div>
-        )}
+        </div>
 
-        {/* Scheduled Outings & Mood Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-          {/* Scheduled Outings */}
-          <div className="glass-card p-5 animate-slide-up">
-            <h2 className="font-display font-bold text-base text-white mb-4 flex items-center gap-2">
-              <span>📅</span> Upcoming Outings
-            </h2>
-            {loading ? (
-              <div className="flex justify-center py-4">
-                <div className="w-6 h-6 border-2 border-white/20 border-t-primary-500 rounded-full animate-spin" />
+        {/* Dashboard Grid: Active Lobbies & Upcoming Outings */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+          
+          {/* Active & Recent Lobbies */}
+          <div className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-white/10 animate-slide-up h-full flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                  <span>🏠</span> Your Active & Recent Lobbies
+                </h3>
+                <span className="text-[11px] text-slate-500 dark:text-white/40 font-medium">1-Click Rejoin</span>
               </div>
-            ) : plans.length === 0 ? (
-              <p className="text-white/30 text-xs py-4 text-center">
-                No scheduled outings yet. Propose one in an outing lounge!
-              </p>
-            ) : (
-              <div className="space-y-4">
-                {plans.map((plan) => (
-                  <div key={plan._id} className="p-4 rounded-xl border border-white/5 bg-white/3 hover:border-neon-green/30 shadow-glow-green-sm transition-all duration-300 relative overflow-hidden flex flex-col justify-between">
-                    <div>
-                      {/* Header */}
-                      <div className="flex justify-between items-start mb-2.5">
-                        <span className="text-[9px] uppercase font-bold tracking-widest text-neon-green">
-                          Confirmed Outing
-                        </span>
-                        <div className="flex items-center gap-1 text-[9px] text-white/40 font-medium">
-                          <FiClock size={10} className="text-neon-green animate-pulse" />
-                          <span>{getCountdownString(plan.dateTime)}</span>
+
+              {loading ? (
+                <div className="flex justify-center py-6">
+                  <div className="w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
+                </div>
+              ) : activeRooms.length === 0 ? (
+                <div className="text-center py-8 px-4 bg-slate-100/50 dark:bg-white/3 rounded-2xl border border-slate-200 dark:border-white/5">
+                  <span className="text-3xl block mb-2">🎮</span>
+                  <p className="text-slate-700 dark:text-white/60 text-sm font-semibold mb-1">No active lobbies yet</p>
+                  <p className="text-slate-500 dark:text-white/40 text-xs mb-4">Create a room or join your friends with a 6-digit code!</p>
+                  <Link to="/create-room" className="btn-primary py-2 px-4 rounded-xl text-xs font-bold inline-flex items-center gap-1.5">
+                    <span>Create Room</span>
+                    <FiArrowRight size={14} />
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {activeRooms.slice(0, 3).map((room) => {
+                    const isMember = room.isCurrentMember !== false;
+
+                    return (
+                      <div key={room._id} className="p-4 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-100/60 dark:bg-dark-800/80 hover:border-primary-500/40 transition-all duration-300 flex items-center justify-between gap-4">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h4 className="font-display font-bold text-slate-900 dark:text-white text-sm truncate">
+                              {room.name}
+                            </h4>
+                            {isMember ? (
+                              <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">Active</span>
+                            ) : (
+                              <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">Recently Left</span>
+                            )}
+                          </div>
+                          {room.purpose && (
+                            <p className="text-primary-600 dark:text-primary-300 text-xs font-semibold truncate mb-1">
+                              🎯 {room.purpose}
+                            </p>
+                          )}
+                          <p className="text-slate-500 dark:text-white/40 text-[11px]">
+                            Code: <span className="font-mono font-bold text-primary-500">{room.code}</span> · {room.members?.length || 1} member{room.members?.length !== 1 ? 's' : ''}
+                          </p>
                         </div>
-                      </div>
 
-                      <h3 className="font-display font-bold text-white text-sm mb-1 truncate">
-                        {plan.placeName}
-                      </h3>
-                      {plan.address && (
-                        <p className="text-white/40 text-[11px] line-clamp-1 mb-2 leading-relaxed">
-                          📍 {plan.address}
-                        </p>
-                      )}
-                      <p className="text-white/60 text-[11px] font-medium mb-3 flex items-center gap-1.5">
-                        <span>⏰</span>
-                        {new Date(plan.dateTime).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
-                      </p>
-                    </div>
-
-                    <div className="flex justify-between items-center pt-2.5 border-t border-white/5 mt-auto">
-                      <div className="flex flex-col text-left">
-                        <span className="text-[9px] text-white/30">
-                          Room: <span className="font-semibold text-white/50">{plan.roomName || 'Hangout'}</span>
-                        </span>
-                        {(plan.creator === user?._id || plan.creator?._id === user?._id) && (
-                          <button
-                            onClick={() => handleCancelPlan(plan._id)}
-                            className="text-[9px] text-red-400 hover:text-red-300 font-semibold transition-colors mt-1 flex items-center gap-1 cursor-pointer bg-transparent border-none outline-none"
+                        {isMember ? (
+                          <Link
+                            to={`/room/${room._id}`}
+                            className="btn-primary py-2 px-3.5 rounded-xl text-xs font-bold flex-shrink-0 cursor-pointer"
                           >
-                            <FiTrash2 size={9} /> Cancel Outing
+                            Enter
+                          </Link>
+                        ) : (
+                          <button
+                            onClick={() => handleRejoinRoom(room._id)}
+                            className="bg-accent-500/20 border border-accent-500/30 text-accent-300 hover:bg-accent-500/30 py-2 px-3.5 rounded-xl text-xs font-bold flex-shrink-0 transition-all cursor-pointer"
+                          >
+                            Rejoin ↻
                           </button>
                         )}
                       </div>
-                      {plan.mapsLink && (
-                        <a
-                          href={plan.mapsLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-xs text-neon-green hover:underline flex items-center gap-1 font-semibold"
-                        >
-                          Directions
-                          <FiExternalLink size={12} />
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Today's Mood */}
-          <div className="glass-card p-5 animate-slide-up">
-            <p className="text-white/30 text-xs uppercase tracking-widest font-semibold mb-4">Today's mood?</p>
-            <div className="flex flex-col gap-2.5">
-              {[
-                { emoji: '😌', label: 'Chill', mood: 'chill', desc: 'Parks, cafes, lakesides' },
-                { emoji: '🍕', label: 'Foodie', mood: 'foodie', desc: 'Restaurants, cafes, bakeries' },
-                { emoji: '🧗', label: 'Adventure', mood: 'adventure', desc: 'Peaks, beaches, attractions' },
-                { emoji: '🌅', label: 'Romantic', mood: 'romantic', desc: 'Viewpoints, romantic spots' },
-                { emoji: '📚', label: 'Study', mood: 'study', desc: 'Cafes, libraries, quiet spots' },
-              ].map((m) => (
-                <Link
-                  key={m.mood}
-                  to={`/explore`}
-                  state={{ mood: m.mood }}
-                  className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 
-                             text-white/80 hover:bg-primary-500/10 hover:border-primary-500/20 
-                             hover:text-primary-300 hover:shadow-glow-purple-sm transition-all duration-200 group"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-lg">{m.emoji}</span>
-                    <div className="text-left">
-                      <p className="text-xs font-semibold text-white group-hover:text-primary-300 transition-colors">{m.label}</p>
-                      <p className="text-[10px] text-white/35">{m.desc}</p>
+          {/* Upcoming Outings */}
+          <div className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-white/10 animate-slide-up h-full flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                  <span>📅</span> Upcoming Outings
+                </h3>
+                <span className="text-[11px] text-slate-500 dark:text-white/40 font-medium">Scheduled Plans</span>
+              </div>
+
+              {loading ? (
+                <div className="flex justify-center py-6">
+                  <div className="w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
+                </div>
+              ) : plans.length === 0 ? (
+                <div className="text-center py-8 px-4 bg-slate-100/50 dark:bg-white/3 rounded-2xl border border-slate-200 dark:border-white/5">
+                  <span className="text-3xl block mb-2">🏖️</span>
+                  <p className="text-slate-700 dark:text-white/60 text-sm font-semibold mb-1">No scheduled outings yet</p>
+                  <p className="text-slate-500 dark:text-white/40 text-xs mb-4">Propose a spot in an active hangout room lounge!</p>
+                  <Link to="/explore" className="btn-secondary py-2 px-4 rounded-xl text-xs font-bold inline-flex items-center gap-1.5">
+                    <span>Explore Spots</span>
+                    <FiArrowRight size={14} />
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {plans.slice(0, 3).map((plan) => (
+                    <div key={plan._id} className="p-4 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-100/60 dark:bg-dark-800/80 hover:border-emerald-500/40 transition-all duration-300">
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">Confirmed</span>
+                          <h4 className="font-display font-bold text-slate-900 dark:text-white text-sm mt-1 truncate">
+                            {plan.placeName}
+                          </h4>
+                        </div>
+                        <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                          <FiClock size={12} className="animate-pulse" />
+                          {getCountdownString(plan.dateTime)}
+                        </span>
+                      </div>
+
+                      {plan.address && (
+                        <p className="text-slate-600 dark:text-white/50 text-xs truncate mb-2">
+                          📍 {plan.address}
+                        </p>
+                      )}
+
+                      <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-white/5 text-xs">
+                        <span className="text-slate-500 dark:text-white/40 font-medium">
+                          ⏰ {new Date(plan.dateTime).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
+                        </span>
+
+                        <div className="flex items-center gap-2">
+                          {(plan.creator === user?._id || plan.creator?._id === user?._id) && (
+                            <button
+                              onClick={() => handleCancelPlan(plan._id)}
+                              className="text-red-500 hover:text-red-600 text-[11px] font-bold cursor-pointer"
+                            >
+                              Cancel
+                            </button>
+                          )}
+                          {plan.mapsLink && (
+                            <a
+                              href={plan.mapsLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-emerald-600 dark:text-emerald-400 hover:underline font-bold flex items-center gap-1 text-xs"
+                            >
+                              Directions <FiExternalLink size={12} />
+                            </a>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <FiArrowRight size={14} className="text-white/20 group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all" />
-                </Link>
-              ))}
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -870,13 +938,13 @@ const UserHome = ({ user }) => {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-6 px-4 mt-8">
-        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <footer className="border-t border-slate-200 dark:border-white/5 py-6 px-4 mt-8">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Logo className="w-5 h-5" />
             <span className="font-display font-bold text-gradient">Where To?</span>
           </div>
-          <p className="text-white/20 text-sm">Built with ❤️ for indecisive friend groups.</p>
+          <p className="text-slate-500 dark:text-white/20 text-sm">Built with ❤️ for friend groups everywhere.</p>
         </div>
       </footer>
     </div>

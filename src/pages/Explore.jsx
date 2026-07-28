@@ -1,18 +1,60 @@
 import { useState, useEffect, useRef } from 'react';
-import { FiMapPin, FiNavigation, FiAlertCircle, FiRefreshCw } from 'react-icons/fi';
+import { FiMapPin, FiNavigation, FiAlertCircle, FiRefreshCw, FiArrowRight, FiArrowLeft, FiSearch, FiCompass } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import useGeolocation from '../hooks/useGeolocation';
 import { placeService } from '../services/placeService';
 import PlaceCard from '../components/places/PlaceCard';
 
 // ─── Config Data ────────────────────────────────────────────────
-const moods = [
-  { id: 'chill',     emoji: '😌', label: 'Chill',     desc: 'Parks, cafes, lakesides' },
-  { id: 'foodie',    emoji: '🍕', label: 'Foodie',    desc: 'Restaurants, cafes, bakeries' },
-  { id: 'adventure', emoji: '🧗', label: 'Adventure', desc: 'Peaks, beaches, attractions' },
-  { id: 'romantic',  emoji: '🌅', label: 'Romantic',  desc: 'Viewpoints, beaches, restaurants' },
-  { id: 'study',     emoji: '📚', label: 'Study',     desc: 'Cafes, libraries, quiet spots' },
+const groupCategories = [
+  {
+    id: 'friends',
+    emoji: '👥',
+    label: 'Friends',
+    tagline: 'Squad Outings & Fun',
+    desc: 'Malls, concerts, trekking, sports & street food crawls',
+  },
+  {
+    id: 'couples',
+    emoji: '❤️',
+    label: 'Couples',
+    tagline: 'Romantic Getaways',
+    desc: 'Beaches, cozy cafes, fine dining & sunset viewpoints',
+  },
+  {
+    id: 'family',
+    emoji: '👨‍👩‍👧‍👦',
+    label: 'Family',
+    tagline: 'Quality Family Time',
+    desc: 'Family beaches, theme parks, malls, zoos & picnic spots',
+  },
 ];
+
+const vibeOptions = {
+  couples: [
+    { id: 'beaches',          emoji: '🏖️', label: 'Beaches & Sunsets',     desc: 'Sandy shorelines, ocean waves, and romantic sunset walks' },
+    { id: 'cafes',            emoji: '☕', label: 'Cozy Cafes & Bakery',  desc: 'Aromatic coffee, sweet pastries, and quiet conversations' },
+    { id: 'romantic_dining',  emoji: '🍷', label: 'Fine Dining',          desc: 'Candlelight dinners and premium gourmet restaurants' },
+    { id: 'scenic_spots',     emoji: '🌄', label: 'Scenic Viewpoints',     desc: 'Panoramic skyline views, lush gardens, and photo spots' },
+    { id: 'nature',           emoji: '🌟', label: 'Stargazing & Nature',    desc: 'Quiet lakesides, parks, and starry outdoor escapes' },
+  ],
+  family: [
+    { id: 'beaches',          emoji: '🏖️', label: 'Family Beaches',       desc: 'Safe, clean beaches with watersports and sunset views' },
+    { id: 'parks',            emoji: '🎢', label: 'Amusement & Parks',     desc: 'Theme parks, green gardens, and fun outdoor play areas' },
+    { id: 'malls',            emoji: '🛍️', label: 'Malls & Shopping',     desc: 'Spacious malls with kid zones, gaming arcades, and food courts' },
+    { id: 'zoos',             emoji: '🦁', label: 'Zoos & Aquariums',      desc: 'Exciting wildlife, aquariums, and animal parks' },
+    { id: 'museums',          emoji: '🏛️', label: 'Museums & Monuments',   desc: 'Historical heritage, science centers, and art galleries' },
+    { id: 'picnic',           emoji: '🍉', label: 'Picnic Spots',          desc: 'Lush botanical gardens, lakes, and relaxing lawns' },
+  ],
+  friends: [
+    { id: 'malls',            emoji: '🛍️', label: 'Malls & Arcades',      desc: 'Shopping malls, bowling, arcade gaming, and food courts' },
+    { id: 'concerts',         emoji: '🎵', label: 'Concerts & Clubs',     desc: 'Live music venues, bars, pubs, and high-energy nightlife' },
+    { id: 'trekking',         emoji: '🧗', label: 'Adventurous Trekking', desc: 'Mountain peaks, forest trails, and hiking adventures' },
+    { id: 'sports',           emoji: '⚽', label: 'Sports & Turf Games',  desc: 'Turf grounds, sports arenas, and action activities' },
+    { id: 'food_crawl',       emoji: '🍕', label: 'Street Food Crawl',    desc: 'Local street food, junk food hubs, and popular cafes' },
+    { id: 'camping',          emoji: '⛺', label: 'Camping & Outdoors',   desc: 'Outdoor bonfires, lakeside camping, and nature trails' },
+  ],
+};
 
 const distances = [
   { id: 2000,  label: 'Nearby',    desc: 'Within 2 km',   emoji: '🚶' },
@@ -20,10 +62,72 @@ const distances = [
   { id: 10000, label: 'Anywhere',  desc: 'Within 10 km',  emoji: '🚗' },
 ];
 
-// ─── Step Components ─────────────────────────────────────────────
+const featuredVibePlaces = {
+  // Couples
+  beaches: [
+    { name: 'Marine Drive', city: 'Mumbai', query: 'Marine Drive, Mumbai, India', emoji: '🌅' },
+    { name: 'Baga Beach', city: 'Goa', query: 'Baga Beach, Goa, India', emoji: '🏖️' },
+    { name: 'Radhanagar Beach', city: 'Andaman', query: 'Radhanagar Beach, Andaman, India', emoji: '🌊' },
+    { name: 'Palolem Beach', city: 'Goa', query: 'Palolem Beach, Goa, India', emoji: '🏝️' },
+  ],
+  cafes: [
+    { name: 'Bandra Coffee House', city: 'Mumbai', query: 'Bandra, Mumbai, India', emoji: '☕' },
+    { name: 'Cyber Hub Cafes', city: 'Gurugram', query: 'Cyber Hub, Gurugram, India', emoji: '🥐' },
+    { name: 'Koregaon Park Cafes', city: 'Pune', query: 'Koregaon Park, Pune, India', emoji: '🍩' },
+  ],
+  romantic_dining: [
+    { name: 'Aer Rooftop Lounge', city: 'Mumbai', query: 'Aer Rooftop, Mumbai, India', emoji: '🍷' },
+    { name: 'Olive Bar & Kitchen', city: 'Delhi', query: 'Olive Bar Kitchen, Delhi, India', emoji: '🕯️' },
+    { name: 'Thalassa Waterfront', city: 'Goa', query: 'Thalassa, Goa, India', emoji: '🌅' },
+  ],
+  scenic_spots: [
+    { name: 'Bandra Fort Sunset', city: 'Mumbai', query: 'Bandra Fort, Mumbai, India', emoji: '🌄' },
+    { name: 'Tiger Point Views', city: 'Lonavala', query: 'Tiger Point, Lonavala, India', emoji: '⛰️' },
+    { name: 'Nandi Hills Viewpoint', city: 'Bangalore', query: 'Nandi Hills, Bangalore, India', emoji: '🌅' },
+  ],
+
+  // Family
+  parks: [
+    { name: 'Wonderla Amusement Park', city: 'Bangalore', query: 'Wonderla, Bangalore, India', emoji: '🎢' },
+    { name: 'Imagicaa World Theme Park', city: 'Lonavala', query: 'Imagicaa, Lonavala, India', emoji: '🎠' },
+    { name: 'Sanjay Gandhi National Park', city: 'Mumbai', query: 'Sanjay Gandhi National Park, Mumbai, India', emoji: '🌳' },
+  ],
+  malls: [
+    { name: 'Phoenix Palladium Mall', city: 'Mumbai', query: 'Phoenix Palladium, Mumbai, India', emoji: '🛍️' },
+    { name: 'DLF Mall of India', city: 'Noida', query: 'DLF Mall of India, Noida, India', emoji: '🏬' },
+    { name: 'Lulu International Mall', city: 'Kochi', query: 'Lulu Mall, Kochi, India', emoji: '🍿' },
+  ],
+  zoos: [
+    { name: 'Mysore Zoo & Sanctuary', city: 'Karnataka', query: 'Mysore Zoo, Karnataka, India', emoji: '🦁' },
+    { name: 'Veermata Jijabai Zoo', city: 'Mumbai', query: 'Byculla Zoo, Mumbai, India', emoji: '🦒' },
+  ],
+
+  // Friends
+  concerts: [
+    { name: 'Hard Rock Cafe', city: 'Mumbai', query: 'Hard Rock Cafe, Mumbai, India', emoji: '🎸' },
+    { name: 'Hauz Khas Social Pub', city: 'Delhi', query: 'Hauz Khas Social, Delhi, India', emoji: '🎧' },
+    { name: 'Tito’s Nightclub Lane', city: 'Goa', query: 'Titos Lane, Goa, India', emoji: '🍹' },
+  ],
+  trekking: [
+    { name: 'Sinhagad Fort Trek', city: 'Pune', query: 'Sinhagad Fort, Pune, India', emoji: '🧗' },
+    { name: 'Rajmachi Fort Trail', city: 'Lonavala', query: 'Rajmachi, Lonavala, India', emoji: '🎒' },
+    { name: 'Triund Hill Trek', city: 'Himachal', query: 'Triund, Dharamshala, India', emoji: '🏔️' },
+  ],
+  sports: [
+    { name: 'Padel & Turf Arena', city: 'Mumbai', query: 'Turf Arena, Mumbai, India', emoji: '⚽' },
+    { name: 'Smaaash Arcade', city: 'Gurugram', query: 'Smaaash, Gurugram, India', emoji: '🎳' },
+  ],
+  food_crawl: [
+    { name: 'Mohammad Ali Road Street Food', city: 'Mumbai', query: 'Mohammad Ali Road, Mumbai, India', emoji: '🍕' },
+    { name: 'Chandni Chowk Food Crawl', city: 'Delhi', query: 'Chandni Chowk, Delhi, India', emoji: '🥙' },
+    { name: 'VV Puram Food Street', city: 'Bangalore', query: 'VV Puram, Bangalore, India', emoji: '🥞' },
+  ],
+};
+
+// ─── Step Indicator ─────────────────────────────────────────────
 const StepIndicator = ({ step, currentStep }) => (
   <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold transition-all duration-300
-    ${step < currentStep ? 'bg-primary-500 text-white' :
+    ${step < currentStep ? 'bg-primary-500 text-white shadow-glow-purple-sm' :
       step === currentStep ? 'bg-primary-500/20 border-2 border-primary-500 text-primary-300' :
       'bg-white/5 text-white/30'}`}
   >
@@ -51,21 +155,16 @@ const PlaceSkeleton = () => (
 
 // ─── Main Explore Page ───────────────────────────────────────────
 const Explore = () => {
-  const [step, setStep] = useState(1);        // 1=mood 1.5=customizer 2=distance 3=results
-  const [mood, setMood] = useState(null);
+  const [step, setStep] = useState(1);                      // 1 = Group, 2 = Vibe, 3 = Location, 4 = Results
+  const [groupCategory, setGroupCategory] = useState(null);  // 'friends' | 'couples' | 'family'
+  const [vibe, setVibe] = useState(null);                   // e.g. 'beaches', 'cafes', 'malls'
   const [distance, setDistance] = useState(5000);
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [locationQuery, setLocationQuery] = useState('');
   const [resolvedLocationText, setResolvedLocationText] = useState('');
-  const [locationMode, setLocationMode] = useState('current'); // 'current' or 'custom'
-  const [subFilters, setSubFilters] = useState({
-    diet: 'any',
-    foodType: 'any',
-    budget: 'any',
-    adventureType: 'any'
-  });
+  const [locationMode, setLocationMode] = useState('current'); // 'current' (GPS) or 'custom' (Search)
 
   // Autocomplete states & refs
   const [suggestions, setSuggestions] = useState([]);
@@ -76,7 +175,7 @@ const Explore = () => {
 
   const { location, loading: geoLoading, error: geoError, getLocation } = useGeolocation();
 
-
+  // Handle Autocomplete Input
   const handleInputChange = (val, inputId) => {
     setLocationQuery(val);
     setActiveInputId(inputId);
@@ -103,7 +202,7 @@ const Explore = () => {
       } finally {
         setSuggestionsLoading(false);
       }
-    }, 300); // 300ms debounce
+    }, 300);
   };
 
   const handleInputFocus = (inputId) => {
@@ -114,7 +213,6 @@ const Explore = () => {
   };
 
   const handleInputBlur = () => {
-    // Delay hiding suggestions to allow button onClick to fire first
     setTimeout(() => {
       setShowSuggestions(false);
     }, 200);
@@ -125,7 +223,7 @@ const Explore = () => {
     setShowSuggestions(false);
     setSuggestions([]);
     setLocationMode('custom');
-    setStep(3);
+    setStep(4);
     await fetchPlaces(null, null, suggestion.formatted);
   };
 
@@ -138,19 +236,22 @@ const Explore = () => {
     };
   }, []);
 
-  // ── Step 1: Mood selected ──
-  const handleMoodSelect = (moodId) => {
-    setMood(moodId);
-    if (moodId === 'foodie' || moodId === 'adventure') {
-      setStep(1.5);
-    } else {
-      setStep(2);
-    }
+  // Step 1: Select Group Category (Friends / Couples / Family)
+  const handleGroupSelect = (groupId) => {
+    setGroupCategory(groupId);
+    setVibe(null); // Reset vibe when group changes
+    setStep(2);
   };
 
-  // Automatically fetch places when Step 3 is reached and location is acquired
+  // Step 2: Select Vibe / Sub-category
+  const handleVibeSelect = (vibeId) => {
+    setVibe(vibeId);
+    setStep(3);
+  };
+
+  // Step 4: Automatically fetch places when Step 4 is reached and GPS location is available
   useEffect(() => {
-    if (step === 3 && locationMode === 'current') {
+    if (step === 4 && locationMode === 'current') {
       if (location.lat && location.lng) {
         fetchPlaces(location.lat, location.lng);
       } else if (geoError) {
@@ -160,9 +261,9 @@ const Explore = () => {
         getLocation();
       }
     }
-  }, [step, location.lat, location.lng, geoError, geoLoading, locationMode, distance, mood, subFilters]);
+  }, [step, location.lat, location.lng, geoError, geoLoading, locationMode, distance, groupCategory, vibe]);
 
-  // Watch for location being fetched then call API
+  // Core API call
   const fetchPlaces = async (lat, lng, searchQuery = '') => {
     setLoading(true);
     setError(null);
@@ -171,11 +272,11 @@ const Explore = () => {
         lat,
         lng,
         locationQuery: searchQuery,
-        mood,
+        groupCategory,
+        vibe,
         distance,
-        subFilters,
       });
-      setPlaces(data.places);
+      setPlaces(data.places || []);
       
       if (data.resolvedLocation) {
         setResolvedLocationText(data.resolvedLocation.address);
@@ -183,35 +284,20 @@ const Explore = () => {
         setResolvedLocationText('');
       }
 
-      if (data.places.length === 0) {
-        setError('No places found. Try a different mood, larger distance, or search query!');
+      if ((data.places || []).length === 0) {
+        setError('No places found. Try selecting another vibe or searching a broader city area!');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to fetch places. Try again.');
+      setError(err.response?.data?.message || 'Failed to fetch places. Please try again.');
       toast.error('Could not load places. Check your connection.');
     } finally {
       setLoading(false);
     }
   };
 
-  // Trigger fetch once location is known
-  const handleFetch = async () => {
-    setLoading(true);
-    setError(null);
-
-    if (locationMode === 'current') {
-      if (location.lat) {
-        await fetchPlaces(location.lat, location.lng);
-      } else {
-        getLocation();
-      }
-    } else {
-      await fetchPlaces(null, null, locationQuery);
-    }
-  };
-
+  // Trigger search from Step 3
   const handleFindPlacesClick = async () => {
-    setStep(3);
+    setStep(4);
     setLoading(true);
     setError(null);
 
@@ -235,14 +321,9 @@ const Explore = () => {
 
   const handleReset = () => {
     setStep(1);
-    setMood(null);
+    setGroupCategory(null);
+    setVibe(null);
     setDistance(5000);
-    setSubFilters({
-      diet: 'any',
-      foodType: 'any',
-      budget: 'any',
-      adventureType: 'any'
-    });
     setPlaces([]);
     setLocationQuery('');
     setResolvedLocationText('');
@@ -255,279 +336,299 @@ const Explore = () => {
     setActiveInputId(null);
   };
 
-  const selectedMood = moods.find((m) => m.id === mood);
+  const handleFeaturedSpotClick = async (spot) => {
+    setLocationQuery(spot.query);
+    setLocationMode('custom');
+    setStep(4);
+    await fetchPlaces(null, null, spot.query);
+  };
+
+  const selectedGroup = groupCategories.find((g) => g.id === groupCategory);
+  const currentVibeList = vibeOptions[groupCategory] || [];
+  const selectedVibe = currentVibeList.find((v) => v.id === vibe);
   const selectedDist = distances.find((d) => d.id === distance);
+  const currentFeaturedList = (selectedVibe && featuredVibePlaces[selectedVibe.id]) || [];
 
   return (
     <div className="min-h-screen bg-dark-900 bg-grid pt-24 pb-12 px-4">
-      {/* Glow */}
+      {/* Background Ambient Glows */}
       <div className="fixed top-20 left-1/4 w-96 h-96 bg-neon-teal/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="fixed top-40 right-1/4 w-96 h-96 bg-primary-500/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-4xl mx-auto relative z-10">
 
-        {/* Header */}
+        {/* Page Header */}
         <div className="text-center mb-10 animate-fade-in">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-neon-teal/10 border border-neon-teal/20 text-neon-teal text-sm font-medium mb-4">
-            <FiMapPin size={14} />
-            Solo Place Finder
+            <FiCompass size={14} />
+            Place Explorer & Recommendations
           </div>
-          <h1 className="font-display font-extrabold text-4xl sm:text-5xl text-white mb-3">
-            Where should you go?
+          <h1 className="font-display font-extrabold text-4xl sm:text-5xl text-slate-900 dark:text-white mb-3">
+            Where are you heading?
           </h1>
-          <p className="text-white/40 text-lg">
-            Tell us your vibe — we'll find the spot.
+          <p className="text-slate-600 dark:text-white/40 text-lg">
+            Discover incredible spots curated for Friends, Couples, and Family.
           </p>
         </div>
 
-        {/* Progress Steps */}
-        {step <= 2 && (
+        {/* Step Progress Tracker */}
+        {step <= 3 && (
           <div className="flex items-center justify-center gap-3 mb-10 animate-fade-in">
-            {['Mood', 'Distance', 'Places'].map((label, i) => (
+            {['Group', 'Vibe', 'Location'].map((label, i) => (
               <div key={label} className="flex items-center gap-3">
                 <div className="flex flex-col items-center gap-1">
                   <StepIndicator step={i + 1} currentStep={step} />
-                  <span className={`text-sm font-semibold ${i + 1 === step ? 'text-primary-300' : i + 1 < step ? 'text-white/40' : 'text-white/20'}`}>
+                  <span className={`text-sm font-semibold ${i + 1 === step ? 'text-primary-400 font-bold' : i + 1 < step ? 'text-slate-600 dark:text-white/40' : 'text-slate-400 dark:text-white/20'}`}>
                     {label}
                   </span>
                 </div>
-                {i < 2 && <div className={`w-12 sm:w-20 h-px ${i + 1 < step ? 'bg-primary-500' : 'bg-white/10'} mb-4 transition-colors`} />}
+                {i < 2 && <div className={`w-12 sm:w-20 h-px ${i + 1 < step ? 'bg-primary-500' : 'bg-slate-200 dark:bg-white/10'} mb-4 transition-colors`} />}
               </div>
             ))}
           </div>
         )}
 
-        {/* ── STEP 1: Mood Selector ── */}
+        {/* ── STEP 1: Choose Group Category ── */}
         {step === 1 && (
           <div className="animate-slide-up">
-            <p className="text-center text-white/50 text-base mb-6">What's the vibe today?</p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-              {moods.map((m) => (
+            <p className="text-center text-slate-700 dark:text-white/60 text-base font-medium mb-6">
+              Who are you planning this outing for?
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
+              {groupCategories.map((cat) => (
                 <button
-                  key={m.id}
-                  onClick={() => handleMoodSelect(m.id)}
-                  className="glass-card-hover p-5 text-center group cursor-pointer"
+                  key={cat.id}
+                  onClick={() => handleGroupSelect(cat.id)}
+                  className="glass-card p-6 text-center group cursor-pointer border border-slate-200 dark:border-white/10 hover:border-primary-500/50 hover:shadow-glow-purple-sm transition-all duration-300 rounded-3xl"
                 >
-                  <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-200">
-                    {m.emoji}
+                  <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-200">
+                    {cat.emoji}
                   </div>
-                  <p className="font-display font-semibold text-white text-base mb-1">{m.label}</p>
-                  <p className="text-white/30 text-sm leading-relaxed">{m.desc}</p>
+                  <h3 className="font-display font-bold text-slate-900 dark:text-white text-xl mb-1">
+                    {cat.label}
+                  </h3>
+                  <p className="text-neon-teal text-xs font-semibold uppercase tracking-wider mb-2">
+                    {cat.tagline}
+                  </p>
+                  <p className="text-slate-600 dark:text-white/40 text-xs leading-relaxed">
+                    {cat.desc}
+                  </p>
                 </button>
               ))}
             </div>
           </div>
         )}
 
-        {/* ── STEP 1.5: Vibe Customizer (Sub-filters) ── */}
-        {step === 1.5 && (
-          <div className="animate-slide-up max-w-lg mx-auto glass-card p-6 border-white/5 space-y-6">
-            <div className="text-center">
-              <span className="text-3xl mb-2 block">{selectedMood?.emoji}</span>
-              <h3 className="font-display font-bold text-2xl text-white">Customize Your {selectedMood?.label} Vibe</h3>
-              <p className="text-white/40 text-sm mt-1">Refine your suggestions below</p>
-            </div>
-
-            {mood === 'foodie' && (
-              <div className="space-y-4">
-                {/* Diet Selector */}
-                <div>
-                  <label className="block text-white/50 text-sm font-semibold uppercase tracking-wider mb-2">
-                    Diet Preference
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { id: 'any', label: '🍔 Any Food' },
-                      { id: 'veg', label: '🥗 Veg Only' }
-                    ].map(opt => (
-                      <button
-                        key={opt.id}
-                        onClick={() => setSubFilters(prev => ({ ...prev, diet: opt.id }))}
-                        className={`py-2 px-3 rounded-xl text-sm font-semibold border transition-all cursor-pointer
-                          ${subFilters.diet === opt.id
-                            ? 'bg-primary-500/25 border-primary-500 text-primary-300'
-                            : 'bg-white/3 border-white/5 text-white/50 hover:bg-white/8'}`}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Food Type Selector */}
-                <div>
-                  <label className="block text-white/50 text-sm font-semibold uppercase tracking-wider mb-2">
-                    Food Category
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { id: 'any', label: '🍽️ All Options' },
-                      { id: 'junk_food', label: '🍟 Junk Food' },
-                      { id: 'cuisine', label: '🍷 Fine Dining' },
-                      { id: 'food_cart', label: '🚚 Street Carts / Trucks' }
-                    ].map(opt => (
-                      <button
-                        key={opt.id}
-                        onClick={() => setSubFilters(prev => ({ ...prev, foodType: opt.id }))}
-                        className={`py-2 px-3 rounded-xl text-sm font-semibold border transition-all cursor-pointer
-                          ${subFilters.foodType === opt.id
-                            ? 'bg-primary-500/25 border-primary-500 text-primary-300'
-                            : 'bg-white/3 border-white/5 text-white/50 hover:bg-white/8'}`}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Budget Selector */}
-                <div>
-                  <label className="block text-white/50 text-sm font-semibold uppercase tracking-wider mb-2">
-                    Budget
-                  </label>
-                  <div className="grid grid-cols-4 gap-2">
-                    {[
-                      { id: 'any', label: 'All' },
-                      { id: 'cheap', label: '$' },
-                      { id: 'moderate', label: '$$' },
-                      { id: 'expensive', label: '$$$' }
-                    ].map(opt => (
-                      <button
-                        key={opt.id}
-                        onClick={() => setSubFilters(prev => ({ ...prev, budget: opt.id }))}
-                        className={`py-2 px-1 rounded-xl text-sm font-semibold border transition-all cursor-pointer
-                          ${subFilters.budget === opt.id
-                            ? 'bg-primary-500/25 border-primary-500 text-primary-300'
-                            : 'bg-white/3 border-white/5 text-white/50 hover:bg-white/8'}`}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {mood === 'adventure' && (
-              <div className="space-y-4">
-                {/* Adventure Type */}
-                <div>
-                  <label className="block text-white/50 text-sm font-semibold uppercase tracking-wider mb-2">
-                    Adventure Type
-                  </label>
-                  <div className="grid grid-cols-1 gap-2">
-                    {[
-                      { id: 'any', label: '🧗 Any Adventure' },
-                      { id: 'nature', label: '🌳 Nature & Forest Trails' },
-                      { id: 'beach', label: '🌊 Beaches & Lakes' },
-                      { id: 'mountains', label: '🏔️ Mountain Peaks' },
-                      { id: 'sports', label: '⚽ Sports Centers' }
-                    ].map(opt => (
-                      <button
-                        key={opt.id}
-                        onClick={() => setSubFilters(prev => ({ ...prev, adventureType: opt.id }))}
-                        className={`py-2.5 px-4 rounded-xl text-sm font-semibold border transition-all text-left flex justify-between items-center cursor-pointer
-                          ${subFilters.adventureType === opt.id
-                            ? 'bg-primary-500/25 border-primary-500 text-primary-300 font-bold'
-                            : 'bg-white/3 border-white/5 text-white/50 hover:bg-white/8'}`}
-                      >
-                        <span>{opt.label}</span>
-                        {subFilters.adventureType === opt.id && <span className="text-primary-400 font-bold">✓</span>}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Step Navigation Buttons */}
-            <div className="flex gap-3 pt-4 border-t border-white/5">
+        {/* ── STEP 2: Choose Activity / Vibe Sub-Category ── */}
+        {step === 2 && (
+          <div className="animate-slide-up max-w-3xl mx-auto">
+            <div className="flex items-center justify-between mb-6">
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="flex-1 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 text-sm font-semibold transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs text-slate-600 dark:text-white/50 hover:text-slate-900 dark:hover:text-white font-semibold transition-colors cursor-pointer"
               >
-                ← Back
+                <FiArrowLeft size={14} /> Back to Groups
               </button>
-              <button
-                type="button"
-                onClick={() => setStep(2)}
-                className="flex-1 btn-primary py-2.5 rounded-xl text-sm font-bold shadow-glow-purple-sm cursor-pointer"
-              >
-                Choose Distance →
-              </button>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-300 text-xs font-bold">
+                <span>{selectedGroup?.emoji} {selectedGroup?.label}</span>
+              </div>
+            </div>
+
+            <h2 className="text-center font-display font-bold text-2xl sm:text-3xl text-slate-900 dark:text-white mb-2">
+              Select a Vibe for {selectedGroup?.label}
+            </h2>
+            <p className="text-center text-slate-600 dark:text-white/40 text-sm mb-8">
+              Pick what kind of activity you'd like to explore
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {currentVibeList.map((v) => (
+                <button
+                  key={v.id}
+                  onClick={() => handleVibeSelect(v.id)}
+                  className="glass-card p-5 text-left group cursor-pointer border border-slate-200 dark:border-white/10 hover:border-primary-500/50 hover:shadow-glow-purple-sm transition-all duration-300 rounded-2xl flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-200">
+                      {v.emoji}
+                    </div>
+                    <h4 className="font-display font-bold text-slate-900 dark:text-white text-base mb-1">
+                      {v.label}
+                    </h4>
+                    <p className="text-slate-600 dark:text-white/40 text-xs leading-relaxed">
+                      {v.desc}
+                    </p>
+                  </div>
+                  <div className="mt-4 flex justify-end text-primary-400 group-hover:translate-x-1 transition-transform">
+                    <FiArrowRight size={16} />
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
         )}
 
-        {/* ── STEP 2: Configuration ── */}
-        {step === 2 && (
-          <div className="animate-slide-up text-center max-w-2xl mx-auto">
-            <p className="text-center text-white/50 text-base mb-6">
-              {selectedMood?.emoji} {selectedMood?.label} vibes — configure your search
+        {/* ── STEP 3: Location Selection (2 Main Options) ── */}
+        {step === 3 && (
+          <div className="animate-slide-up text-center max-w-2xl mx-auto glass-card p-8 border border-slate-200 dark:border-white/10 rounded-3xl shadow-xl">
+            <div className="flex items-center justify-between mb-6">
+              <button
+                type="button"
+                onClick={() => setStep(2)}
+                className="inline-flex items-center gap-1.5 text-xs text-slate-600 dark:text-white/50 hover:text-slate-900 dark:hover:text-white font-semibold transition-colors cursor-pointer"
+              >
+                <FiArrowLeft size={14} /> Back to Vibes
+              </button>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-dark-800 border border-slate-200 dark:border-white/10 text-xs font-bold">
+                <span>{selectedGroup?.emoji} {selectedGroup?.label}</span>
+                <span>·</span>
+                <span>{selectedVibe?.emoji} {selectedVibe?.label}</span>
+              </div>
+            </div>
+
+            <h3 className="font-display font-extrabold text-2xl text-slate-900 dark:text-white mb-2">
+              Where should we look?
+            </h3>
+            <p className="text-slate-600 dark:text-white/40 text-sm mb-6">
+              Choose how you want to discover spots for your outing
             </p>
 
-            {/* Segmented Location Mode Toggles */}
-            <div className="flex p-1 rounded-xl bg-white/5 border border-white/10 max-w-md mx-auto mb-6">
+            {/* Featured / Famous Spots in India Quick Selector */}
+            {currentFeaturedList.length > 0 && (
+              <div className="mb-6 text-left animate-slide-up bg-slate-100 dark:bg-dark-800/80 p-4 border border-slate-200 dark:border-white/10 rounded-2xl">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-white/80 flex items-center gap-1.5">
+                    <span>🌟 Featured Iconic Spots in India</span>
+                  </span>
+                  <span className="text-[11px] text-primary-600 dark:text-neon-teal font-bold">1-Click Instant Search</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {currentFeaturedList.map((spot) => (
+                    <button
+                      key={spot.name}
+                      type="button"
+                      onClick={() => handleFeaturedSpotClick(spot)}
+                      className="px-3.5 py-2 rounded-xl bg-white dark:bg-dark-700 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-xs font-bold hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-500/20 transition-all cursor-pointer shadow-sm flex items-center gap-1.5"
+                    >
+                      <span>{spot.emoji}</span>
+                      <span>{spot.name}</span>
+                      <span className="text-slate-500 dark:text-white/40 text-[10px] font-semibold">({spot.city})</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 2 Main Location Options Toggle */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
               <button
                 type="button"
                 onClick={() => setLocationMode('current')}
-                className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-all duration-300 cursor-pointer
+                className={`p-5 rounded-2xl text-left border transition-all duration-300 cursor-pointer flex flex-col justify-between
                   ${locationMode === 'current'
-                    ? 'bg-primary-500 text-white shadow-glow-purple-sm'
-                    : 'text-white/50 hover:text-white/80 hover:bg-white/3'}`}
+                    ? 'bg-primary-500/10 dark:bg-primary-500/20 border-2 border-primary-500 shadow-glow-purple-sm'
+                    : 'bg-slate-100 dark:bg-dark-800/80 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white/70 hover:bg-slate-200 dark:hover:bg-dark-700'}`}
               >
-                📍 GPS Location
+                <div>
+                  <div className="text-3xl mb-2">📍</div>
+                  <h4 className="font-display font-bold text-slate-900 dark:text-white text-base mb-1">
+                    Suggest Nearby Places
+                  </h4>
+                  <p className="text-slate-600 dark:text-white/60 text-xs font-medium leading-relaxed">
+                    Uses your browser's live GPS coordinates to find places near your current position.
+                  </p>
+                </div>
+                {locationMode === 'current' && <span className="text-primary-600 dark:text-neon-teal font-bold text-xs mt-3 block">✓ Selected</span>}
               </button>
+
               <button
                 type="button"
                 onClick={() => setLocationMode('custom')}
-                className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-all duration-300 cursor-pointer
+                className={`p-5 rounded-2xl text-left border transition-all duration-300 cursor-pointer flex flex-col justify-between
                   ${locationMode === 'custom'
-                    ? 'bg-primary-500 text-white shadow-glow-purple-sm'
-                    : 'text-white/50 hover:text-white/80 hover:bg-white/3'}`}
+                    ? 'bg-primary-500/10 dark:bg-primary-500/20 border-2 border-primary-500 shadow-glow-purple-sm'
+                    : 'bg-slate-100 dark:bg-dark-800/80 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white/70 hover:bg-slate-200 dark:hover:bg-dark-700'}`}
               >
-                🔍 Search Specific Place
+                <div>
+                  <div className="text-3xl mb-2">🔍</div>
+                  <h4 className="font-display font-bold text-slate-900 dark:text-white text-base mb-1">
+                    Search Specific Place or City
+                  </h4>
+                  <p className="text-slate-600 dark:text-white/60 text-xs font-medium leading-relaxed">
+                    Type any city, area, or landmark (e.g. Goa, Mumbai, Paris, Juhu Beach).
+                  </p>
+                </div>
+                {locationMode === 'custom' && <span className="text-primary-600 dark:text-neon-teal font-bold text-xs mt-3 block">✓ Selected</span>}
               </button>
             </div>
 
-            {/* Area/City text input if locationMode is custom */}
+            {/* Config Option A: GPS Search Radius */}
+            {locationMode === 'current' && (
+              <div className="text-left mb-8 animate-slide-up">
+                <label className="block text-slate-700 dark:text-white/60 text-xs font-bold uppercase tracking-wider mb-3 text-center">
+                  Select Search Radius
+                </label>
+                <div className="grid grid-cols-3 gap-3">
+                  {distances.map((d) => {
+                    const isSelected = distance === d.id;
+                    return (
+                      <button
+                        key={d.id}
+                        type="button"
+                        onClick={() => setDistance(d.id)}
+                        className={`p-4 text-center cursor-pointer border transition-all duration-300 rounded-2xl
+                          ${isSelected
+                            ? 'bg-primary-500/10 dark:bg-primary-500/20 border-2 border-primary-500 shadow-glow-purple-sm text-slate-900 dark:text-white'
+                            : 'bg-slate-100 dark:bg-dark-800/80 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white/70 hover:bg-slate-200 dark:hover:bg-dark-700'}`}
+                      >
+                        <div className="text-2xl mb-1">{d.emoji}</div>
+                        <p className="font-display font-bold text-slate-900 dark:text-white text-sm">{d.label}</p>
+                        <p className="text-slate-600 dark:text-white/50 text-[11px] font-medium">{d.desc}</p>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Config Option B: Area/City Autocomplete Input */}
             {locationMode === 'custom' && (
-              <div className="max-w-md mx-auto mb-6 text-left animate-slide-up">
-                <label className="block text-white/50 text-xs font-bold uppercase tracking-wider mb-2 pl-1">
-                  Area or City Name
+              <div className="mb-8 text-left animate-slide-up">
+                <label className="block text-slate-700 dark:text-white/60 text-xs font-bold uppercase tracking-wider mb-2 pl-1">
+                  Type Specific Place, Area, or City
                 </label>
                 <div className="relative z-30">
                   <input
                     type="text"
-                    placeholder="e.g. Dadar, Mumbai or Gujarat"
+                    placeholder="e.g. Goa, Mumbai, Juhu Beach, Paris"
                     value={locationQuery}
-                    onChange={(e) => handleInputChange(e.target.value, 'step2')}
-                    onFocus={() => handleInputFocus('step2')}
+                    onChange={(e) => handleInputChange(e.target.value, 'step3')}
+                    onFocus={() => handleInputFocus('step3')}
                     onBlur={handleInputBlur}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-base placeholder-white/20 focus:outline-none focus:border-primary-500/40 focus:bg-white/8 transition-all"
+                    className="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white text-base placeholder-slate-400 dark:placeholder-white/20 focus:outline-none focus:border-primary-500/50 focus:bg-white dark:focus:bg-white/10 transition-all shadow-sm"
                   />
-                  {showSuggestions && activeInputId === 'step2' && (
-                    <div className="absolute z-50 left-0 right-0 mt-1.5 bg-dark-800/95 border border-white/10 rounded-xl shadow-2xl overflow-hidden max-h-60 overflow-y-auto divide-y divide-white/5">
+                  {showSuggestions && activeInputId === 'step3' && (
+                    <div className="absolute z-50 left-0 right-0 mt-1.5 bg-white dark:bg-dark-800/95 border border-slate-200 dark:border-white/10 rounded-xl shadow-2xl overflow-hidden max-h-60 overflow-y-auto divide-y divide-slate-100 dark:divide-white/5">
                       {suggestionsLoading ? (
-                        <div className="p-3.5 text-sm text-white/40 text-center flex items-center justify-center gap-2">
+                        <div className="p-3.5 text-sm text-slate-500 dark:text-white/40 text-center flex items-center justify-center gap-2">
                           <FiRefreshCw size={14} className="animate-spin text-primary-400" />
                           <span>Searching locations...</span>
                         </div>
                       ) : suggestions.length === 0 ? (
-                        <div className="p-3.5 text-sm text-white/40 text-center">No matching locations found</div>
+                        <div className="p-3.5 text-sm text-slate-500 dark:text-white/40 text-center">No matching locations found</div>
                       ) : (
                         suggestions.map((s) => (
                           <button
                             key={s.placeId}
                             type="button"
                             onClick={() => handleSelectSuggestion(s)}
-                            className="w-full text-left px-4 py-3 hover:bg-white/5 transition-colors cursor-pointer block"
+                            className="w-full text-left px-4 py-3 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer block"
                           >
-                            <div className="text-white font-medium text-sm">
+                            <div className="text-slate-900 dark:text-white font-semibold text-sm">
                               {s.name || s.formatted.split(',')[0]}
                             </div>
-                            <div className="text-white/40 text-xs mt-0.5 truncate">
+                            <div className="text-slate-500 dark:text-white/40 text-xs mt-0.5 truncate">
                               {s.formatted}
                             </div>
                           </button>
@@ -539,97 +640,48 @@ const Explore = () => {
               </div>
             )}
 
-            {locationMode === 'current' && (
-              <p className="text-white/30 text-sm mb-6 max-w-md mx-auto animate-slide-up">
-                We'll use your browser's current coordinates to suggest nearby places.
-              </p>
-            )}
-
-            {/* Distance Cards Selector (Only visible for GPS location mode) */}
-            {locationMode === 'current' && (
-              <div className="text-left max-w-2xl mx-auto mb-8 animate-slide-up">
-                <label className="block text-white/50 text-xs font-bold uppercase tracking-wider mb-3 text-center">
-                  Search Radius
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  {distances.map((d) => {
-                    const isSelected = distance === d.id;
-                    return (
-                      <button
-                        key={d.id}
-                        type="button"
-                        onClick={() => setDistance(d.id)}
-                        className={`p-5 text-center group cursor-pointer border transition-all duration-300 rounded-2xl
-                          ${isSelected
-                            ? 'bg-primary-500/10 border-primary-500 shadow-glow-purple-sm'
-                            : 'bg-white/3 border-white/5 text-white/70 hover:bg-white/8 hover:border-white/10'}`}
-                      >
-                        <div className="text-3xl mb-2 group-hover:scale-110 transition-transform duration-200">
-                          {d.emoji}
-                        </div>
-                        <p className="font-display font-semibold text-white text-base mb-0.5">{d.label}</p>
-                        <p className="text-white/30 text-sm">{d.desc}</p>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* Actions */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center max-w-md mx-auto">
-              <button
-                type="button"
-                onClick={() => {
-                  if (mood === 'foodie' || mood === 'adventure') {
-                    setStep(1.5);
-                  } else {
-                    setStep(1);
-                  }
-                }}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 text-sm font-semibold transition-all cursor-pointer"
-              >
-                ← Back
-              </button>
-              <button
-                type="button"
-                onClick={handleFindPlacesClick}
-                disabled={locationMode === 'custom' && !locationQuery.trim()}
-                className="w-full sm:flex-1 btn-primary py-2.5 rounded-xl text-sm font-bold shadow-glow-purple-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Find places {locationMode === 'current' ? 'near me 📍' : '🔍'}
-              </button>
-            </div>
+            {/* Find Places Action Button */}
+            <button
+              type="button"
+              onClick={handleFindPlacesClick}
+              disabled={locationMode === 'custom' && !locationQuery.trim()}
+              className="w-full btn-primary py-3.5 rounded-xl text-base font-bold shadow-glow-purple transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              <span>Explore Spots for {selectedGroup?.label}</span>
+              <FiArrowRight size={18} />
+            </button>
           </div>
         )}
 
-
-        {/* ── STEP 3: Results ── */}
-        {step === 3 && (
+        {/* ── STEP 4: Results Display ── */}
+        {step === 4 && (
           <div className="animate-fade-in">
-            {/* Summary bar */}
-            <div className="glass-card relative z-30 p-4 flex flex-col md:flex-row items-center justify-between gap-4 mb-6 animate-slide-up">
-              <div className="flex flex-wrap items-center gap-3 text-base text-white/60">
-                <span>{selectedMood?.emoji} <span className="text-white font-medium">{selectedMood?.label}</span></span>
+            {/* Filter Summary Header */}
+            <div className="glass-card relative z-30 p-4 flex flex-col md:flex-row items-center justify-between gap-4 mb-6 animate-slide-up border border-slate-200 dark:border-white/10 rounded-2xl shadow-md">
+              <div className="flex flex-wrap items-center gap-3 text-sm sm:text-base text-slate-700 dark:text-white/60">
+                <span>{selectedGroup?.emoji} <span className="text-slate-900 dark:text-white font-bold">{selectedGroup?.label}</span></span>
+                <span className="text-slate-400 dark:text-white/20">·</span>
+                <span>{selectedVibe?.emoji} <span className="text-slate-900 dark:text-white font-bold">{selectedVibe?.label}</span></span>
                 {locationMode === 'current' && selectedDist && (
                   <>
-                    <span className="text-white/20">·</span>
-                    <span>{selectedDist?.emoji} <span className="text-white font-medium">{selectedDist?.label}</span></span>
+                    <span className="text-slate-400 dark:text-white/20">·</span>
+                    <span>{selectedDist?.emoji} <span className="text-slate-900 dark:text-white font-bold">{selectedDist?.label}</span></span>
                   </>
                 )}
                 {resolvedLocationText && (
                   <>
-                    <span className="text-white/20">·</span>
-                    <span className="text-white font-medium">📍 {resolvedLocationText}</span>
+                    <span className="text-slate-400 dark:text-white/20">·</span>
+                    <span className="text-slate-900 dark:text-white font-bold truncate max-w-[200px]">📍 {resolvedLocationText}</span>
                   </>
                 )}
                 {places.length > 0 && (
                   <>
-                    <span className="text-white/20">·</span>
-                    <span className="text-neon-teal font-medium">{places.length} places found</span>
+                    <span className="text-slate-400 dark:text-white/20">·</span>
+                    <span className="text-neon-teal font-bold">{places.length} places found</span>
                   </>
                 )}
               </div>
+
               <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
                 <form onSubmit={handleSearchSubmit} className="flex gap-2 w-full md:w-auto">
                   <div className="relative flex-1 md:w-48">
@@ -637,32 +689,32 @@ const Explore = () => {
                       type="text"
                       placeholder="Search new location..."
                       value={locationQuery}
-                      onChange={(e) => handleInputChange(e.target.value, 'step3')}
-                      onFocus={() => handleInputFocus('step3')}
+                      onChange={(e) => handleInputChange(e.target.value, 'step4')}
+                      onFocus={() => handleInputFocus('step4')}
                       onBlur={handleInputBlur}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 text-white text-sm placeholder-white/20 focus:outline-none focus:border-primary-500/40 focus:bg-white/8 transition-all"
+                      className="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 rounded-xl px-3 py-1.5 text-slate-900 dark:text-white text-sm placeholder-slate-400 dark:placeholder-white/20 focus:outline-none focus:border-primary-500/40 transition-all"
                     />
-                    {showSuggestions && activeInputId === 'step3' && (
-                      <div className="absolute z-50 left-0 right-0 mt-1.5 bg-dark-800/95 border border-white/10 rounded-xl shadow-2xl overflow-hidden max-h-60 overflow-y-auto divide-y divide-white/5 md:w-64 md:left-auto md:right-0">
+                    {showSuggestions && activeInputId === 'step4' && (
+                      <div className="absolute z-50 left-0 right-0 mt-1.5 bg-white dark:bg-dark-800/95 border border-slate-200 dark:border-white/10 rounded-xl shadow-2xl overflow-hidden max-h-60 overflow-y-auto divide-y divide-slate-100 dark:divide-white/5 md:w-64 md:left-auto md:right-0">
                         {suggestionsLoading ? (
-                          <div className="p-3 text-xs text-white/40 text-center flex items-center justify-center gap-2">
+                          <div className="p-3 text-xs text-slate-500 dark:text-white/40 text-center flex items-center justify-center gap-2">
                             <FiRefreshCw size={12} className="animate-spin text-primary-400" />
                             <span>Searching locations...</span>
                           </div>
                         ) : suggestions.length === 0 ? (
-                          <div className="p-3 text-xs text-white/40 text-center">No locations found</div>
+                          <div className="p-3 text-xs text-slate-500 dark:text-white/40 text-center">No locations found</div>
                         ) : (
                           suggestions.map((s) => (
                             <button
                               key={s.placeId}
                               type="button"
                               onClick={() => handleSelectSuggestion(s)}
-                              className="w-full text-left px-3 py-2 hover:bg-white/5 transition-colors cursor-pointer block"
+                              className="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer block"
                             >
-                              <div className="text-white font-medium text-xs truncate">
+                              <div className="text-slate-900 dark:text-white font-semibold text-xs truncate">
                                 {s.name || s.formatted.split(',')[0]}
                               </div>
-                              <div className="text-white/40 text-[10px] mt-0.5 truncate">
+                              <div className="text-slate-500 dark:text-white/40 text-[10px] mt-0.5 truncate">
                                 {s.formatted}
                               </div>
                             </button>
@@ -674,12 +726,12 @@ const Explore = () => {
                   <button
                     type="submit"
                     disabled={!locationQuery.trim()}
-                    className="bg-primary-500/20 border border-primary-500/25 hover:bg-primary-500/35 text-primary-300 font-semibold px-3 py-1.5 rounded-xl text-sm transition-colors cursor-pointer"
+                    className="bg-primary-500/20 border border-primary-500/25 hover:bg-primary-500/35 text-primary-300 font-bold px-3 py-1.5 rounded-xl text-sm transition-colors cursor-pointer"
                   >
                     Go
                   </button>
                 </form>
-                <button onClick={handleReset} className="btn-ghost text-sm flex items-center gap-1.5 !px-3 !py-2">
+                <button onClick={handleReset} className="btn-ghost text-sm flex items-center gap-1.5 !px-3 !py-2 font-bold cursor-pointer">
                   <FiRefreshCw size={12} />
                   Start over
                 </button>
@@ -689,15 +741,15 @@ const Explore = () => {
             {/* Empty state placeholder if no places found and not loading */}
             {!loading && places.length === 0 && !error && (
               <div className="glass-card p-8 text-center animate-slide-up">
-                <p className="text-base text-white/70">No places loaded yet.</p>
+                <p className="text-base text-slate-600 dark:text-white/70">No places loaded yet.</p>
               </div>
             )}
 
             {/* Loading skeletons */}
             {loading && (
               <div>
-                <p className="text-center text-white/40 text-base mb-6 animate-pulse">
-                  📡 Finding places near you...
+                <p className="text-center text-slate-600 dark:text-white/40 text-base mb-6 animate-pulse font-semibold">
+                  📡 Finding curated spots for {selectedGroup?.label}...
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {[...Array(6)].map((_, i) => <PlaceSkeleton key={i} />)}
@@ -707,10 +759,10 @@ const Explore = () => {
 
             {/* Error state */}
             {error && (
-              <div className="glass-card p-8 text-center animate-slide-up">
+              <div className="glass-card p-8 text-center animate-slide-up border border-slate-200 dark:border-white/10">
                 <FiAlertCircle className="text-accent-400 mx-auto mb-3" size={32} />
-                <p className="text-base text-white/70 mb-4">{error}</p>
-                <button onClick={handleFetch} className="btn-secondary flex items-center gap-2 mx-auto text-sm">
+                <p className="text-base text-slate-700 dark:text-white/70 mb-4">{error}</p>
+                <button onClick={handleFindPlacesClick} className="btn-secondary flex items-center gap-2 mx-auto text-sm font-bold">
                   <FiRefreshCw size={16} />
                   Try again
                 </button>
