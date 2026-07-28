@@ -66,7 +66,7 @@ const Room = () => {
   const { roomId: id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { socket } = useSocket();
+  const { socket, connected } = useSocket();
 
   const [room, setRoom] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -237,7 +237,15 @@ const Room = () => {
   useEffect(() => {
     if (!socket || !room) return;
 
-    socket.emit('join-room', { roomId: id });
+    const joinRoomSocket = () => {
+      socket.emit('join-room', { roomId: id });
+    };
+
+    if (socket.connected) {
+      joinRoomSocket();
+    }
+
+    socket.on('connect', joinRoomSocket);
 
     socket.on('new-message', (msg) => {
       setMessages((prev) => [...prev, msg]);
@@ -281,17 +289,23 @@ const Room = () => {
       setVoteResult(null);
     });
 
-    socket.on('vote-started', ({ item, endTime, tallies }) => {
+    socket.on('vote-started', ({ item, endTime, votes, tallies, isRestored }) => {
       setActiveVote({ item, endTime });
-      setMyVote(null);
       setVoteTallies(tallies || { yes: 0, no: 0, maybe: 0 });
+      if (votes && user?._id && votes[user._id]) {
+        setMyVote(votes[user._id]);
+      } else {
+        setMyVote(null);
+      }
       setVoteResult(null);
-      toast.info(`🗳️ Vote started: ${item.name || item.title}`, { toastId: `vote-started-${item.id || item.name}` });
+      if (!isRestored) {
+        toast.info(`🗳️ Vote started: ${item.name || item.title}`, { toastId: `vote-started-${item.id || item.name}` });
+      }
     });
 
     socket.on('vote-update', ({ votes, tallies }) => {
       setVoteTallies(tallies);
-      if (votes && votes[user?._id]) {
+      if (votes && user?._id && votes[user?._id]) {
         setMyVote(votes[user?._id]);
       }
     });
@@ -337,6 +351,7 @@ const Room = () => {
 
     return () => {
       socket.emit('leave-room', { roomId: id });
+      socket.off('connect', joinRoomSocket);
       socket.off('new-message');
       socket.off('message-updated');
       socket.off('message-deleted');
@@ -351,7 +366,7 @@ const Room = () => {
       socket.off('outing-plan-cancelled');
       socket.off(`chat-relationship-updated-${user?._id}`);
     };
-  }, [socket, room, id, user?._id, fetchRoomPlan]);
+  }, [socket, connected, room, id, user?._id, fetchRoomPlan, isHost]);
 
   // Auto-scroll chat
   useEffect(() => {
