@@ -130,102 +130,98 @@ const GameVoting = ({
     const finalTallies = voteResult.tallies || { yes: 0, no: 0, maybe: 0 };
 
     return (
-      <div className="flex-1 flex flex-col items-center justify-start p-6 text-center max-w-md mx-auto w-full animate-slide-up my-auto">
+      <div className="flex-1 flex flex-col items-center justify-start p-6 text-center max-w-2xl mx-auto w-full animate-slide-up my-auto">
         {isApproved ? (
-          <div className="glass-card p-8 border-neon-green/30 shadow-glow-green w-full">
-            <div className="w-16 h-16 rounded-full bg-neon-green/10 flex items-center justify-center text-neon-green mx-auto mb-6 animate-bounce">
-              <FiAward size={32} />
+          <div className="glass-card p-7 border-neon-green/30 shadow-glow-green w-full">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <div className="w-8 h-8 rounded-full bg-neon-green/10 flex items-center justify-center text-neon-green">
+                <FiAward size={18} />
+              </div>
+              <span className="text-neon-green text-sm font-extrabold uppercase tracking-widest">
+                PROPOSAL PASSED!
+              </span>
             </div>
-            <p className="text-neon-green text-xs font-bold uppercase tracking-widest mb-1">
-              Proposal Passed!
-            </p>
-            <h2 className="font-display font-black text-3xl text-slate-900 dark:text-white mb-4">
+
+            <h2 className="font-display font-black text-3xl text-slate-900 dark:text-white mb-5 leading-tight">
               {item.type === 'activity' ? `Switch to ${item.name}?` : item.type === 'outing' ? `Let's meet at ${item.name || item.title}!` : item.type === 'movie' ? `Watch ${item.name || item.title}?` : `Let's Play ${item.name || item.title}!`}
             </h2>
-            <p className="text-slate-600 dark:text-white/50 text-sm mb-6">
-              {item.type === 'activity'
-                ? 'The group voted YES! Changing room activity...'
-                : item.type === 'outing'
-                ? 'The group voted YES! Get directions on Google Maps below.'
-                : item.type === 'movie'
-                ? 'The group voted YES! Streaming source info is below.'
-                : 'The group voted YES! Click the button below to join the game session.'}
-            </p>
 
-            {/* Movie Poster */}
-            {item.type === 'movie' && item.poster && (
-              <img
-                src={item.poster}
-                alt={item.title}
-                className="w-24 h-36 object-cover rounded-lg mx-auto mb-4 border border-slate-200 dark:border-white/10 shadow-md"
-              />
-            )}
-
-            {/* Watch Providers for Movie */}
+            {/* Watch Providers & Poster for Movie */}
             {item.type === 'movie' && (
-              <div className="mb-6 bg-slate-100/80 dark:bg-dark-800/60 rounded-2xl p-4 border border-slate-200/80 dark:border-white/10 shadow-sm text-center">
-                <p className="text-slate-700 dark:text-white/60 text-xs font-semibold mb-3">Available Stream Sources:</p>
-                {loadingProviders ? (
-                  <div className="flex justify-center py-2">
-                    <div className="w-5 h-5 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin" />
-                  </div>
-                ) : providers.length > 0 ? (
-                  <div className="flex flex-wrap gap-4 justify-center items-center">
-                    {providers.map((p, idx) => {
-                      const logoUrl = getProviderLogoUrl(p);
-                      return (
-                        <div key={idx} className="flex flex-col items-center gap-1.5">
-                          <div className="w-12 h-12 rounded-xl bg-white shadow-md border border-slate-200 dark:border-white/10 p-1.5 flex items-center justify-center transition-transform hover:scale-105">
-                            {logoUrl ? (
-                              <img
-                                src={logoUrl}
-                                alt={p.provider_name}
-                                className="max-w-full max-h-full object-contain"
-                                title={p.provider_name}
-                                onError={(e) => {
-                                  e.target.onerror = null;
-                                  e.target.style.display = 'none';
-                                  if (e.target.nextSibling) {
-                                    e.target.nextSibling.style.display = 'flex';
-                                  }
-                                }}
-                              />
-                            ) : null}
-                            <div
-                              style={{ display: logoUrl ? 'none' : 'flex' }}
-                              className="w-full h-full text-[9px] text-slate-800 font-bold items-center justify-center text-center leading-tight"
-                            >
-                              {p.provider_name}
-                            </div>
-                          </div>
-                          <span className="text-[10px] text-slate-700 dark:text-white/70 font-semibold truncate max-w-[75px]">{p.provider_name}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <p className="text-slate-500 dark:text-white/40 text-xs italic">No streaming providers found.</p>
+              <div className="mb-6 bg-slate-100/80 dark:bg-dark-800/60 rounded-2xl p-5 border border-slate-200/80 dark:border-white/10 shadow-sm text-left flex flex-col sm:flex-row items-center sm:items-start gap-5">
+                {item.poster && (
+                  <img
+                    src={item.poster}
+                    alt={item.title}
+                    className="w-28 h-40 object-cover rounded-xl border border-slate-200 dark:border-white/10 shadow-md flex-shrink-0"
+                  />
                 )}
+                <div className="flex-1 min-w-0 w-full flex flex-col justify-between min-h-[160px]">
+                  <div>
+                    <p className="text-slate-800 dark:text-white/80 text-sm font-bold mb-3">Available Stream Sources:</p>
+                    {loadingProviders ? (
+                      <div className="py-3 flex justify-start">
+                        <div className="w-5.5 h-5.5 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin" />
+                      </div>
+                    ) : providers.length > 0 ? (
+                      <div className="flex flex-wrap gap-3 items-center">
+                        {providers.map((p, idx) => {
+                          const logoUrl = getProviderLogoUrl(p);
+                          return (
+                            <div key={idx} className="flex items-center gap-2 bg-white dark:bg-dark-900/90 px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm">
+                              {logoUrl ? (
+                                <img
+                                  src={logoUrl}
+                                  alt={p.provider_name}
+                                  className="w-5 h-5 object-contain"
+                                  title={p.provider_name}
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.style.display = 'none';
+                                  }}
+                                />
+                              ) : null}
+                              <span className="text-sm text-slate-900 dark:text-white font-bold">{p.provider_name}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="text-slate-500 dark:text-white/40 text-sm italic">No streaming providers found.</p>
+                    )}
+                  </div>
+
+                  {/* Integrated Voting Summary */}
+                  <div className="bg-white/80 dark:bg-dark-900/70 rounded-xl p-2.5 border border-slate-200/60 dark:border-white/5 flex items-center justify-around text-sm mt-4 font-bold">
+                    <span className="text-neon-green">{finalTallies.yes} <span className="font-semibold text-slate-500 dark:text-white/40 text-xs">Yes</span></span>
+                    <span className="text-slate-300 dark:text-white/10">|</span>
+                    <span className="text-red-500 dark:text-red-400">{finalTallies.no} <span className="font-semibold text-slate-500 dark:text-white/40 text-xs">No</span></span>
+                    <span className="text-slate-300 dark:text-white/10">|</span>
+                    <span className="text-slate-700 dark:text-white/70">{finalTallies.maybe} <span className="font-semibold text-slate-500 dark:text-white/40 text-xs">Maybe</span></span>
+                  </div>
+                </div>
               </div>
             )}
 
-            {/* Voting summary */}
-            <div className="bg-slate-100/80 dark:bg-dark-800/60 rounded-2xl p-4 border border-slate-200/80 dark:border-white/10 flex justify-around mb-8 text-sm shadow-sm">
-              <div>
-                <span className="block text-neon-green font-bold text-lg">{finalTallies.yes}</span>
-                <span className="text-slate-500 dark:text-white/40 text-xs font-medium">Yes</span>
+            {/* Non-Movie Voting Summary */}
+            {item.type !== 'movie' && (
+              <div className="bg-slate-100/80 dark:bg-dark-800/60 rounded-2xl p-4 border border-slate-200/80 dark:border-white/10 flex justify-around mb-6 text-base shadow-sm">
+                <div>
+                  <span className="block text-neon-green font-bold text-lg">{finalTallies.yes}</span>
+                  <span className="text-slate-500 dark:text-white/40 text-xs font-semibold">Yes</span>
+                </div>
+                <div className="border-r border-slate-200 dark:border-white/10" />
+                <div>
+                  <span className="block text-red-500 dark:text-red-400 font-bold text-lg">{finalTallies.no}</span>
+                  <span className="text-slate-500 dark:text-white/40 text-xs font-semibold">No</span>
+                </div>
+                <div className="border-r border-slate-200 dark:border-white/10" />
+                <div>
+                  <span className="block text-slate-700 dark:text-white/60 font-bold text-lg">{finalTallies.maybe}</span>
+                  <span className="text-slate-500 dark:text-white/40 text-xs font-semibold">Maybe</span>
+                </div>
               </div>
-              <div className="border-r border-slate-200 dark:border-white/10" />
-              <div>
-                <span className="block text-red-500 dark:text-red-400 font-bold text-lg">{finalTallies.no}</span>
-                <span className="text-slate-500 dark:text-white/40 text-xs font-medium">No</span>
-              </div>
-              <div className="border-r border-slate-200 dark:border-white/10" />
-              <div>
-                <span className="block text-slate-700 dark:text-white/60 font-bold text-lg">{finalTallies.maybe}</span>
-                <span className="text-slate-500 dark:text-white/40 text-xs font-medium">Maybe</span>
-              </div>
-            </div>
+            )}
 
             {/* Outing Scheduling Block */}
             {item.type === 'outing' && (
@@ -266,43 +262,44 @@ const GameVoting = ({
               </div>
             )}
 
-            <div className="flex flex-col gap-3">
+            {/* Action Buttons */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {item.type !== 'activity' && (
                 item.type === 'outing' ? (
                   <a
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full btn-primary flex items-center justify-center gap-2 py-3 rounded-xl font-semibold bg-gradient-to-r from-neon-green to-emerald-500 hover:from-neon-green hover:to-emerald-600 hover:shadow-glow-green text-white transition-all"
+                    className="w-full btn-primary flex items-center justify-center gap-2 py-3 rounded-xl font-bold bg-gradient-to-r from-neon-green to-emerald-500 hover:from-neon-green hover:to-emerald-600 hover:shadow-glow-green text-white transition-all text-sm"
                   >
                     Open Google Maps
-                    <FiExternalLink size={16} />
+                    <FiExternalLink size={15} />
                   </a>
                 ) : item.type === 'movie' ? (
                   <a
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full btn-primary flex items-center justify-center gap-2 py-3 rounded-xl font-semibold bg-gradient-to-r from-primary-500 to-accent-500 hover:from-primary-600 hover:to-accent-600 hover:shadow-glow-purple text-white transition-all"
+                    className="w-full btn-primary flex items-center justify-center gap-2 py-3 rounded-xl font-bold bg-gradient-to-r from-primary-500 to-accent-500 hover:from-primary-600 hover:to-accent-600 hover:shadow-glow-purple text-white transition-all text-sm"
                   >
                     View Details on TMDB
-                    <FiExternalLink size={16} />
+                    <FiExternalLink size={15} />
                   </a>
                 ) : (
                   <a
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full btn-primary flex items-center justify-center gap-2 py-3 rounded-xl font-semibold bg-gradient-to-r from-neon-green to-emerald-500 hover:from-neon-green hover:to-emerald-600 hover:shadow-glow-green text-white transition-all"
+                    className="w-full btn-primary flex items-center justify-center gap-2 py-3 rounded-xl font-bold bg-gradient-to-r from-neon-green to-emerald-500 hover:from-neon-green hover:to-emerald-600 hover:shadow-glow-green text-white transition-all text-sm"
                   >
                     Open Game
-                    <FiExternalLink size={16} />
+                    <FiExternalLink size={15} />
                   </a>
                 )
               )}
               <button
                 onClick={onClear}
-                className="w-full btn-secondary text-xs"
+                className={`w-full btn-secondary py-3 text-sm font-bold rounded-xl ${item.type === 'activity' ? 'sm:col-span-2' : ''}`}
               >
                 {item.type === 'activity' ? 'Back to Room' : item.type === 'outing' ? 'Back to Outing Lounge' : item.type === 'movie' ? 'Back to Watch Lounge' : 'Back to Game Lounge'}
               </button>
@@ -357,7 +354,7 @@ const GameVoting = ({
   // 2. --- Active Voting State ---
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-6 max-w-md mx-auto w-full animate-slide-up">
+    <div className="flex-1 flex flex-col items-center justify-center p-6 max-w-3xl mx-auto w-full animate-slide-up">
       <div className="glass-card p-8 border-primary-500/30 w-full relative overflow-hidden">
         {/* Glow */}
         <div className="absolute top-0 right-0 w-24 h-24 bg-primary-500/10 rounded-full blur-2xl pointer-events-none" />
