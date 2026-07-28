@@ -714,7 +714,7 @@ const Room = () => {
           )}
         </div>
 
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
           {scheduledPlan && (
             <div className="bg-neon-green/10 border-b border-neon-green/20 px-6 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 animate-slide-up">
               <div className="flex items-center gap-3">

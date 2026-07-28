@@ -4,6 +4,31 @@ import { toast } from 'react-toastify';
 import { movieService } from '../../services/movieService';
 import { outingPlanService } from '../../services/outingPlanService';
 
+const PROVIDER_LOGOS = {
+  'netflix': 'https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_N_logo.svg',
+  'amazon prime video': 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Prime_Video.png',
+  'prime video': 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Prime_Video.png',
+  'disney+': 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg',
+  'disney plus': 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg',
+  'apple tv': 'https://upload.wikimedia.org/wikipedia/commons/2/28/Apple_TV_Plus_Logo.svg',
+  'apple tv+': 'https://upload.wikimedia.org/wikipedia/commons/2/28/Apple_TV_Plus_Logo.svg',
+  'hbo max': 'https://upload.wikimedia.org/wikipedia/commons/1/17/HBO_Max_Logo.svg',
+  'max': 'https://upload.wikimedia.org/wikipedia/commons/1/17/HBO_Max_Logo.svg',
+  'youtube': 'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg',
+  'hotstar': 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Disney%2B_Hotstar_logo.svg',
+  'disney+ hotstar': 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Disney%2B_Hotstar_logo.svg',
+  'jiocinema': 'https://upload.wikimedia.org/wikipedia/commons/e/e4/JioCinema_Logo.svg'
+};
+
+const getProviderLogoUrl = (provider) => {
+  if (!provider) return null;
+  const name = (provider.provider_name || provider.name || '').toLowerCase();
+  for (const [key, url] of Object.entries(PROVIDER_LOGOS)) {
+    if (name.includes(key)) return url;
+  }
+  return provider.logo || provider.logo_path || null;
+};
+
 const GameVoting = ({
   activeVote,
   tallies = { yes: 0, no: 0, maybe: 0 },
@@ -105,7 +130,7 @@ const GameVoting = ({
     const finalTallies = voteResult.tallies || { yes: 0, no: 0, maybe: 0 };
 
     return (
-      <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto w-full animate-slide-up">
+      <div className="flex-1 flex flex-col items-center justify-start p-6 text-center max-w-md mx-auto w-full animate-slide-up my-auto">
         {isApproved ? (
           <div className="glass-card p-8 border-neon-green/30 shadow-glow-green w-full">
             <div className="w-16 h-16 rounded-full bg-neon-green/10 flex items-center justify-center text-neon-green mx-auto mb-6 animate-bounce">
@@ -146,23 +171,35 @@ const GameVoting = ({
                   </div>
                 ) : providers.length > 0 ? (
                   <div className="flex flex-wrap gap-4 justify-center items-center">
-                    {providers.map((p, idx) => (
-                      <div key={idx} className="flex flex-col items-center gap-1.5">
-                        {p.logo ? (
-                          <img
-                            src={p.logo}
-                            alt={p.provider_name}
-                            className="w-10 h-10 rounded-xl object-cover border border-white/10"
-                            title={p.provider_name}
-                          />
-                        ) : (
-                          <div className="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] text-white">
+                    {providers.map((p, idx) => {
+                      const logoUrl = getProviderLogoUrl(p);
+                      return (
+                        <div key={idx} className="flex flex-col items-center gap-1.5">
+                          {logoUrl ? (
+                            <img
+                              src={logoUrl}
+                              alt={p.provider_name}
+                              className="w-10 h-10 rounded-xl object-contain bg-white/5 p-1 border border-white/10 shadow-sm"
+                              title={p.provider_name}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.style.display = 'none';
+                                if (e.target.nextSibling) {
+                                  e.target.nextSibling.style.display = 'flex';
+                                }
+                              }}
+                            />
+                          ) : null}
+                          <div
+                            style={{ display: logoUrl ? 'none' : 'flex' }}
+                            className="w-10 h-10 rounded-xl bg-white/10 border border-white/10 text-[10px] text-white font-bold items-center justify-center text-center p-1"
+                          >
                             {p.provider_name}
                           </div>
-                        )}
-                        <span className="text-[9px] text-white/30 truncate max-w-[65px]">{p.provider_name}</span>
-                      </div>
-                    ))}
+                          <span className="text-[9px] text-white/40 font-medium truncate max-w-[70px]">{p.provider_name}</span>
+                        </div>
+                      );
+                    })}
                   </div>
                 ) : (
                   <p className="text-white/30 text-xs italic">No streaming providers found.</p>
