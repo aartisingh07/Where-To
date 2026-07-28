@@ -562,15 +562,6 @@ const UserHome = ({ user }) => {
 
   const quickActions = [
     {
-      emoji: '📍',
-      label: 'Explore Outing Spots',
-      desc: 'Curated places for Friends, Couples & Family',
-      to: '/explore',
-      color: 'from-teal-500/20 to-cyan-500/10 hover:border-teal-500/40 hover:shadow-glow-teal',
-      badge: <span className="px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 text-[10px] font-extrabold uppercase border border-teal-500/30">India Spots</span>,
-      iconColor: 'bg-teal-500/20 text-teal-300',
-    },
-    {
       emoji: '🏠',
       label: 'Create Hangout Room',
       desc: 'Start a room, invite squad & decide together',
@@ -587,6 +578,15 @@ const UserHome = ({ user }) => {
       color: 'from-indigo-500/20 to-blue-500/10 hover:border-indigo-500/40 hover:shadow-glow-cyan',
       badge: <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-extrabold uppercase border border-indigo-500/30">Use Code</span>,
       iconColor: 'bg-indigo-500/20 text-indigo-300',
+    },
+    {
+      emoji: '💬',
+      label: 'Direct Chats & DMs',
+      desc: 'Message friends privately without joining codes',
+      to: '/chats',
+      color: 'from-teal-500/20 to-cyan-500/10 hover:border-teal-500/40 hover:shadow-glow-teal',
+      badge: <span className="px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 text-[10px] font-extrabold uppercase border border-teal-500/30">Private Chat</span>,
+      iconColor: 'bg-teal-500/20 text-teal-300',
     },
     {
       emoji: '❤️',
@@ -641,7 +641,7 @@ const UserHome = ({ user }) => {
                   Welcome back, <span className="text-gradient">{user?.username || 'Explorer'}</span>! 👋
                 </h1>
                 <p className="text-slate-600 dark:text-white/50 text-sm mt-1">
-                  Ready to plan an outing, join a room, or explore spots nearby?
+                  Plan an outing, join a room, or chat with your friends in real-time.
                 </p>
               </div>
             </div>
@@ -794,11 +794,11 @@ const UserHome = ({ user }) => {
                   <div className="w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
                 </div>
               ) : activeRooms.length === 0 ? (
-                <div className="text-center py-8 px-4 bg-slate-100/50 dark:bg-white/3 rounded-2xl border border-slate-200 dark:border-white/5">
+                <div className="text-center py-8 px-4 bg-slate-100 dark:bg-dark-800/80 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
                   <span className="text-3xl block mb-2">🎮</span>
-                  <p className="text-slate-700 dark:text-white/60 text-sm font-semibold mb-1">No active lobbies yet</p>
-                  <p className="text-slate-500 dark:text-white/40 text-xs mb-4">Create a room or join your friends with a 6-digit code!</p>
-                  <Link to="/create-room" className="btn-primary py-2 px-4 rounded-xl text-xs font-bold inline-flex items-center gap-1.5">
+                  <p className="text-slate-900 dark:text-white text-sm font-bold mb-1">No active lobbies yet</p>
+                  <p className="text-slate-600 dark:text-white/50 text-xs mb-4 font-medium">Create a room or join your friends with a 6-digit code!</p>
+                  <Link to="/create-room" className="btn-primary py-2 px-4 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 shadow-sm">
                     <span>Create Room</span>
                     <FiArrowRight size={14} />
                   </Link>
@@ -869,11 +869,11 @@ const UserHome = ({ user }) => {
                   <div className="w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
                 </div>
               ) : plans.length === 0 ? (
-                <div className="text-center py-8 px-4 bg-slate-100/50 dark:bg-white/3 rounded-2xl border border-slate-200 dark:border-white/5">
+                <div className="text-center py-8 px-4 bg-slate-100 dark:bg-dark-800/80 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
                   <span className="text-3xl block mb-2">🏖️</span>
-                  <p className="text-slate-700 dark:text-white/60 text-sm font-semibold mb-1">No scheduled outings yet</p>
-                  <p className="text-slate-500 dark:text-white/40 text-xs mb-4">Propose a spot in an active hangout room lounge!</p>
-                  <Link to="/explore" className="btn-secondary py-2 px-4 rounded-xl text-xs font-bold inline-flex items-center gap-1.5">
+                  <p className="text-slate-900 dark:text-white text-sm font-bold mb-1">No scheduled outings yet</p>
+                  <p className="text-slate-600 dark:text-white/50 text-xs mb-4 font-medium">Propose a spot in an active hangout room lounge!</p>
+                  <Link to="/explore" className="btn-secondary py-2 px-4 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 shadow-sm">
                     <span>Explore Spots</span>
                     <FiArrowRight size={14} />
                   </Link>
@@ -938,13 +938,13 @@ const UserHome = ({ user }) => {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 dark:border-white/5 py-6 px-4 mt-8">
+      <footer className="border-t border-slate-200 dark:border-white/10 py-6 px-4 mt-8">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Logo className="w-5 h-5" />
             <span className="font-display font-bold text-gradient">Where To?</span>
           </div>
-          <p className="text-slate-500 dark:text-white/20 text-sm">Built with ❤️ for friend groups everywhere.</p>
+          <p className="text-slate-600 dark:text-white/50 font-medium text-sm">Built with ❤️ for friend groups everywhere.</p>
         </div>
       </footer>
     </div>
