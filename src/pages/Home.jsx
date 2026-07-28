@@ -445,17 +445,6 @@ const GuestHome = () => {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="border-t border-white/5 py-8 px-4">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Logo className="w-5 h-5" />
-            <span className="font-display font-bold text-gradient">Where To?</span>
-          </div>
-          <p className="text-white/30 text-sm">Built with ❤️ for indecisive friend groups everywhere.</p>
-        </div>
-      </footer>
     </div>
   );
 };
@@ -936,17 +925,6 @@ const UserHome = ({ user }) => {
         </div>
 
       </div>
-
-      {/* Footer */}
-      <footer className="border-t border-slate-200 dark:border-white/10 py-6 px-4 mt-8">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Logo className="w-5 h-5" />
-            <span className="font-display font-bold text-gradient">Where To?</span>
-          </div>
-          <p className="text-slate-600 dark:text-white/50 font-medium text-sm">Built with ❤️ for friend groups everywhere.</p>
-        </div>
-      </footer>
     </div>
   );
 };

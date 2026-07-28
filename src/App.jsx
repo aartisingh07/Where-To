@@ -14,6 +14,8 @@ import Feed from './pages/Feed';
 import OAuthSuccess from './pages/OAuthSuccess';
 import SavedPlaces from './pages/SavedPlaces';
 
+import Footer from './components/layout/Footer';
+
 // Protected Route wrapper — redirects to login if not authenticated
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -59,80 +61,91 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-dark-900">
+    <div className="min-h-screen bg-dark-900 flex flex-col justify-between">
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/feed"
-          element={
-            <ProtectedRoute>
-              <Feed />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/explore" element={<Explore />} />
-        <Route
-          path="/login"
-          element={
-            <GuestRoute>
-              <Login />
-            </GuestRoute>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <GuestRoute>
-              <Register />
-            </GuestRoute>
-          }
-        />
-        <Route
-          path="/profile/:userId?"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/create-room"
-          element={
-            <ProtectedRoute>
-              <CreateRoom />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/join-room" element={<JoinRoom />} />
-        <Route
-          path="/room/:roomId"
-          element={
-            <ProtectedRoute>
-              <Room />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/messages"
-          element={
-            <ProtectedRoute>
-              <DirectMessages />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/saved-places"
-          element={
-            <ProtectedRoute>
-              <SavedPlaces />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/oauth-success" element={<OAuthSuccess />} />
-        {/* Catch-all redirect */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/feed"
+            element={
+              <ProtectedRoute>
+                <Feed />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/explore" element={<Explore />} />
+          <Route
+            path="/login"
+            element={
+              <GuestRoute>
+                <Login />
+              </GuestRoute>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <GuestRoute>
+                <Register />
+              </GuestRoute>
+            }
+          />
+          <Route
+            path="/profile/:userId?"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/create-room"
+            element={
+              <ProtectedRoute>
+                <CreateRoom />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/join-room" element={<JoinRoom />} />
+          <Route
+            path="/room/:roomId"
+            element={
+              <ProtectedRoute>
+                <Room />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/messages"
+            element={
+              <ProtectedRoute>
+                <DirectMessages />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chats"
+            element={
+              <ProtectedRoute>
+                <DirectMessages />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/saved-places"
+            element={
+              <ProtectedRoute>
+                <SavedPlaces />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/oauth-success" element={<OAuthSuccess />} />
+          {/* Catch-all redirect */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+      <Footer />
     </div>
   );
 }
