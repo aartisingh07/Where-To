@@ -139,10 +139,10 @@ const GameVoting = ({
             <p className="text-neon-green text-xs font-bold uppercase tracking-widest mb-1">
               Proposal Passed!
             </p>
-            <h2 className="font-display font-black text-3xl text-white mb-4">
+            <h2 className="font-display font-black text-3xl text-slate-900 dark:text-white mb-4">
               {item.type === 'activity' ? `Switch to ${item.name}?` : item.type === 'outing' ? `Let's meet at ${item.name || item.title}!` : item.type === 'movie' ? `Watch ${item.name || item.title}?` : `Let's Play ${item.name || item.title}!`}
             </h2>
-            <p className="text-white/50 text-sm mb-6">
+            <p className="text-slate-600 dark:text-white/50 text-sm mb-6">
               {item.type === 'activity'
                 ? 'The group voted YES! Changing room activity...'
                 : item.type === 'outing'
@@ -157,17 +157,17 @@ const GameVoting = ({
               <img
                 src={item.poster}
                 alt={item.title}
-                className="w-24 h-36 object-cover rounded-lg mx-auto mb-4 border border-white/10"
+                className="w-24 h-36 object-cover rounded-lg mx-auto mb-4 border border-slate-200 dark:border-white/10 shadow-md"
               />
             )}
 
             {/* Watch Providers for Movie */}
             {item.type === 'movie' && (
-              <div className="mb-6 bg-dark-800/40 rounded-xl p-4 border border-white/5">
-                <p className="text-white/40 text-xs font-semibold mb-3">Available Stream Sources:</p>
+              <div className="mb-6 bg-slate-100/80 dark:bg-dark-800/60 rounded-2xl p-4 border border-slate-200/80 dark:border-white/10 shadow-sm text-center">
+                <p className="text-slate-700 dark:text-white/60 text-xs font-semibold mb-3">Available Stream Sources:</p>
                 {loadingProviders ? (
                   <div className="flex justify-center py-2">
-                    <div className="w-5 h-5 border-2 border-white/20 border-t-primary-500 rounded-full animate-spin" />
+                    <div className="w-5 h-5 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin" />
                   </div>
                 ) : providers.length > 0 ? (
                   <div className="flex flex-wrap gap-4 justify-center items-center">
@@ -175,53 +175,55 @@ const GameVoting = ({
                       const logoUrl = getProviderLogoUrl(p);
                       return (
                         <div key={idx} className="flex flex-col items-center gap-1.5">
-                          {logoUrl ? (
-                            <img
-                              src={logoUrl}
-                              alt={p.provider_name}
-                              className="w-10 h-10 rounded-xl object-contain bg-white/5 p-1 border border-white/10 shadow-sm"
-                              title={p.provider_name}
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.style.display = 'none';
-                                if (e.target.nextSibling) {
-                                  e.target.nextSibling.style.display = 'flex';
-                                }
-                              }}
-                            />
-                          ) : null}
-                          <div
-                            style={{ display: logoUrl ? 'none' : 'flex' }}
-                            className="w-10 h-10 rounded-xl bg-white/10 border border-white/10 text-[10px] text-white font-bold items-center justify-center text-center p-1"
-                          >
-                            {p.provider_name}
+                          <div className="w-12 h-12 rounded-xl bg-white shadow-md border border-slate-200 dark:border-white/10 p-1.5 flex items-center justify-center transition-transform hover:scale-105">
+                            {logoUrl ? (
+                              <img
+                                src={logoUrl}
+                                alt={p.provider_name}
+                                className="max-w-full max-h-full object-contain"
+                                title={p.provider_name}
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.style.display = 'none';
+                                  if (e.target.nextSibling) {
+                                    e.target.nextSibling.style.display = 'flex';
+                                  }
+                                }}
+                              />
+                            ) : null}
+                            <div
+                              style={{ display: logoUrl ? 'none' : 'flex' }}
+                              className="w-full h-full text-[9px] text-slate-800 font-bold items-center justify-center text-center leading-tight"
+                            >
+                              {p.provider_name}
+                            </div>
                           </div>
-                          <span className="text-[9px] text-white/40 font-medium truncate max-w-[70px]">{p.provider_name}</span>
+                          <span className="text-[10px] text-slate-700 dark:text-white/70 font-semibold truncate max-w-[75px]">{p.provider_name}</span>
                         </div>
                       );
                     })}
                   </div>
                 ) : (
-                  <p className="text-white/30 text-xs italic">No streaming providers found.</p>
+                  <p className="text-slate-500 dark:text-white/40 text-xs italic">No streaming providers found.</p>
                 )}
               </div>
             )}
 
             {/* Voting summary */}
-            <div className="bg-dark-800/50 rounded-xl p-4 border border-white/5 flex justify-around mb-8 text-sm">
+            <div className="bg-slate-100/80 dark:bg-dark-800/60 rounded-2xl p-4 border border-slate-200/80 dark:border-white/10 flex justify-around mb-8 text-sm shadow-sm">
               <div>
                 <span className="block text-neon-green font-bold text-lg">{finalTallies.yes}</span>
-                <span className="text-white/30 text-xs">Yes</span>
+                <span className="text-slate-500 dark:text-white/40 text-xs font-medium">Yes</span>
               </div>
-              <div className="border-r border-white/5" />
+              <div className="border-r border-slate-200 dark:border-white/10" />
               <div>
-                <span className="block text-red-400 font-bold text-lg">{finalTallies.no}</span>
-                <span className="text-white/30 text-xs">No</span>
+                <span className="block text-red-500 dark:text-red-400 font-bold text-lg">{finalTallies.no}</span>
+                <span className="text-slate-500 dark:text-white/40 text-xs font-medium">No</span>
               </div>
-              <div className="border-r border-white/5" />
+              <div className="border-r border-slate-200 dark:border-white/10" />
               <div>
-                <span className="block text-white/50 font-bold text-lg">{finalTallies.maybe}</span>
-                <span className="text-white/30 text-xs">Maybe</span>
+                <span className="block text-slate-700 dark:text-white/60 font-bold text-lg">{finalTallies.maybe}</span>
+                <span className="text-slate-500 dark:text-white/40 text-xs font-medium">Maybe</span>
               </div>
             </div>
 
