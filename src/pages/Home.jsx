@@ -556,8 +556,8 @@ const UserHome = ({ user }) => {
       desc: 'Start a room, invite squad & decide together',
       to: '/create-room',
       color: 'from-purple-500/20 to-pink-500/10 hover:border-primary-500/40 hover:shadow-glow-purple',
-      badge: <span className="px-2 py-0.5 rounded-full bg-primary-500/20 text-primary-300 text-[10px] font-extrabold uppercase border border-primary-500/30">Real-time</span>,
-      iconColor: 'bg-primary-500/20 text-primary-300',
+      badge: <span className="px-2 py-0.5 rounded-full bg-primary-100 dark:bg-primary-500/20 text-primary-700 dark:text-primary-300 text-[10px] font-extrabold uppercase border border-primary-300 dark:border-primary-500/30">Real-time</span>,
+      iconColor: 'bg-primary-100 dark:bg-primary-500/20 text-primary-700 dark:text-primary-300',
     },
     {
       emoji: '🔑',
@@ -565,8 +565,8 @@ const UserHome = ({ user }) => {
       desc: 'Enter a 6-digit code to join active lobby',
       to: '/join-room',
       color: 'from-indigo-500/20 to-blue-500/10 hover:border-indigo-500/40 hover:shadow-glow-cyan',
-      badge: <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-extrabold uppercase border border-indigo-500/30">Use Code</span>,
-      iconColor: 'bg-indigo-500/20 text-indigo-300',
+      badge: <span className="px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 text-[10px] font-extrabold uppercase border border-indigo-300 dark:border-indigo-500/30">Use Code</span>,
+      iconColor: 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300',
     },
     {
       emoji: '💬',
@@ -574,8 +574,8 @@ const UserHome = ({ user }) => {
       desc: 'Message friends privately without joining codes',
       to: '/chats',
       color: 'from-teal-500/20 to-cyan-500/10 hover:border-teal-500/40 hover:shadow-glow-teal',
-      badge: <span className="px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 text-[10px] font-extrabold uppercase border border-teal-500/30">Private Chat</span>,
-      iconColor: 'bg-teal-500/20 text-teal-300',
+      badge: <span className="px-2 py-0.5 rounded-full bg-teal-100 dark:bg-teal-500/20 text-teal-800 dark:text-teal-300 text-[10px] font-extrabold uppercase border border-teal-300 dark:border-teal-500/30">Private Chat</span>,
+      iconColor: 'bg-teal-100 dark:bg-teal-500/20 text-teal-800 dark:text-teal-300',
     },
     {
       emoji: '❤️',
@@ -583,8 +583,8 @@ const UserHome = ({ user }) => {
       desc: 'View & route to your bookmarked spots',
       to: '/saved-places',
       color: 'from-rose-500/20 to-amber-500/10 hover:border-rose-500/40 hover:shadow-glow-pink',
-      badge: <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-extrabold uppercase border border-rose-500/30">Your List</span>,
-      iconColor: 'bg-rose-500/20 text-rose-300',
+      badge: <span className="px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-300 text-[10px] font-extrabold uppercase border border-rose-300 dark:border-rose-500/30">Your List</span>,
+      iconColor: 'bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-300',
     },
   ];
 
@@ -621,10 +621,10 @@ const UserHome = ({ user }) => {
               </div>
 
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-300 text-xs font-bold mb-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-500/10 border border-primary-300 dark:border-primary-500/20 text-primary-700 dark:text-primary-300 text-xs font-bold mb-2">
                   <span>{greetingEmoji} {greeting}</span>
                   <span>·</span>
-                  <span className="text-neon-teal font-extrabold">Where To?</span>
+                  <span className="text-teal-700 dark:text-neon-teal font-extrabold">Where To?</span>
                 </div>
                 <h1 className="font-display font-extrabold text-2xl sm:text-4xl text-slate-900 dark:text-white">
                   Welcome back, <span className="text-gradient">{user?.username || 'Explorer'}</span>! 👋
