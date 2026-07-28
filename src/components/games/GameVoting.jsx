@@ -5,19 +5,19 @@ import { movieService } from '../../services/movieService';
 import { outingPlanService } from '../../services/outingPlanService';
 
 const PROVIDER_LOGOS = {
-  'netflix': 'https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_N_logo.svg',
-  'amazon prime video': 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Prime_Video.png',
-  'prime video': 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Prime_Video.png',
-  'disney+': 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg',
-  'disney plus': 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg',
-  'apple tv': 'https://upload.wikimedia.org/wikipedia/commons/2/28/Apple_TV_Plus_Logo.svg',
-  'apple tv+': 'https://upload.wikimedia.org/wikipedia/commons/2/28/Apple_TV_Plus_Logo.svg',
-  'hbo max': 'https://upload.wikimedia.org/wikipedia/commons/1/17/HBO_Max_Logo.svg',
-  'max': 'https://upload.wikimedia.org/wikipedia/commons/1/17/HBO_Max_Logo.svg',
-  'youtube': 'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg',
-  'hotstar': 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Disney%2B_Hotstar_logo.svg',
-  'disney+ hotstar': 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Disney%2B_Hotstar_logo.svg',
-  'jiocinema': 'https://upload.wikimedia.org/wikipedia/commons/e/e4/JioCinema_Logo.svg'
+  'netflix': 'https://api.iconify.design/logos:netflix-icon.svg',
+  'amazon prime video': 'https://api.iconify.design/logos:amazon-prime-video.svg',
+  'prime video': 'https://api.iconify.design/logos:amazon-prime-video.svg',
+  'disney+': 'https://api.iconify.design/logos:disney-plus.svg',
+  'disney plus': 'https://api.iconify.design/logos:disney-plus.svg',
+  'apple tv': 'https://api.iconify.design/logos:apple-tv.svg',
+  'apple tv+': 'https://api.iconify.design/logos:apple-tv.svg',
+  'hbo max': 'https://api.iconify.design/logos:hbo-max.svg',
+  'max': 'https://api.iconify.design/logos:hbo-max.svg',
+  'youtube': 'https://api.iconify.design/logos:youtube-icon.svg',
+  'hotstar': 'https://api.iconify.design/logos:disney-plus.svg',
+  'disney+ hotstar': 'https://api.iconify.design/logos:disney-plus.svg',
+  'jiocinema': 'https://api.iconify.design/simple-icons:jio.svg'
 };
 
 const getProviderLogoUrl = (provider) => {
@@ -26,7 +26,59 @@ const getProviderLogoUrl = (provider) => {
   for (const [key, url] of Object.entries(PROVIDER_LOGOS)) {
     if (name.includes(key)) return url;
   }
-  return provider.logo || provider.logo_path || null;
+  if (provider.logo) return provider.logo;
+  if (provider.logo_path) return `https://image.tmdb.org/t/p/w92${provider.logo_path}`;
+  return null;
+};
+
+const ProviderLogo = ({ name, logoUrl }) => {
+  const [imgError, setImgError] = useState(false);
+  const lower = (name || '').toLowerCase();
+
+  if (lower.includes('netflix')) {
+    return (
+      <div className="w-6 h-6 bg-[#E50914] rounded-md flex items-center justify-center p-1 shadow-sm flex-shrink-0">
+        <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current text-white">
+          <path d="M5.398 0v24l4.892-1.927V9.721L15.352 24h3.25V0l-4.892 1.927v12.352L8.648 0z" />
+        </svg>
+      </div>
+    );
+  }
+
+  if (lower.includes('prime') || lower.includes('amazon')) {
+    return (
+      <div className="w-6 h-6 bg-[#00A8E1] rounded-md flex items-center justify-center p-0.5 shadow-sm flex-shrink-0 text-white font-extrabold text-[8.5px] leading-none">
+        <span className="tracking-tighter">prime</span>
+      </div>
+    );
+  }
+
+  if (lower.includes('disney')) {
+    return (
+      <div className="w-6 h-6 bg-[#113CCF] rounded-md flex items-center justify-center p-0.5 shadow-sm flex-shrink-0 text-white font-extrabold text-[10px] leading-none">
+        <span>D+</span>
+      </div>
+    );
+  }
+
+  if (logoUrl && !imgError) {
+    return (
+      <div className="w-6 h-6 bg-white rounded-md p-0.5 flex items-center justify-center border border-slate-200 dark:border-white/10 flex-shrink-0 shadow-sm">
+        <img
+          src={logoUrl}
+          alt={name}
+          className="max-w-full max-h-full object-contain"
+          onError={() => setImgError(true)}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-6 h-6 bg-primary-600 rounded-md p-0.5 flex items-center justify-center text-white font-bold text-[10px] shadow-sm flex-shrink-0">
+      {(name || 'P').substring(0, 2).toUpperCase()}
+    </div>
+  );
 };
 
 const GameVoting = ({
@@ -164,24 +216,13 @@ const GameVoting = ({
                         <div className="w-5.5 h-5.5 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin" />
                       </div>
                     ) : providers.length > 0 ? (
-                      <div className="flex flex-wrap gap-3 items-center">
+                      <div className="flex flex-nowrap items-center gap-2 overflow-x-auto py-0.5 whitespace-nowrap">
                         {providers.map((p, idx) => {
                           const logoUrl = getProviderLogoUrl(p);
                           return (
-                            <div key={idx} className="flex items-center gap-2 bg-white dark:bg-dark-900/90 px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm">
-                              {logoUrl ? (
-                                <img
-                                  src={logoUrl}
-                                  alt={p.provider_name}
-                                  className="w-5 h-5 object-contain"
-                                  title={p.provider_name}
-                                  onError={(e) => {
-                                    e.target.onerror = null;
-                                    e.target.style.display = 'none';
-                                  }}
-                                />
-                              ) : null}
-                              <span className="text-sm text-slate-900 dark:text-white font-bold">{p.provider_name}</span>
+                            <div key={idx} className="flex items-center gap-1.5 bg-slate-200/80 dark:bg-dark-900/90 px-2.5 py-1.5 rounded-xl border border-slate-300/80 dark:border-white/10 shadow-sm flex-shrink-0">
+                              <ProviderLogo name={p.provider_name} logoUrl={logoUrl} />
+                              <span className="text-xs text-slate-900 dark:text-white font-bold whitespace-nowrap">{p.provider_name}</span>
                             </div>
                           );
                         })}
