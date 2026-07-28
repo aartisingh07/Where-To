@@ -145,4 +145,6 @@ The production assets will be built into the `dist/` directory.
 
 ## 👩‍💻 Author
 
-**Aarti Singh** — [@aartisingh07](https://github.com/aartisingh07)
+**Aarti Singh**
+- 🐙 **GitHub**: [aartisingh07](https://github.com/aartisingh07)
+- 💼 **LinkedIn**: [aarti-singh-555ab827b](https://www.linkedin.com/in/aarti-singh-555ab827b/)
