@@ -28,6 +28,13 @@ const groupCategories = [
     tagline: 'Quality Family Time',
     desc: 'Family beaches, theme parks, malls, zoos & picnic spots',
   },
+  {
+    id: 'solo',
+    emoji: '🧘',
+    label: 'Solo Outing',
+    tagline: 'Me-Time & Self Care',
+    desc: 'Reading cafes, peaceful parks, bookstores, solo movies & scenic drives',
+  },
 ];
 
 const vibeOptions = {
@@ -53,6 +60,14 @@ const vibeOptions = {
     { id: 'sports',           emoji: '⚽', label: 'Sports & Turf Games',  desc: 'Turf grounds, sports arenas, and action activities' },
     { id: 'food_crawl',       emoji: '🍕', label: 'Street Food Crawl',    desc: 'Local street food, junk food hubs, and popular cafes' },
     { id: 'camping',          emoji: '⛺', label: 'Camping & Outdoors',   desc: 'Outdoor bonfires, lakeside camping, and nature trails' },
+  ],
+  solo: [
+    { id: 'solo_cafes',    emoji: '☕', label: 'Cozy Reading Cafes',   desc: 'Quiet corners, artisanal coffee, and peaceful reading vibes' },
+    { id: 'bookstores',    emoji: '📚', label: 'Bookstores & Nooks',   desc: 'Indie bookshops, quiet nooks, and literary retreats' },
+    { id: 'nature_trails', emoji: '🌿', label: 'Peaceful Nature Trails',desc: 'Botanical gardens, tranquil lakesides, and quiet morning walks' },
+    { id: 'art_museums',   emoji: '🎨', label: 'Art Galleries & Museums',desc: 'Solo gallery walks, historical museums, and creative exhibits' },
+    { id: 'solo_cinema',   emoji: '🎬', label: 'Solo Movie Date',      desc: 'Comfortable theater seats, popcorn, and solo movie date vibes' },
+    { id: 'scenic_drives', emoji: '🛵', label: 'Scenic Drives & Rides',desc: 'Long peaceful drives, sea links, and scenic road trips' },
   ],
 };
 
@@ -121,6 +136,38 @@ const featuredVibePlaces = {
     { name: 'Mohammad Ali Road Street Food', city: 'Mumbai', query: 'Mohammad Ali Road, Mumbai, India', emoji: '🍕' },
     { name: 'Chandni Chowk Food Crawl', city: 'Delhi', query: 'Chandni Chowk, Delhi, India', emoji: '🥙' },
     { name: 'VV Puram Food Street', city: 'Bangalore', query: 'VV Puram, Bangalore, India', emoji: '🥞' },
+  ],
+
+  // Solo Outing
+  solo_cafes: [
+    { name: 'Prithvi Cafe & Book Corner', city: 'Mumbai', query: 'Prithvi Cafe, Mumbai, India', emoji: '☕' },
+    { name: 'Subko Coffee Roasters', city: 'Mumbai', query: 'Subko Coffee, Mumbai, India', emoji: '🥐' },
+    { name: 'Blue Tokai Roasters', city: 'Bangalore', query: 'Blue Tokai, Bangalore, India', emoji: '☕' },
+    { name: 'Kunzum Travel Cafe', city: 'Delhi', query: 'Kunzum Travel Cafe, Delhi, India', emoji: '📖' },
+  ],
+  bookstores: [
+    { name: 'Kitab Khana Bookstore', city: 'Mumbai', query: 'Kitab Khana, Mumbai, India', emoji: '📚' },
+    { name: 'Blossom Book House', city: 'Bangalore', query: 'Blossom Book House, Bangalore, India', emoji: '📖' },
+    { name: 'Bahrisons Booksellers', city: 'Delhi', query: 'Bahrisons, Delhi, India', emoji: '📕' },
+  ],
+  nature_trails: [
+    { name: 'Cubbon Park Walkways', city: 'Bangalore', query: 'Cubbon Park, Bangalore, India', emoji: '🌳' },
+    { name: 'Lodhi Garden Lawns', city: 'Delhi', query: 'Lodhi Garden, Delhi, India', emoji: '🌿' },
+    { name: 'Sanjay Gandhi Forest Trail', city: 'Mumbai', query: 'Sanjay Gandhi National Park, Mumbai, India', emoji: '🍃' },
+  ],
+  art_museums: [
+    { name: 'CSMVS Museum & Art Gallery', city: 'Mumbai', query: 'CSMVS Museum, Mumbai, India', emoji: '🏛️' },
+    { name: 'National Gallery of Modern Art', city: 'New Delhi', query: 'NGMA, New Delhi, India', emoji: '🎨' },
+    { name: 'Kiran Nadar Museum of Art', city: 'Noida', query: 'Kiran Nadar Museum, Noida, India', emoji: '🖼️' },
+  ],
+  solo_cinema: [
+    { name: 'PVR Director’s Cut', city: 'Delhi', query: 'PVR Directors Cut, Delhi, India', emoji: '🎬' },
+    { name: 'Inox Insignia Cinema', city: 'Mumbai', query: 'Inox Insignia, Mumbai, India', emoji: '🍿' },
+  ],
+  scenic_drives: [
+    { name: 'Bandra-Worli Sea Link Ride', city: 'Mumbai', query: 'Bandra Worli Sea Link, Mumbai, India', emoji: '🌉' },
+    { name: 'Carter Road Promenade Walk', city: 'Mumbai', query: 'Carter Road, Mumbai, India', emoji: '🛵' },
+    { name: 'ECR Coastal Road Drive', city: 'Chennai', query: 'East Coast Road, Chennai, India', emoji: '🌊' },
   ],
 };
 
@@ -397,7 +444,7 @@ const Explore = () => {
             <p className="text-center text-slate-700 dark:text-white/60 text-base font-medium mb-6">
               Who are you planning this outing for?
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
               {groupCategories.map((cat) => (
                 <button
                   key={cat.id}
