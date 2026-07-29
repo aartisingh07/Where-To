@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom';
 import { FaGithub, FaInstagram, FaLinkedinIn, FaXTwitter, FaReddit } from 'react-icons/fa6';
+import { FiMessageSquare } from 'react-icons/fi';
 import Logo from './Logo';
 
 const socialLinks = [
@@ -49,21 +51,33 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Right: Social Media Icons ONLY (No text written) */}
-        <div className="flex items-center gap-2.5">
-          {socialLinks.map((s) => (
-            <a
-              key={s.name}
-              href={s.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              title={s.name}
-              aria-label={s.name}
-              className={`p-2.5 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-white/60 transition-all duration-300 transform hover:-translate-y-1 ${s.color} cursor-pointer flex items-center justify-center`}
-            >
-              {s.icon}
-            </a>
-          ))}
+        {/* Right: Feedback & Contact + Social Media Icons */}
+        <div className="flex items-center gap-3 flex-wrap justify-center">
+          <Link
+            to="/contact"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary-500/10 border border-primary-500/20 text-primary-400 hover:text-white hover:bg-primary-500/20 transition-all text-xs font-bold shadow-sm cursor-pointer"
+          >
+            <FiMessageSquare size={14} />
+            <span>Feedback / Contact Us</span>
+          </Link>
+
+          <div className="h-4 w-[1px] bg-slate-200 dark:bg-white/10 hidden sm:block" />
+
+          <div className="flex items-center gap-2">
+            {socialLinks.map((s) => (
+              <a
+                key={s.name}
+                href={s.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={s.name}
+                aria-label={s.name}
+                className={`p-2 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-white/60 transition-all duration-300 transform hover:-translate-y-1 ${s.color} cursor-pointer flex items-center justify-center`}
+              >
+                {s.icon}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </footer>
