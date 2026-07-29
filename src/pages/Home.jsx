@@ -427,6 +427,31 @@ const GuestHome = () => {
         </div>
       </section>
 
+      {/* Feedback & Contact section for Visitors */}
+      <section className="py-12 px-4">
+        <div className="max-w-4xl mx-auto glass-card p-8 rounded-3xl border border-slate-200 dark:border-white/10 relative overflow-hidden text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-300 text-xs font-bold">
+              <span>💬 Your Feedback Matters</span>
+            </div>
+            <h3 className="font-display font-extrabold text-2xl text-slate-900 dark:text-white">
+              Have a suggestion, bug report, or spot idea?
+            </h3>
+            <p className="text-slate-600 dark:text-white/50 text-xs max-w-lg leading-relaxed">
+              No account required! Share your thoughts, report issues, or suggest famous places to help us make <strong className="text-gradient">Where To?</strong> better for everyone.
+            </p>
+          </div>
+
+          <Link
+            to="/contact"
+            className="btn-primary py-3 px-6 rounded-2xl text-xs font-bold shadow-glow-purple flex items-center gap-2 flex-shrink-0 cursor-pointer"
+          >
+            <FiMessageSquare size={16} />
+            <span>Send Feedback / Contact Us</span>
+          </Link>
+        </div>
+      </section>
+
       {/* CTA strip */}
       <section className="py-16 px-4">
         <div className="max-w-2xl mx-auto text-center glass-card p-10">
@@ -922,6 +947,28 @@ const UserHome = ({ user }) => {
               )}
             </div>
           </div>
+
+        </div>
+
+        {/* Feedback & Suggestion Banner for Logged-In User */}
+        <div className="glass-card p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6 animate-slide-up shadow-xl">
+          <div className="space-y-1 text-center sm:text-left">
+            <span className="text-xs font-bold uppercase tracking-wider text-neon-teal">We Value Your Experience</span>
+            <h3 className="font-display font-bold text-xl text-slate-900 dark:text-white flex items-center justify-center sm:justify-start gap-2 mt-0.5">
+              <span>💬</span> Have Feedback or Spot Suggestions?
+            </h3>
+            <p className="text-slate-600 dark:text-white/50 text-xs leading-relaxed max-w-xl">
+              Found a bug, want a new feature, or have a famous place recommendation in India? Let us know!
+            </p>
+          </div>
+
+          <Link
+            to="/contact"
+            className="btn-primary py-3 px-6 rounded-2xl text-xs font-bold shadow-glow-purple flex items-center gap-2 flex-shrink-0 cursor-pointer"
+          >
+            <FiMessageSquare size={16} />
+            <span>Send Feedback / Contact</span>
+          </Link>
         </div>
 
       </div>
