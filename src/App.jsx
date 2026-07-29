@@ -14,6 +14,7 @@ import Feed from './pages/Feed';
 import OAuthSuccess from './pages/OAuthSuccess';
 import SavedPlaces from './pages/SavedPlaces';
 import Contact from './pages/Contact';
+import AdminFeedback from './pages/AdminFeedback';
 
 import Footer from './components/layout/Footer';
 
@@ -143,6 +144,8 @@ function App() {
           />
           <Route path="/contact" element={<Contact />} />
           <Route path="/feedback" element={<Contact />} />
+          <Route path="/admin" element={<AdminFeedback />} />
+          <Route path="/admin/feedback" element={<AdminFeedback />} />
           <Route path="/oauth-success" element={<OAuthSuccess />} />
           {/* Catch-all redirect */}
           <Route path="*" element={<Navigate to="/" replace />} />

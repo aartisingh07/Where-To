@@ -9,6 +9,14 @@ export const feedbackService = {
     const response = await api.get('/feedback');
     return response.data;
   },
+  updateStatus: async (id, status) => {
+    const response = await api.put(`/feedback/${id}/status`, { status });
+    return response.data;
+  },
+  deleteFeedback: async (id) => {
+    const response = await api.delete(`/feedback/${id}`);
+    return response.data;
+  },
 };
 
 export default feedbackService;
