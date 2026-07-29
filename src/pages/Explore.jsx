@@ -297,19 +297,16 @@ const Explore = () => {
     setStep(3);
   };
 
-  // Step 4: Automatically fetch places when Step 4 is reached and GPS location is available
+  // Step 4: Automatically fetch places when Step 4 is reached
   useEffect(() => {
     if (step === 4 && locationMode === 'current') {
       if (location.lat && location.lng) {
         fetchPlaces(location.lat, location.lng);
-      } else if (geoError) {
-        setError(geoError);
-        setLoading(false);
-      } else if (!geoLoading && !location.lat) {
-        getLocation();
+      } else if (!geoLoading) {
+        fetchPlaces(null, null);
       }
     }
-  }, [step, location.lat, location.lng, geoError, geoLoading, locationMode, distance, groupCategory, vibe]);
+  }, [step, location.lat, location.lng, geoLoading, locationMode, distance, groupCategory, vibe]);
 
   // Core API call
   const fetchPlaces = async (lat, lng, searchQuery = '') => {
