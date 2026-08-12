@@ -590,15 +590,6 @@ const UserHome = ({ user }) => {
       badge: <span className="px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-300 text-[10px] font-extrabold uppercase border border-rose-300 dark:border-rose-500/30">Your List</span>,
       iconColor: 'bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-300',
     },
-    {
-      emoji: '📖',
-      label: 'Platform User Guide',
-      desc: 'Learn how to use Explore, Lobbies, Lounges & DMs',
-      to: '/guide',
-      color: 'from-amber-500/20 to-orange-500/10 hover:border-amber-500/40 hover:shadow-glow-amber',
-      badge: <span className="px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 text-[10px] font-extrabold uppercase border border-amber-300 dark:border-amber-500/30">How To Use</span>,
-      iconColor: 'bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300',
-    },
   ];
 
   return (
