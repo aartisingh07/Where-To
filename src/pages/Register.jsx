@@ -355,19 +355,7 @@ const Register = () => {
                 ))}
               </div>
 
-              {/* Development warning badge */}
-              {devOtp && (
-                <div className="py-2.5 px-3 rounded-lg bg-primary-500/10 border border-primary-500/20 text-left">
-                  <p className="text-[9px] font-semibold text-primary-400 uppercase tracking-wider mb-1">
-                    💻 Development Mode Alert:
-                  </p>
-                  <p className="text-white/70 text-xs">
-                    SMTP not configured. Verification code is: <span className="font-mono font-bold text-primary-300 tracking-wider text-sm">{devOtp}</span>
-                  </p>
-                </div>
-              )}
-
-              {/* Action Buttons */}
+              {/* Submit button */}
               <div className="space-y-3 pt-2">
                 <button
                   type="submit"
