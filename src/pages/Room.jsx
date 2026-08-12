@@ -24,20 +24,20 @@ const activities = [
 ];
 
 const ActivitySelector = ({ currentActivity, onSelect }) => (
-  <div className="flex-1 flex flex-col items-center justify-center p-6">
-    <p className="text-white/30 text-xs uppercase tracking-widest mb-2 font-semibold">
+  <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 w-full">
+    <p className="text-white/30 text-xs uppercase tracking-widest mb-2 font-semibold text-center">
       Propose an activity to the group
     </p>
-    <h2 className="font-display font-bold text-2xl text-white mb-8 text-center">Choose an activity</h2>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-2xl">
+    <h2 className="font-display font-bold text-xl sm:text-2xl text-white mb-6 sm:mb-8 text-center">Choose an activity</h2>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 w-full max-w-2xl px-2">
       {activities.map((act) => (
         <button
           key={act.id}
           onClick={() => onSelect(act.id)}
-          className={`glass-card p-5 text-left transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:border-primary-500/30 hover:shadow-glow-purple
+          className={`glass-card p-4 sm:p-5 text-left transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:border-primary-500/30 hover:shadow-glow-purple
             ${currentActivity === act.id ? 'border-primary-500/40 shadow-glow-purple' : ''}`}
         >
-          <div className="text-3xl mb-3">{act.emoji}</div>
+          <div className="text-2xl sm:text-3xl mb-2 sm:mb-3">{act.emoji}</div>
           <p className="font-display font-semibold text-white text-sm mb-1">{act.label}</p>
           <p className="text-white/30 text-xs leading-relaxed">{act.desc}</p>
         </button>
@@ -76,6 +76,7 @@ const Room = () => {
   const [loading, setLoading] = useState(true);
   const [chatOpen, setChatOpen] = useState(true);
   const [membersOpen, setMembersOpen] = useState(false);
+  const [mobileTab, setMobileTab] = useState('activity'); // 'activity' | 'chat' | 'members'
 
   // Voting States
   const [activeVote, setActiveVote] = useState(null);
@@ -591,16 +592,18 @@ const Room = () => {
 
           {/* Mobile toggles */}
           <button
-            onClick={() => setMembersOpen(!membersOpen)}
+            onClick={() => setMobileTab(mobileTab === 'members' ? 'activity' : 'members')}
             className={`lg:hidden w-9 h-9 rounded-xl flex items-center justify-center transition-colors
-              ${membersOpen ? 'bg-primary-500/20 text-primary-300' : 'bg-white/5 text-white/40 hover:text-white'}`}
+              ${mobileTab === 'members' ? 'bg-primary-500/20 text-primary-300' : 'bg-white/5 text-white/40 hover:text-white'}`}
+            title="Toggle Members"
           >
             <FiUsers size={16} />
           </button>
           <button
-            onClick={() => setChatOpen(!chatOpen)}
+            onClick={() => setMobileTab(mobileTab === 'chat' ? 'activity' : 'chat')}
             className={`lg:hidden w-9 h-9 rounded-xl flex items-center justify-center transition-colors
-              ${chatOpen ? 'bg-primary-500/20 text-primary-300' : 'bg-white/5 text-white/40 hover:text-white'}`}
+              ${mobileTab === 'chat' ? 'bg-primary-500/20 text-primary-300' : 'bg-white/5 text-white/40 hover:text-white'}`}
+            title="Toggle Chat"
           >
             <FiMessageCircle size={16} />
           </button>
@@ -634,11 +637,47 @@ const Room = () => {
         </div>
       </div>
 
+      {/* Mobile Navigation Tab Bar (< lg screens) */}
+      <div className="lg:hidden flex items-center justify-around border-b border-white/5 bg-dark-950/90 px-2 py-2 flex-shrink-0 gap-1.5">
+        <button
+          onClick={() => setMobileTab('activity')}
+          className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold transition-all flex-1 ${
+            mobileTab === 'activity'
+              ? 'bg-primary-500/20 text-primary-300 border border-primary-500/30 shadow-glow-purple-sm'
+              : 'text-white/40 hover:text-white hover:bg-white/5'
+          }`}
+        >
+          <span>🎮 Activity</span>
+        </button>
+        <button
+          onClick={() => setMobileTab('chat')}
+          className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold transition-all flex-1 relative ${
+            mobileTab === 'chat'
+              ? 'bg-primary-500/20 text-primary-300 border border-primary-500/30 shadow-glow-purple-sm'
+              : 'text-white/40 hover:text-white hover:bg-white/5'
+          }`}
+        >
+          <FiMessageCircle size={14} />
+          <span>Chat</span>
+        </button>
+        <button
+          onClick={() => setMobileTab('members')}
+          className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold transition-all flex-1 ${
+            mobileTab === 'members'
+              ? 'bg-primary-500/20 text-primary-300 border border-primary-500/30 shadow-glow-purple-sm'
+              : 'text-white/40 hover:text-white hover:bg-white/5'
+          }`}
+        >
+          <FiUsers size={14} />
+          <span>Members ({allMembers.length})</span>
+        </button>
+      </div>
+
       {/* Main layout */}
       <div className="flex-1 flex overflow-hidden">
 
         {/* Members sidebar */}
-        <div className={`${membersOpen || 'hidden'} lg:flex flex-col w-52 border-r border-white/5 bg-dark-900/50 flex-shrink-0`}>
+        <div className={`${mobileTab === 'members' ? 'flex w-full' : 'hidden'} lg:flex flex-col lg:w-52 border-r border-white/5 bg-dark-900/50 flex-shrink-0`}>
           <div className="p-4 border-b border-white/5">
             <p className="text-white/30 text-xs uppercase tracking-widest font-semibold">
               Members · {allMembers.length}
@@ -714,7 +753,8 @@ const Room = () => {
           )}
         </div>
 
-        <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+        {/* Center / Activity Pane */}
+        <div className={`${mobileTab === 'activity' ? 'flex w-full' : 'hidden'} lg:flex flex-1 flex-col min-w-0 overflow-y-auto`}>
           {scheduledPlan && (
             <div className="bg-neon-green/10 border-b border-neon-green/20 px-6 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 animate-slide-up">
               <div className="flex items-center gap-3">
@@ -848,7 +888,7 @@ const Room = () => {
         </div>
 
         {/* Chat panel */}
-        <div className={`${chatOpen ? 'flex' : 'hidden'} lg:flex flex-col w-72 border-l border-white/5 bg-dark-900/50 flex-shrink-0`}>
+        <div className={`${mobileTab === 'chat' ? 'flex w-full' : 'hidden'} lg:flex flex-col lg:w-72 border-l border-white/5 bg-dark-900/50 flex-shrink-0`}>
           {/* Chat header */}
           <div className="p-4 border-b border-white/5 flex-shrink-0">
             <p className="text-white/30 text-xs uppercase tracking-widest font-semibold flex items-center gap-1.5">
