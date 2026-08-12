@@ -5,7 +5,6 @@
 [![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-where--to--beryl.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://where-to-beryl.vercel.app/)
 
 🌐 **Live Application:** [https://where-to-beryl.vercel.app](https://where-to-beryl.vercel.app)  
-🔧 **Backend Repository:** [WhereTo-BE](https://github.com/aartisingh07/WhereTo-BE)
 
 ---
 
@@ -139,12 +138,6 @@ npm run build
 ```
 
 The production assets will be built into the `dist/` directory.
-
----
-
-## 🔗 Related
-
-- 🔧 **Backend Repo**: [WhereTo-BE](https://github.com/aartisingh07/WhereTo-BE)
 
 ---
 
