@@ -7,7 +7,7 @@ import { notificationService } from '../../services/notificationService';
 import { chatService } from '../../services/chatService';
 import { toast } from 'react-toastify';
 import { HiMenu, HiX } from 'react-icons/hi';
-import { FiLogOut, FiUser, FiCompass, FiUsers, FiBell, FiCheck, FiMessageSquare, FiImage, FiHome, FiSun, FiMoon, FiMapPin } from 'react-icons/fi';
+import { FiLogOut, FiUser, FiCompass, FiUsers, FiBell, FiCheck, FiMessageSquare, FiImage, FiHome, FiSun, FiMoon, FiMapPin, FiBookOpen } from 'react-icons/fi';
 import Logo from './Logo';
 import { handleAvatarError } from '../../utils/avatarHelper';
 
@@ -148,6 +148,8 @@ const Navbar = () => {
       { path: '/messages', label: 'Chats', icon: <FiMessageSquare size={18} /> }
     );
   }
+
+  navLinks.push({ path: '/guide', label: 'Guide', icon: <FiBookOpen size={18} /> });
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-900/80 backdrop-blur-xl border-b border-white/5">

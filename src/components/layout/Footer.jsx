@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom';
 import { FaGithub, FaInstagram, FaLinkedinIn, FaXTwitter, FaReddit } from 'react-icons/fa6';
+import { FiBookOpen } from 'react-icons/fi';
 import Logo from './Logo';
 
 const socialLinks = [
@@ -40,13 +42,20 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
         
         {/* Left: Brand Logo & Tagline */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <Logo className="w-6 h-6" />
           <div className="flex items-center gap-2">
             <span className="font-display font-bold text-gradient text-lg">Where To?</span>
             <span className="text-slate-400 dark:text-white/20">·</span>
             <span className="text-slate-600 dark:text-white/50 text-xs font-medium">Stop asking. Start going.</span>
           </div>
+          <span className="text-slate-400 dark:text-white/20 hidden sm:inline">·</span>
+          <Link
+            to="/guide"
+            className="flex items-center gap-1.5 text-xs text-primary-500 dark:text-primary-400 font-semibold hover:underline"
+          >
+            <FiBookOpen size={14} /> User Guide
+          </Link>
         </div>
 
         {/* Right: Social Media Icons ONLY (No text written) */}

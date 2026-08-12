@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import {
   FiArrowRight, FiMapPin, FiUsers, FiZap, FiHeart,
   FiCompass, FiHash, FiUser, FiSunrise, FiExternalLink, FiClock, FiTrash2, FiCheck, FiX,
-  FiMessageSquare, FiImage
+  FiMessageSquare, FiImage, FiBookOpen
 } from 'react-icons/fi';
 import { outingPlanService } from '../services/outingPlanService';
 import { roomService } from '../services/roomService';
@@ -182,7 +182,7 @@ const GuestHome = () => {
             Find places, plan hangouts, or just vibe with your squad — all in one place.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up mb-16" style={{ animationDelay: '0.2s' }}>
+          <div className="flex flex-wrap items-center justify-center gap-4 animate-slide-up mb-16" style={{ animationDelay: '0.2s' }}>
             <Link to="/explore" className="btn-primary text-lg !px-8 !py-4 flex items-center gap-2 group">
               <FiCompass size={20} />
               Explore Places
@@ -191,6 +191,10 @@ const GuestHome = () => {
             <Link to="/register" className="btn-secondary text-lg !px-8 !py-4 flex items-center gap-2">
               <FiUsers size={20} />
               Create an account
+            </Link>
+            <Link to="/guide" className="btn-secondary text-lg !px-6 !py-4 flex items-center gap-2 border-amber-500/30 text-amber-300 hover:bg-amber-500/10">
+              <FiBookOpen size={20} />
+              User Guide
             </Link>
           </div>
 
@@ -585,6 +589,15 @@ const UserHome = ({ user }) => {
       color: 'from-rose-500/20 to-amber-500/10 hover:border-rose-500/40 hover:shadow-glow-pink',
       badge: <span className="px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-300 text-[10px] font-extrabold uppercase border border-rose-300 dark:border-rose-500/30">Your List</span>,
       iconColor: 'bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-300',
+    },
+    {
+      emoji: '📖',
+      label: 'Platform User Guide',
+      desc: 'Learn how to use Explore, Lobbies, Lounges & DMs',
+      to: '/guide',
+      color: 'from-amber-500/20 to-orange-500/10 hover:border-amber-500/40 hover:shadow-glow-amber',
+      badge: <span className="px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 text-[10px] font-extrabold uppercase border border-amber-300 dark:border-amber-500/30">How To Use</span>,
+      iconColor: 'bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300',
     },
   ];
 

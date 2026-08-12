@@ -13,6 +13,7 @@ import DirectMessages from './pages/DirectMessages';
 import Feed from './pages/Feed';
 import OAuthSuccess from './pages/OAuthSuccess';
 import SavedPlaces from './pages/SavedPlaces';
+import Guide from './pages/Guide';
 
 import Footer from './components/layout/Footer';
 
@@ -140,6 +141,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/guide" element={<Guide />} />
           <Route path="/oauth-success" element={<OAuthSuccess />} />
           {/* Catch-all redirect */}
           <Route path="*" element={<Navigate to="/" replace />} />
