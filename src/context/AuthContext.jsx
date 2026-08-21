@@ -12,7 +12,15 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const saved = sessionStorage.getItem('whereto_user');
+    if (!saved) return null;
+    try {
+      return JSON.parse(saved);
+    } catch {
+      return null;
+    }
+  });
   const [token, setToken] = useState(sessionStorage.getItem('whereto_token'));
   const [loading, setLoading] = useState(true);
 
@@ -22,6 +30,7 @@ export const AuthProvider = ({ children }) => {
       if (token) {
         try {
           const userData = await authService.getMe();
+          sessionStorage.setItem('whereto_user', JSON.stringify(userData));
           setUser(userData);
         } catch (error) {
           console.error('Failed to load user:', error);
@@ -63,9 +72,18 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  const loginWithToken = (tokenValue) => {
+  const loginWithToken = async (tokenValue) => {
     sessionStorage.setItem('whereto_token', tokenValue);
     setToken(tokenValue);
+    try {
+      const userData = await authService.getMe();
+      sessionStorage.setItem('whereto_user', JSON.stringify(userData));
+      setUser(userData);
+      return userData;
+    } catch (error) {
+      console.error('Failed to fetch user with OAuth token:', error);
+      throw error;
+    }
   };
 
   const updateUser = (updatedUserData) => {

@@ -15,13 +15,21 @@ const OAuthSuccess = () => {
     const token = searchParams.get('token');
     if (token) {
       hasLogged.current = true;
-      loginWithToken(token);
-      toast.success('Successfully logged in!');
-      navigate('/');
+      const completeOAuth = async () => {
+        try {
+          await loginWithToken(token);
+          toast.success('Successfully logged in!');
+          navigate('/', { replace: true });
+        } catch (err) {
+          toast.error('Authentication failed');
+          navigate('/login', { replace: true });
+        }
+      };
+      completeOAuth();
     } else {
       hasLogged.current = true;
       toast.error('Authentication failed');
-      navigate('/login');
+      navigate('/login', { replace: true });
     }
   }, [searchParams, navigate, loginWithToken]);
 

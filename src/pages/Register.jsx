@@ -136,7 +136,7 @@ const Register = () => {
       });
       toast.success('Account created successfully! Welcome onboard 🚀');
       setShowOtpModal(false);
-      navigate('/');
+      navigate('/', { replace: true });
     } catch (err) {
       toast.error(err.response?.data?.message || 'Verification failed. Code might be invalid or expired.');
     } finally {

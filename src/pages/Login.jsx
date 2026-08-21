@@ -24,7 +24,7 @@ const Login = () => {
     try {
       await login({ identifier: identifier.trim(), password });
       toast.success('Successfully logged in! Welcome back 🎉');
-      navigate('/');
+      navigate('/', { replace: true });
     } catch (err) {
       toast.error(err.response?.data?.message || 'Invalid username/email or password');
     } finally {
