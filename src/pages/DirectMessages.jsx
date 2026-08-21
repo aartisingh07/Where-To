@@ -5,7 +5,7 @@ import { useSocket } from '../context/SocketContext';
 import { chatService } from '../services/chatService';
 import { toast } from 'react-toastify';
 import { handleAvatarError } from '../utils/avatarHelper';
-import { FiSend, FiUser, FiMessageSquare, FiClock, FiPlusCircle, FiCheck, FiX, FiTrash2, FiEdit2 } from 'react-icons/fi';
+import { FiSend, FiUser, FiMessageSquare, FiClock, FiPlusCircle, FiCheck, FiX, FiTrash2, FiEdit2, FiArrowLeft, FiUserX, FiSearch } from 'react-icons/fi';
 
 const DirectMessages = () => {
   const { user } = useAuth();
@@ -309,9 +309,9 @@ const DirectMessages = () => {
   };
 
   return (
-    <div className="h-screen bg-dark-900 flex overflow-hidden pt-16">
+    <div className="h-[calc(100dvh-4rem)] sm:h-[calc(100vh-4rem)] mt-16 bg-dark-900 flex overflow-hidden">
       {/* 1. Sidebar - Chat List & Requests */}
-      <div className="w-80 border-r border-white/5 bg-dark-950 flex flex-col flex-shrink-0">
+      <div className={`w-full md:w-80 lg:w-96 border-r border-white/5 bg-dark-950 flex flex-col flex-shrink-0 ${activeChat ? 'hidden md:flex' : 'flex'}`}>
         
         {/* Sidebar Header */}
         <div className="p-4 border-b border-white/5 flex items-center justify-between flex-shrink-0 bg-dark-900/40">
@@ -330,19 +330,22 @@ const DirectMessages = () => {
               Find Users to Chat
             </p>
             <form onSubmit={handleSearchUser} className="flex gap-1.5 px-2">
-              <input
-                type="text"
-                placeholder="Search username..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 bg-white/5 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white
-                           placeholder-white/20 focus:outline-none focus:border-primary-500/40
-                           transition-all"
-              />
+              <div className="relative flex-1">
+                <FiSearch className="absolute left-2.5 top-1/2 -translate-y-1/2 text-white/30" size={13} />
+                <input
+                  type="text"
+                  placeholder="Search username..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg pl-8 pr-2.5 py-2 text-xs text-white
+                             placeholder-white/20 focus:outline-none focus:border-primary-500/40
+                             transition-all"
+                />
+              </div>
               <button
                 type="submit"
                 disabled={searching}
-                className="px-3 py-1.5 rounded-lg bg-primary-500/25 border border-primary-500/25 hover:bg-primary-500/40 text-primary-300 hover:text-white text-xs transition-colors flex-shrink-0 cursor-pointer"
+                className="px-3 py-2 rounded-lg bg-primary-500/25 border border-primary-500/25 hover:bg-primary-500/40 text-primary-300 hover:text-white text-xs font-semibold transition-colors flex-shrink-0 cursor-pointer"
               >
                 {searching ? '...' : 'Search'}
               </button>
@@ -375,7 +378,7 @@ const DirectMessages = () => {
                   {searchResult.relationship === 'none' && (
                     <button
                       onClick={handleSendChatRequest}
-                      className="px-2 py-1 rounded bg-primary-500/20 border border-primary-500/25 hover:bg-primary-500/45 text-primary-300 hover:text-white text-[10px] transition-colors cursor-pointer"
+                      className="px-2.5 py-1.5 rounded-lg bg-primary-500/20 border border-primary-500/25 hover:bg-primary-500/45 text-primary-300 hover:text-white text-[10px] font-bold transition-colors cursor-pointer"
                     >
                       Add
                     </button>
@@ -386,20 +389,20 @@ const DirectMessages = () => {
                     </span>
                   )}
                   {searchResult.relationship === 'pending_received' && (
-                    <div className="flex gap-0.5">
+                    <div className="flex gap-1">
                       <button
                         onClick={() => handleAcceptSearchRequest(searchResult.requestId)}
-                        className="p-1 rounded bg-neon-green/20 hover:bg-neon-green/30 text-neon-green transition-colors cursor-pointer"
+                        className="p-1.5 rounded-lg bg-neon-green/20 hover:bg-neon-green/30 text-neon-green transition-colors cursor-pointer"
                         title="Accept"
                       >
-                        <FiCheck size={11} />
+                        <FiCheck size={12} />
                       </button>
                       <button
                         onClick={() => handleRejectSearchRequest(searchResult.requestId)}
-                        className="p-1 rounded bg-red-500/20 hover:bg-red-500/30 text-red-400 transition-colors cursor-pointer"
+                        className="p-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-400 transition-colors cursor-pointer"
                         title="Ignore"
                       >
-                        <FiX size={11} />
+                        <FiX size={12} />
                       </button>
                     </div>
                   )}
@@ -410,7 +413,7 @@ const DirectMessages = () => {
                         setSearchResult(null);
                         setSearchQuery('');
                       }}
-                      className="px-2 py-1 rounded bg-neon-green/20 border border-neon-green/25 hover:bg-neon-green/35 text-neon-green text-[10px] font-semibold transition-colors cursor-pointer"
+                      className="px-2.5 py-1.5 rounded-lg bg-neon-green/20 border border-neon-green/25 hover:bg-neon-green/35 text-neon-green text-[10px] font-bold transition-colors cursor-pointer"
                     >
                       Chat
                     </button>
@@ -453,14 +456,14 @@ const DirectMessages = () => {
                     <div className="flex items-center gap-1 flex-shrink-0">
                       <button
                         onClick={() => handleAcceptRequest(req._id, req.sender.username)}
-                        className="w-6 h-6 rounded bg-neon-green/20 hover:bg-neon-green/30 text-neon-green flex items-center justify-center transition-colors cursor-pointer"
+                        className="w-7 h-7 rounded-lg bg-neon-green/20 hover:bg-neon-green/30 text-neon-green flex items-center justify-center transition-colors cursor-pointer"
                         title="Accept"
                       >
                         <FiCheck size={14} />
                       </button>
                       <button
                         onClick={() => handleRejectRequest(req._id)}
-                        className="w-6 h-6 rounded bg-red-500/20 hover:bg-red-500/30 text-red-400 flex items-center justify-center transition-colors cursor-pointer"
+                        className="w-7 h-7 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-400 flex items-center justify-center transition-colors cursor-pointer"
                         title="Ignore"
                       >
                         <FiX size={14} />
@@ -483,7 +486,7 @@ const DirectMessages = () => {
               </div>
             ) : activeChats.length === 0 ? (
               <p className="text-white/20 text-xs text-center py-8">
-                No conversations yet. Search for a user on the homepage to start chatting!
+                No conversations yet. Search for a user above to start chatting!
               </p>
             ) : (
               activeChats.map((chat) => {
@@ -538,57 +541,68 @@ const DirectMessages = () => {
       </div>
 
       {/* 2. Main DM Workspace */}
-      <div className="flex-1 flex flex-col bg-dark-900">
+      <div className={`w-full flex-1 flex-col bg-dark-900 ${activeChat ? 'flex' : 'hidden md:flex'}`}>
         {activeChat ? (
           <>
             {/* Active Chat Header */}
-            <div className="px-6 py-4 border-b border-white/5 bg-dark-950/40 flex items-center justify-between flex-shrink-0">
-              <Link to={`/profile/${activeChat.user._id}`} className="flex items-center gap-3 group" title="View Profile">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 p-0.5 group-hover:scale-105 transition-transform duration-200">
-                  <div className="w-full h-full rounded-full bg-dark-800 flex items-center justify-center overflow-hidden">
-                    {activeChat.user.avatar ? (
-                      <img 
-                        src={activeChat.user.avatar} 
-                        alt="" 
-                        className="w-full h-full object-cover" 
-                        onError={(e) => handleAvatarError(e, activeChat.user.username)}
-                      />
-                    ) : (
-                      <span className="text-white font-bold">{activeChat.user.username[0]?.toUpperCase()}</span>
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <p className="font-display font-bold text-white text-sm leading-tight group-hover:text-primary-300 transition-colors">{activeChat.user.username}</p>
-                  <span className="inline-flex items-center gap-1 text-[10px] text-neon-green font-semibold mt-0.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-neon-green animate-pulse" />
-                    Active connection &middot; View Profile &rarr;
-                  </span>
-                </div>
-              </Link>
+            <div className="px-3 sm:px-6 py-3 sm:py-4 border-b border-white/5 bg-dark-950/40 flex items-center justify-between flex-shrink-0 gap-2">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                {/* Mobile Back Button */}
+                <button
+                  onClick={() => setActiveChat(null)}
+                  className="md:hidden p-2 rounded-xl text-white/70 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex-shrink-0"
+                  title="Back to conversations"
+                >
+                  <FiArrowLeft size={20} />
+                </button>
 
-              <div className="flex gap-2">
+                <Link to={`/profile/${activeChat.user._id}`} className="flex items-center gap-2.5 sm:gap-3 group min-w-0" title="View Profile">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 p-0.5 group-hover:scale-105 transition-transform duration-200 flex-shrink-0">
+                    <div className="w-full h-full rounded-full bg-dark-800 flex items-center justify-center overflow-hidden">
+                      {activeChat.user.avatar ? (
+                        <img 
+                          src={activeChat.user.avatar} 
+                          alt="" 
+                          className="w-full h-full object-cover" 
+                          onError={(e) => handleAvatarError(e, activeChat.user.username)}
+                        />
+                      ) : (
+                        <span className="text-white text-xs sm:text-sm font-bold">{activeChat.user.username[0]?.toUpperCase()}</span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-display font-bold text-white text-xs sm:text-sm leading-tight truncate group-hover:text-primary-300 transition-colors">{activeChat.user.username}</p>
+                    <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] text-neon-green font-semibold mt-0.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-neon-green animate-pulse" />
+                      Active connection &middot; Profile &rarr;
+                    </span>
+                  </div>
+                </Link>
+              </div>
+
+              <div className="flex gap-1.5 sm:gap-2 flex-shrink-0">
                 <button
                   onClick={handleDeleteConversation}
-                  className="px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-xs font-semibold transition-all cursor-pointer flex items-center gap-1"
+                  className="p-2 sm:px-3 sm:py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-xs font-semibold transition-all cursor-pointer flex items-center gap-1"
                   title="Clear Chat History"
                 >
-                  <FiTrash2 size={13} />
-                  <span>Clear Chat</span>
+                  <FiTrash2 size={14} />
+                  <span className="hidden sm:inline">Clear Chat</span>
                 </button>
                 <button
                   onClick={handleRemoveConnection}
-                  className="px-3 py-1.5 rounded-xl border border-red-500/10 bg-red-500/5 hover:bg-red-500/15 hover:border-red-500/30 text-red-400 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1"
+                  className="p-2 sm:px-3 sm:py-1.5 rounded-xl border border-red-500/10 bg-red-500/5 hover:bg-red-500/15 hover:border-red-500/30 text-red-400 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1"
                   title="Remove from Chats"
                 >
-                  <FiX size={13} />
-                  <span>Remove Chat</span>
+                  <FiUserX size={14} />
+                  <span className="hidden sm:inline">Remove Chat</span>
                 </button>
               </div>
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+            <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-3 sm:space-y-4">
               {loadingMessages ? (
                 <div className="flex items-center justify-center h-full">
                   <div className="w-8 h-8 border-2 border-white/20 border-t-primary-500 rounded-full animate-spin" />
@@ -606,35 +620,35 @@ const DirectMessages = () => {
 
                   return (
                     <div key={msg._id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'} group relative mb-2`}>
-                      <div className={`flex items-center gap-2 max-w-[85%] ${isMe ? 'flex-row-reverse' : 'flex-row'}`}>
+                      <div className={`flex items-center gap-1.5 sm:gap-2 max-w-[88%] sm:max-w-[75%] ${isMe ? 'flex-row-reverse' : 'flex-row'}`}>
                         
                         {/* Action buttons (only for own messages) */}
                         {isMe && (
-                          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-0.5 bg-dark-950/60 border border-white/5 rounded-lg p-0.5 shadow-sm flex-shrink-0">
+                          <div className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-0.5 bg-dark-950/80 border border-white/10 rounded-lg p-0.5 shadow-sm flex-shrink-0">
                             {isEditable && (
                               <button
                                 onClick={() => handleStartEdit(msg._id, msg.content)}
-                                className="p-1 text-white/40 hover:text-primary-300 rounded hover:bg-white/5 transition-colors cursor-pointer"
+                                className="p-1 text-white/50 hover:text-primary-300 rounded hover:bg-white/5 transition-colors cursor-pointer"
                                 title="Edit message"
                               >
-                                <FiEdit2 size={11} />
+                                <FiEdit2 size={12} />
                               </button>
                             )}
                             <button
                               onClick={() => handleDeleteMsg(msg._id)}
-                              className="p-1 text-white/40 hover:text-red-400 rounded hover:bg-white/5 transition-colors cursor-pointer"
+                              className="p-1 text-white/50 hover:text-red-400 rounded hover:bg-white/5 transition-colors cursor-pointer"
                               title="Delete message"
                             >
-                              <FiTrash2 size={11} />
+                              <FiTrash2 size={12} />
                             </button>
                           </div>
                         )}
 
                         {/* Message content bubble */}
-                        <div className={`px-4 py-2.5 rounded-2xl text-sm break-words leading-relaxed shadow-sm
+                        <div className={`px-3.5 py-2.5 sm:px-4 sm:py-2.5 rounded-2xl text-xs sm:text-sm break-words leading-relaxed shadow-sm
                           ${isMe
                             ? 'bg-primary-500/20 text-white rounded-tr-sm border border-primary-500/25 shadow-glow-purple-sm'
-                            : 'bg-white/5 text-white/80 rounded-tl-sm border border-white/5'
+                            : 'bg-white/5 text-white/90 rounded-tl-sm border border-white/5'
                           }`}>
                           {editingMessageId === msg._id ? (
                             <div className="flex flex-col gap-1.5 min-w-[200px]">
@@ -695,8 +709,8 @@ const DirectMessages = () => {
             </div>
 
             {/* Input Form */}
-            <div className="p-4 border-t border-white/5 bg-dark-950/20 flex-shrink-0">
-              <div className="flex gap-2 max-w-4xl mx-auto">
+            <div className="p-2.5 sm:p-4 border-t border-white/5 bg-dark-950/40 flex-shrink-0">
+              <div className="flex gap-2 max-w-4xl mx-auto items-center">
                 <input
                   type="text"
                   placeholder={`Message ${activeChat.user.username}...`}
@@ -704,15 +718,15 @@ const DirectMessages = () => {
                   onChange={(e) => setMessageInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                   maxLength={1000}
-                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm
-                             placeholder-white/20 focus:outline-none focus:border-primary-500/40 focus:bg-white/8
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 sm:px-4 sm:py-3 text-white text-xs sm:text-sm
+                             placeholder-white/30 focus:outline-none focus:border-primary-500/40 focus:bg-white/8
                              transition-all"
                 />
                 <button
                   onClick={handleSendMessage}
                   disabled={!messageInput.trim()}
-                  className="w-11 h-11 rounded-xl bg-primary-500/25 border border-primary-500/25 flex items-center justify-center
-                             text-primary-300 hover:bg-primary-500/40 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                  className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary-500/25 border border-primary-500/25 flex items-center justify-center
+                             text-primary-300 hover:bg-primary-500/40 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex-shrink-0"
                 >
                   <FiSend size={16} />
                 </button>
@@ -726,7 +740,7 @@ const DirectMessages = () => {
             </div>
             <h3 className="font-display font-bold text-white text-xl mb-1">Your Direct Messages</h3>
             <p className="text-white/40 text-sm max-w-sm leading-relaxed">
-              Select an active conversation from the sidebar or find a user on the homepage to start chatting privately!
+              Select an active conversation from the sidebar or search for a user above to start chatting privately!
             </p>
           </div>
         )}
