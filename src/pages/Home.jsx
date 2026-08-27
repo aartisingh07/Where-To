@@ -587,8 +587,6 @@ const UserHome = ({ user }) => {
               <div>
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-300 text-xs font-bold mb-2">
                   <span>{greetingEmoji} {greeting}</span>
-                  <span>·</span>
-                  <span className="text-neon-teal font-extrabold">Where To? Dashboard</span>
                 </div>
                 <h1 className="font-display font-extrabold text-2xl sm:text-4xl text-white">
                   Welcome back, <span className="text-gradient">{user?.username || 'Explorer'}</span>! 👋
