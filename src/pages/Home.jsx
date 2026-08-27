@@ -113,9 +113,9 @@ const GuestHome = () => {
   }, []);
 
   const [mockPins, setMockPins] = useState([
-    { x: 30, y: 40, name: 'User1' },
-    { x: 70, y: 30, name: 'User2' },
-    { x: 50, y: 80, name: 'User3' }
+    { x: 30, y: 35, name: 'Amit (P1)' },
+    { x: 75, y: 40, name: 'Priya (P2)' },
+    { x: 50, y: 75, name: 'Rahul (P3)' }
   ]);
   const [sandboxCategory, setSandboxCategory] = useState('cafe');
 
@@ -128,47 +128,47 @@ const GuestHome = () => {
 
   const features = [
     {
-      icon: <FiMapPin className="text-neon-teal" size={24} />,
-      title: 'Real Places',
-      desc: 'Discover actual nearby spots — cafes, parks, viewpoints — based on your location.',
+      icon: <FiCompass className="text-neon-teal" size={24} />,
+      title: '1. Explore Places (Public)',
+      desc: 'No account needed! Discover nearby cafes, parks, and hidden spots using instant location filtering.',
     },
     {
       icon: <FiUsers className="text-accent-400" size={24} />,
-      title: 'Group Rooms',
-      desc: 'Create rooms, invite friends with a code, and decide things together in real time.',
+      title: '2. Live Squad Rooms',
+      desc: 'Create rooms, share 6-digit codes, & invite friends to decide hangout plans together in real time.',
     },
     {
-      icon: <FiZap className="text-neon-yellow" size={24} />,
-      title: 'Instant Decisions',
-      desc: 'Vote on games, movies, or hangout spots — no more "I don\'t know, you decide" loops.',
+      icon: <FiMapPin className="text-neon-yellow" size={24} />,
+      title: '3. Squad Midpoint Finder',
+      desc: 'Automatically compute the central meeting spot for all friends so no one travels unfairly far.',
     },
     {
       icon: <FiMessageSquare className="text-accent-300" size={24} />,
-      title: 'Direct Chatting',
-      desc: 'Chat directly and privately with friends without joining room codes by sending requests.',
+      title: '4. Direct Chats & DMs',
+      desc: 'Search friends by username, send chat requests, and message privately in real-time.',
     },
     {
       icon: <FiHeart className="text-accent-500" size={24} />,
-      title: 'Save Favourites',
-      desc: 'Bookmark places you love and come back to them whenever the mood hits.',
+      title: '5. Saved Favorites & Outings',
+      desc: 'Bookmark top spots, plan upcoming hangouts, and capture shared squad memories.',
     },
   ];
 
   return (
     <div className="min-h-screen bg-dark-900 bg-grid">
-      {/* Hero */}
-      <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+      {/* Hero Header */}
+      <section className="relative pt-28 pb-12 px-4 overflow-hidden">
         <ParticleBackground />
         <div className="absolute top-20 left-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute top-40 right-1/4 w-96 h-96 bg-accent-500/10 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="max-w-5xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-300 text-sm font-medium mb-8 animate-fade-in">
+        <div className="max-w-6xl mx-auto text-center relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-300 text-sm font-medium mb-6 animate-fade-in">
             <span className="w-2 h-2 bg-neon-green rounded-full animate-pulse" />
-            Built for your friend group
+            2 Main Pillars — Explore Publicly or Squad Up
           </div>
 
-          <h1 className="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl leading-tight mb-6 animate-slide-up">
+          <h1 className="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl leading-tight mb-4 animate-slide-up">
             Stop asking.
             <br />
             <span>Start going to </span>
@@ -177,41 +177,143 @@ const GuestHome = () => {
             </span>
           </h1>
 
-          <p className="text-lg sm:text-xl text-white/50 max-w-2xl mx-auto mb-10 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            The app that kills the "bhai kahan jaayein?" loop forever.
-            Find places, plan hangouts, or just vibe with your squad — all in one place.
+          <p className="text-base sm:text-lg text-white/60 max-w-3xl mx-auto mb-10 animate-slide-up leading-relaxed" style={{ animationDelay: '0.1s' }}>
+            The app that kills the "bhai kahan jaayein?" loop forever. Choose your path below: explore local spots instantly without an account, or create an account for live squad rooms, midpoint calculating, & direct chat!
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 animate-slide-up mb-16" style={{ animationDelay: '0.2s' }}>
-            <Link to="/explore" className="btn-primary text-lg !px-8 !py-4 flex items-center gap-2 group">
-              <FiCompass size={20} />
-              Explore Places
-              <FiArrowRight className="group-hover:translate-x-1 transition-transform" size={18} />
-            </Link>
-            <Link to="/register" className="btn-secondary text-lg !px-8 !py-4 flex items-center gap-2">
-              <FiUsers size={20} />
-              Create an account
-            </Link>
-            <Link to="/guide" className="btn-secondary text-lg !px-6 !py-4 flex items-center gap-2 border-amber-500/30 text-amber-300 hover:bg-amber-500/10">
-              <FiBookOpen size={20} />
-              User Guide
+          {/* DUAL PILLAR CARDS (The 2 Main Features Highlighted) */}
+          <div className="grid md:grid-cols-2 gap-8 text-left max-w-5xl mx-auto mb-12 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            
+            {/* PILLAR 1: EXPLORE PLACES */}
+            <div className="glass-card p-8 border-cyan-500/30 hover:border-cyan-400/60 shadow-glow-teal/20 transition-all duration-300 flex flex-col justify-between group">
+              <div>
+                <div className="flex items-center justify-between mb-5">
+                  <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+                    📍
+                  </div>
+                  <div className="px-3.5 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 text-xs font-bold uppercase tracking-wider">
+                    ⚡ No Account Needed
+                  </div>
+                </div>
+
+                <h2 className="font-display font-bold text-2xl text-white mb-2 flex items-center gap-2">
+                  Explore Nearby Places
+                </h2>
+                <p className="text-white/60 text-sm leading-relaxed mb-6">
+                  Out right now and need a quick spot? Instantly search nearby cafes, scenic viewpoints, restaurants, and study spots around your current location without logging in.
+                </p>
+
+                <div className="space-y-2.5 mb-8">
+                  {[
+                    '📍 Instant GPS location-based venue search',
+                    '☕ Filter by Cafes, Sunsets, Food & Study spots',
+                    '💰 Filter by distance radius & budget',
+                    '🗺️ Direct Google Maps navigation & ratings'
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-2.5 text-xs text-white/80">
+                      <div className="w-4 h-4 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-[10px] font-bold">✓</div>
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Link to="/explore" className="btn-primary !bg-gradient-to-r !from-cyan-500 !to-blue-600 hover:!from-cyan-400 hover:!to-blue-500 text-white font-bold text-base !py-3.5 flex items-center justify-center gap-2 w-full group">
+                <FiCompass size={20} />
+                Explore Places Now
+                <FiArrowRight className="group-hover:translate-x-1 transition-transform" size={18} />
+              </Link>
+            </div>
+
+            {/* PILLAR 2: SQUAD HUB (CREATE ACCOUNT / SIGN IN) */}
+            <div className="glass-card p-8 border-primary-500/30 hover:border-primary-400/60 shadow-glow-purple/20 transition-all duration-300 flex flex-col justify-between group">
+              <div>
+                <div className="flex items-center justify-between mb-5">
+                  <div className="w-14 h-14 rounded-2xl bg-primary-500/10 border border-primary-500/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+                    🏠
+                  </div>
+                  <div className="px-3.5 py-1 rounded-full bg-primary-500/20 border border-primary-400/40 text-primary-300 text-xs font-bold uppercase tracking-wider">
+                    👥 Squad Hub — Account Required
+                  </div>
+                </div>
+
+                <h2 className="font-display font-bold text-2xl text-white mb-2 flex items-center gap-2">
+                  Rooms, Midpoint & Direct DMs
+                </h2>
+                <p className="text-white/60 text-sm leading-relaxed mb-6">
+                  Hanging out with your squad? Create a room with a 6-digit code to vote on spots, calculate your squad's exact central midpoint, sync games/movies, and direct message friends.
+                </p>
+
+                <div className="space-y-2.5 mb-8">
+                  {[
+                    '🎯 Squad Midpoint Calculator (fair center meeting spot)',
+                    '🔑 Live Room Lobbies (6-digit shareable codes)',
+                    '💬 Direct Messaging (1-on-1 private DMs & friend requests)',
+                    '🎬 Live Game & Movie Lounge voting with room members'
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-2.5 text-xs text-white/80">
+                      <div className="w-4 h-4 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-[10px] font-bold">✓</div>
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3 w-full">
+                <Link to="/register" className="btn-primary font-bold text-base !py-3.5 flex-1 flex items-center justify-center gap-2 text-center">
+                  <FiUsers size={18} />
+                  Create Account
+                </Link>
+                <Link to="/login" className="btn-secondary font-bold text-base !py-3.5 flex-1 flex items-center justify-center gap-2 text-center">
+                  <FiUser size={18} />
+                  Log In
+                </Link>
+              </div>
+            </div>
+
+          </div>
+
+          <div className="flex items-center justify-center gap-4">
+            <Link to="/guide" className="btn-secondary text-sm !px-6 !py-2.5 flex items-center gap-2 border-amber-500/30 text-amber-300 hover:bg-amber-500/10">
+              <FiBookOpen size={18} />
+              Read Full User Guide
             </Link>
           </div>
 
-          {/* Sandbox Widget */}
-          <div className="max-w-4xl mx-auto glass-card p-6 sm:p-8 animate-slide-up relative z-20 border border-primary-500/20 shadow-glow-purple" style={{ animationDelay: '0.3s' }}>
+        </div>
+      </section>
+
+      {/* FEATURE HIGHLIGHT: SQUAD MIDPOINT CALCULATOR DEMO */}
+      <section className="py-16 px-4 relative z-20">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-bold uppercase tracking-wider mb-3">
+              🎯 Interactive Squad Tool
+            </div>
+            <h2 className="font-display font-bold text-3xl sm:text-4xl text-white mb-3">
+              Squad Midpoint Calculator
+            </h2>
+            <p className="text-white/50 max-w-2xl mx-auto text-sm sm:text-base">
+              Ever had friends traveling from different corners of the city? Click anywhere on the map grid below to drop your squad members' locations and calculate the fair central meeting spot!
+            </p>
+          </div>
+
+          {/* Sandbox Calculator Card */}
+          <div className="glass-card p-6 sm:p-8 border border-primary-500/20 shadow-glow-purple">
             <div className="flex flex-col md:flex-row gap-8">
               
-              {/* Grid / Map Canvas */}
+              {/* Grid Map Canvas */}
               <div className="flex-1 flex flex-col items-center">
                 <div className="flex justify-between items-center w-full mb-3">
                   <div className="text-left">
-                    <h3 className="text-sm font-display font-bold text-white">Squad Midpoint Simulator</h3>
-                    <p className="text-[11px] text-white/40">Click on the grid to add friend locations</p>
+                    <h3 className="text-sm font-display font-bold text-white flex items-center gap-2">
+                      📍 Squad Location Grid
+                    </h3>
+                    <p className="text-[11px] text-white/40">Click on the grid to add friend pins</p>
                   </div>
                   <button
                     onClick={() => setMockPins([])}
-                    className="text-[10px] text-red-400 hover:text-red-300 px-2 py-1 rounded bg-red-500/10 hover:bg-red-500/20 transition-all font-semibold cursor-pointer"
+                    className="text-[11px] text-red-400 hover:text-red-300 px-2.5 py-1 rounded bg-red-500/10 hover:bg-red-500/20 transition-all font-semibold cursor-pointer"
                   >
                     Clear Pins
                   </button>
@@ -223,18 +325,18 @@ const GuestHome = () => {
                     const rect = e.currentTarget.getBoundingClientRect();
                     const x = Math.round(((e.clientX - rect.left) / rect.width) * 100);
                     const y = Math.round(((e.clientY - rect.top) / rect.height) * 100);
-                    const names = ['Amit', 'Priya', 'Rahul', 'Zara', 'Sneha', 'Kabir'];
+                    const names = ['Amit', 'Priya', 'Rahul', 'Zara', 'Sneha', 'Kabir', 'Rohan'];
                     const name = names[mockPins.length % names.length] + ` (P${mockPins.length + 1})`;
                     setMockPins([...mockPins, { x, y, name }]);
                   }}
-                  className="relative w-full aspect-square max-w-[280px] bg-dark-950 border border-white/10 rounded-2xl cursor-crosshair overflow-hidden group select-none shadow-inner"
+                  className="relative w-full aspect-square max-w-[320px] bg-dark-950 border border-white/10 rounded-2xl cursor-crosshair overflow-hidden group select-none shadow-inner"
                   style={{
-                    backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)',
-                    backgroundSize: '16px 16px'
+                    backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)',
+                    backgroundSize: '20px 20px'
                   }}
                 >
-                  {/* Grid Lines */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-accent-500/5 pointer-events-none" />
+                  {/* Grid Ambient Background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-cyan-500/5 pointer-events-none" />
 
                   {/* Render Pins */}
                   {mockPins.map((p, idx) => (
@@ -243,10 +345,10 @@ const GuestHome = () => {
                       className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center animate-scale-in pointer-events-none"
                       style={{ left: `${p.x}%`, top: `${p.y}%` }}
                     >
-                      <div className="w-5 h-5 rounded-full bg-primary-500 flex items-center justify-center text-[10px] font-bold text-white border border-white/20 shadow-glow-purple-sm">
+                      <div className="w-6 h-6 rounded-full bg-primary-500 flex items-center justify-center text-[10px] font-bold text-white border border-white/30 shadow-glow-purple-sm">
                         {p.name[0]}
                       </div>
-                      <span className="text-[8px] bg-dark-900/90 text-white/70 px-1 rounded mt-0.5 whitespace-nowrap font-mono">{p.name}</span>
+                      <span className="text-[9px] bg-dark-900/90 text-white/80 px-1.5 py-0.5 rounded mt-0.5 whitespace-nowrap font-mono">{p.name}</span>
                     </div>
                   ))}
 
@@ -256,10 +358,10 @@ const GuestHome = () => {
                       className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center animate-pulse pointer-events-none z-10"
                       style={{ left: `${midpoint.x}%`, top: `${midpoint.y}%` }}
                     >
-                      <div className="w-6 h-6 rounded-full bg-cyan-400 flex items-center justify-center text-xs text-dark-950 border border-white shadow-[0_0_15px_#06b6d4]">
+                      <div className="w-7 h-7 rounded-full bg-cyan-400 flex items-center justify-center text-sm text-dark-950 border-2 border-white shadow-[0_0_20px_#06b6d4]">
                         🎯
                       </div>
-                      <span className="text-[9px] bg-cyan-400 text-dark-950 px-1.5 py-0.5 rounded font-bold mt-0.5 whitespace-nowrap shadow-md">
+                      <span className="text-[10px] bg-cyan-400 text-dark-950 px-2 py-0.5 rounded font-extrabold mt-0.5 whitespace-nowrap shadow-md uppercase tracking-wider">
                         Midpoint
                       </span>
                     </div>
@@ -267,7 +369,7 @@ const GuestHome = () => {
 
                   {mockPins.length === 0 && (
                     <div className="absolute inset-0 flex items-center justify-center text-center p-4 pointer-events-none">
-                      <p className="text-xs text-white/25">Click anywhere inside to start simulating your squad's locations!</p>
+                      <p className="text-xs text-white/30">Click anywhere inside the box to drop friend pins and test the midpoint calculation!</p>
                     </div>
                   )}
                 </div>
@@ -276,10 +378,10 @@ const GuestHome = () => {
               {/* Control Panel / Suggestions */}
               <div className="flex-1 flex flex-col justify-between text-left">
                 <div>
-                  <h4 className="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-2">Category Selector</h4>
+                  <h4 className="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-2">Category Filter</h4>
                   <div className="grid grid-cols-2 gap-2 mb-4">
                     {[
-                      { id: 'cafe', label: '☕ Cafe' },
+                      { id: 'cafe', label: '☕ Cafes' },
                       { id: 'nature', label: '🌅 Viewpoints' },
                       { id: 'entertainment', label: '🎮 Play' },
                       { id: 'food', label: '🍕 Food' }
@@ -295,11 +397,11 @@ const GuestHome = () => {
                     ))}
                   </div>
 
-                  <h4 className="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-2">Places Found at Midpoint</h4>
+                  <h4 className="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-2">Venues Found Near Midpoint</h4>
                   <div className="space-y-2">
                     {mockPins.length === 0 ? (
-                      <div className="p-4 rounded-xl border border-white/5 bg-white/2 text-center text-xs text-white/20">
-                        Add friends to discover midpoint spots
+                      <div className="p-4 rounded-xl border border-white/5 bg-white/3 text-center text-xs text-white/40">
+                        Drop pins on the left grid to calculate central venues!
                       </div>
                     ) : (
                       (sandboxCategory === 'cafe' ? [
@@ -309,14 +411,14 @@ const GuestHome = () => {
                       ] : sandboxCategory === 'nature' ? [
                         { name: "Skyline Overlook Peak 🌅", rating: "4.9 ⭐", dist: "0.4 km from midpoint" },
                         { name: "Blue Lagoon Lakeside 🌊", rating: "4.8 ⭐", dist: "0.9 km from midpoint" },
-                        { name: "Central Canopy Botanical Gardens 🌳", rating: "4.5 ⭐", dist: "1.1 km from midpoint" }
+                        { name: "Central Canopy Gardens 🌳", rating: "4.5 ⭐", dist: "1.1 km from midpoint" }
                       ] : sandboxCategory === 'entertainment' ? [
                         { name: "Pixel Bowling & Retro Arcade 🎳", rating: "4.7 ⭐", dist: "0.3 km from midpoint" },
-                        { name: "Galaxy Multi-Screen Cinema 🍿", rating: "4.5 ⭐", dist: "0.7 km from midpoint" },
+                        { name: "Galaxy Cinema Multiplex 🍿", rating: "4.5 ⭐", dist: "0.7 km from midpoint" },
                         { name: "Active Squad Game Lounge 🎮", rating: "4.8 ⭐", dist: "1.2 km from midpoint" }
                       ] : [
-                        { name: "Slice of Heaven Wood-fired Pizza 🍕", rating: "4.8 ⭐", dist: "0.2 km from midpoint" },
-                        { name: "Gridline Gourmet Burger Shop 🍔", rating: "4.6 ⭐", dist: "0.6 km from midpoint" },
+                        { name: "Slice of Heaven Pizza 🍕", rating: "4.8 ⭐", dist: "0.2 km from midpoint" },
+                        { name: "Gridline Gourmet Burgers 🍔", rating: "4.6 ⭐", dist: "0.6 km from midpoint" },
                         { name: "Neon Cantina Tacos & Grill 🌮", rating: "4.7 ⭐", dist: "0.8 km from midpoint" }
                       ]).map((place, idx) => (
                         <div key={idx} className="p-2.5 rounded-xl border border-white/5 bg-white/3 hover:bg-white/5 transition-all flex items-center justify-between text-xs">
@@ -331,124 +433,21 @@ const GuestHome = () => {
                   </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-[10px] text-white/30 font-mono">
-                  <span>Squad Size: {mockPins.length}</span>
-                  {midpoint && (
-                    <span>Midpoint: {midpoint.x}x, {midpoint.y}y</span>
+                <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-[11px] text-white/40 font-mono">
+                  <span>Squad Pins: {mockPins.length}</span>
+                  {midpoint ? (
+                    <span className="text-cyan-300 font-bold">Midpoint: {midpoint.x}% X, {midpoint.y}% Y</span>
+                  ) : (
+                    <span>Click grid to calculate</span>
                   )}
                 </div>
               </div>
 
             </div>
           </div>
-
         </div>
       </section>
 
-      {/* Mode Cards */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Link to="/explore" className="group block">
-            <div className="glass-card p-8 h-full transition-all duration-500 hover:border-neon-teal/30 hover:shadow-glow-teal group-hover:-translate-y-2">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-neon-teal/10 flex items-center justify-center text-2xl">📍</div>
-                <span className="badge-teal text-xs">No account needed</span>
-              </div>
-              <h2 className="font-display font-bold text-2xl text-white mb-3">Solo Place Finder</h2>
-              <p className="text-white/40 leading-relaxed mb-6">
-                You're out with your squad and nobody can decide where to go.
-                Set your mood and distance — get real nearby spots instantly.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {['☕ Cafes', '🌊 Beaches', '🌅 Sunsets', '🍕 Food', '📚 Study Spots'].map((tag) => (
-                  <span key={tag} className="px-3 py-1 rounded-lg bg-white/5 text-white/50 text-sm">{tag}</span>
-                ))}
-              </div>
-            </div>
-          </Link>
-
-          <Link to="/register" className="group block">
-            <div className="glass-card p-8 h-full transition-all duration-500 hover:border-primary-500/30 hover:shadow-glow-purple group-hover:-translate-y-2">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-primary-500/10 flex items-center justify-center text-2xl">🏠</div>
-                <span className="badge-purple text-xs">Sign up to unlock</span>
-              </div>
-              <h2 className="font-display font-bold text-2xl text-white mb-3">Online Hangout Rooms</h2>
-              <p className="text-white/40 leading-relaxed mb-6">
-                Friends aren't together? Create a room, share the code.
-                Play games, watch movies, plan outings, or study together — all in real time.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {['🎮 Play', '🎬 Watch', '📍 Plan', '📚 Study', '💬 Chat'].map((tag) => (
-                  <span key={tag} className="px-3 py-1 rounded-lg bg-white/5 text-white/50 text-sm">{tag}</span>
-                ))}
-              </div>
-            </div>
-          </Link>
-
-          <Link to="/register" className="group block">
-            <div className="glass-card p-8 h-full transition-all duration-500 hover:border-accent-500/30 hover:shadow-glow-pink group-hover:-translate-y-2">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-accent-500/10 flex items-center justify-center text-2xl">💬</div>
-                <span className="badge-cyan text-xs">Direct Chat</span>
-              </div>
-              <h2 className="font-display font-bold text-2xl text-white mb-3">Direct Messaging (DMs)</h2>
-              <p className="text-white/40 leading-relaxed mb-6">
-                Want to talk without joining a room? Search for friends by username, send a chat request, and start chatting privately in real-time.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {['🔍 Search Users', '✉️ Requests', '💬 Direct Chat', '⚡ Real-time', '🔔 Alerts'].map((tag) => (
-                  <span key={tag} className="px-3 py-1 rounded-lg bg-white/5 text-white/50 text-sm">{tag}</span>
-                ))}
-              </div>
-            </div>
-          </Link>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="font-display font-bold text-3xl sm:text-4xl text-white mb-4">
-              Why <span className="text-gradient">Where To?</span>
-            </h2>
-            <p className="text-white/40 max-w-xl mx-auto">
-              Because every friend group deserves better than 47 messages that end with "chal tu hi decide kar."
-            </p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-            {features.map((feature, index) => (
-              <div key={index} className="glass-card-hover p-6 text-center">
-                <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mx-auto mb-4">
-                  {feature.icon}
-                </div>
-                <h3 className="font-display font-semibold text-lg text-white mb-2">{feature.title}</h3>
-                <p className="text-white/40 text-sm leading-relaxed">{feature.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA strip */}
-      <section className="py-16 px-4">
-        <div className="max-w-2xl mx-auto text-center glass-card p-10">
-          <h2 className="font-display font-bold text-2xl sm:text-3xl text-white mb-3">
-            Ready to stop asking?
-          </h2>
-          <p className="text-white/40 mb-8">Create a free account and start deciding.</p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link to="/register" className="btn-primary flex items-center gap-2">
-              <FiUser size={16} />
-              Sign up — it's free
-            </Link>
-            <Link to="/login" className="btn-ghost">
-              Already have an account →
-            </Link>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

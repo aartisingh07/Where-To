@@ -75,6 +75,7 @@ const Guide = () => {
             {[
               { id: 'all', label: '📖 All Topics' },
               { id: 'quickstart', label: '⚡ Quick Start' },
+              { id: 'compare', label: '📊 Feature Comparison' },
               { id: 'explore', label: '🧭 Explore Mode' },
               { id: 'rooms', label: '👥 Group Rooms' },
               { id: 'lounges', label: '🎮 Lounges' },
@@ -145,6 +146,60 @@ const Guide = () => {
                   </div>
                   <h3 className="font-display font-bold text-white text-base mb-1">{item.title}</h3>
                   <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ─── FEATURE COMPARISON MATRIX (Guest vs Account Member) ───── */}
+        {(activeTab === 'all' || activeTab === 'compare') && (
+          <section className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
+                <FiSliders size={22} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-display font-bold text-white">Compare Features: Guest vs. Account Member</h2>
+                <p className="text-xs text-slate-400">See what you can do instantly as a Guest vs. what features you unlock by logging in.</p>
+              </div>
+            </div>
+
+            <div className="glass-card overflow-hidden border-white/10 shadow-glow-purple/10">
+              <div className="grid grid-cols-3 bg-white/5 p-4 text-xs sm:text-sm font-bold text-white border-b border-white/5">
+                <div>Feature Capability</div>
+                <div className="text-center text-cyan-400 font-display">Guest (Explore Mode)</div>
+                <div className="text-center text-primary-400 font-display">Account Member (Squad Hub)</div>
+              </div>
+
+              {[
+                { name: 'Public Place Search & Filtering', guest: true, account: true },
+                { name: 'Google Maps Directions & Ratings', guest: true, account: true },
+                { name: 'Squad Midpoint Calculator', guest: 'Demo Sandbox', account: 'Full Live Rooms' },
+                { name: 'Create & Join Rooms with 6-Digit Code', guest: false, account: true },
+                { name: 'Real-Time Squad Decision Voting', guest: false, account: true },
+                { name: '1-on-1 Direct Messaging (DMs)', guest: false, account: true },
+                { name: 'Save Favorite Spots to Profile', guest: false, account: true },
+                { name: 'Create Outing Plans & Capture Memories', guest: false, account: true },
+              ].map((row, idx) => (
+                <div key={idx} className="grid grid-cols-3 p-4 text-xs sm:text-sm border-b border-white/5 hover:bg-white/2 transition-colors items-center">
+                  <div className="font-medium text-slate-200">{row.name}</div>
+                  <div className="text-center">
+                    {row.guest === true ? (
+                      <span className="inline-block w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 font-bold text-xs">✓</span>
+                    ) : row.guest === false ? (
+                      <span className="inline-block w-5 h-5 rounded-full bg-white/5 text-slate-500 font-bold text-xs">✕</span>
+                    ) : (
+                      <span className="text-[11px] bg-cyan-500/10 text-cyan-300 px-2 py-0.5 rounded border border-cyan-500/20 font-mono">{row.guest}</span>
+                    )}
+                  </div>
+                  <div className="text-center">
+                    {row.account === true ? (
+                      <span className="inline-block w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 font-bold text-xs">✓</span>
+                    ) : (
+                      <span className="text-[11px] bg-primary-500/10 text-primary-300 px-2 py-0.5 rounded border border-primary-500/20 font-mono">{row.account}</span>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
