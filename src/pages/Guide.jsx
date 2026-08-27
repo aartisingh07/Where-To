@@ -405,15 +405,12 @@ const Guide = () => {
                 </div>
                 <div>
                   <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">Social Hub</span>
-                  <h2 className="text-2xl font-display font-bold text-white">Direct Messages & Community Feed</h2>
+                  <h2 className="text-2xl font-display font-bold text-white">Direct Messages & Profile Memories</h2>
                 </div>
               </div>
               <div className="flex gap-2">
-                <Link to="/messages" className="btn-secondary !px-3 !py-1.5 text-xs flex items-center gap-1.5">
-                  <FiMessageSquare size={14} /> DMs
-                </Link>
-                <Link to="/feed" className="btn-primary !px-3 !py-1.5 text-xs flex items-center gap-1.5">
-                  <FiImage size={14} /> Feed
+                <Link to="/messages" className="btn-primary !px-4 !py-2 text-xs flex items-center gap-1.5">
+                  <FiMessageSquare size={14} /> Open DMs
                 </Link>
               </div>
             </div>
@@ -430,10 +427,10 @@ const Guide = () => {
 
               <div className="p-4 rounded-xl bg-white/5 border border-white/5 space-y-2">
                 <h3 className="font-display font-bold text-white text-base flex items-center gap-2">
-                  📸 Community Memories Feed
+                  📸 Profile Photo Memories
                 </h3>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Share photos from your outings, write diary captions, like posts with pop micro-animations, read community comments, and browse the active members story bar.
+                  Post and preserve photos from your outings on your profile page. Outing memories are stored privately on your profile for visitors and friends who view your profile account.
                 </p>
               </div>
             </div>

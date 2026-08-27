@@ -552,58 +552,19 @@ const UserHome = ({ user }) => {
     }
   };
 
-  const quickActions = [
-    {
-      emoji: '🏠',
-      label: 'Create Hangout Room',
-      desc: 'Start a room, invite squad & decide together',
-      to: '/create-room',
-      color: 'from-purple-500/20 to-pink-500/10 hover:border-primary-500/40 hover:shadow-glow-purple',
-      badge: <span className="px-2 py-0.5 rounded-full bg-primary-100 dark:bg-primary-500/20 text-primary-700 dark:text-primary-300 text-[10px] font-extrabold uppercase border border-primary-300 dark:border-primary-500/30">Real-time</span>,
-      iconColor: 'bg-primary-100 dark:bg-primary-500/20 text-primary-700 dark:text-primary-300',
-    },
-    {
-      emoji: '🔑',
-      label: 'Join with Room Code',
-      desc: 'Enter a 6-digit code to join active lobby',
-      to: '/join-room',
-      color: 'from-indigo-500/20 to-blue-500/10 hover:border-indigo-500/40 hover:shadow-glow-cyan',
-      badge: <span className="px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 text-[10px] font-extrabold uppercase border border-indigo-300 dark:border-indigo-500/30">Use Code</span>,
-      iconColor: 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300',
-    },
-    {
-      emoji: '💬',
-      label: 'Direct Chats & DMs',
-      desc: 'Message friends privately without joining codes',
-      to: '/chats',
-      color: 'from-teal-500/20 to-cyan-500/10 hover:border-teal-500/40 hover:shadow-glow-teal',
-      badge: <span className="px-2 py-0.5 rounded-full bg-teal-100 dark:bg-teal-500/20 text-teal-800 dark:text-teal-300 text-[10px] font-extrabold uppercase border border-teal-300 dark:border-teal-500/30">Private Chat</span>,
-      iconColor: 'bg-teal-100 dark:bg-teal-500/20 text-teal-800 dark:text-teal-300',
-    },
-    {
-      emoji: '❤️',
-      label: 'Saved Favorite Places',
-      desc: 'View & route to your bookmarked spots',
-      to: '/saved-places',
-      color: 'from-rose-500/20 to-amber-500/10 hover:border-rose-500/40 hover:shadow-glow-pink',
-      badge: <span className="px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-300 text-[10px] font-extrabold uppercase border border-rose-300 dark:border-rose-500/30">Your List</span>,
-      iconColor: 'bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-300',
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-dark-900 bg-grid pt-24 pb-16 px-4">
-      {/* Background Ambient Glows */}
+      {/* Ambient Glows */}
       <div className="fixed top-20 left-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="fixed top-40 right-1/4 w-96 h-96 bg-neon-teal/10 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="max-w-5xl mx-auto relative z-10 space-y-8">
+      <div className="max-w-5xl mx-auto relative z-10 space-y-10">
 
         {/* Dynamic Welcome Hero Panel */}
-        <div className="glass-card p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-white/10 relative overflow-hidden shadow-2xl animate-fade-in">
+        <div className="glass-card p-6 sm:p-8 rounded-3xl border border-white/10 relative overflow-hidden shadow-2xl animate-fade-in">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
             
-            {/* User Greeting Profile */}
+            {/* User Profile */}
             <div className="flex items-center gap-5">
               <div className="relative group">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-primary-500 via-accent-500 to-neon-teal p-1 shadow-glow-purple flex-shrink-0">
@@ -624,21 +585,21 @@ const UserHome = ({ user }) => {
               </div>
 
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-500/10 border border-primary-300 dark:border-primary-500/20 text-primary-700 dark:text-primary-300 text-xs font-bold mb-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-300 text-xs font-bold mb-2">
                   <span>{greetingEmoji} {greeting}</span>
                   <span>·</span>
-                  <span className="text-teal-700 dark:text-neon-teal font-extrabold">Where To?</span>
+                  <span className="text-neon-teal font-extrabold">Where To? Dashboard</span>
                 </div>
-                <h1 className="font-display font-extrabold text-2xl sm:text-4xl text-slate-900 dark:text-white">
+                <h1 className="font-display font-extrabold text-2xl sm:text-4xl text-white">
                   Welcome back, <span className="text-gradient">{user?.username || 'Explorer'}</span>! 👋
                 </h1>
-                <p className="text-slate-600 dark:text-white/50 text-sm mt-1">
-                  Plan an outing, join a room, or chat with your friends in real-time.
+                <p className="text-white/50 text-sm mt-1">
+                  Discover places solo, or jump into live squad rooms & DMs.
                 </p>
               </div>
             </div>
 
-            {/* Quick Action Badge Bar */}
+            {/* Quick Action Button */}
             <div className="flex items-center gap-3 w-full md:w-auto justify-end">
               <Link
                 to="/explore"
@@ -660,7 +621,7 @@ const UserHome = ({ user }) => {
                 <span className="text-2xl animate-bounce">💬</span>
                 <div className="text-left">
                   <p className="text-xs text-primary-400 font-bold uppercase tracking-wider">Unread Direct Messages</p>
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white mt-0.5">
+                  <h4 className="text-sm font-bold text-white mt-0.5">
                     You have <span className="text-neon-teal font-extrabold">{unreadDMsCount}</span> new unread chat message{unreadDMsCount !== 1 ? 's' : ''}!
                   </h4>
                 </div>
@@ -676,109 +637,236 @@ const UserHome = ({ user }) => {
           </div>
         )}
 
-        {/* Dynamic Interactive Quick Actions Grid */}
-        <div>
-          <h2 className="font-display font-bold text-xl text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-            <span>⚡ Quick Actions</span>
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {quickActions.map((action) => (
-              <Link key={action.to} to={action.to} className="group block">
-                <div className={`glass-card p-5 rounded-2xl border border-slate-200 dark:border-white/10 bg-gradient-to-b ${action.color} transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-xl h-full flex flex-col justify-between`}>
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className={`w-12 h-12 rounded-xl ${action.iconColor} flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-200 shadow-sm`}>
-                        {action.emoji}
-                      </div>
-                      {action.badge}
-                    </div>
-                    <h3 className="font-display font-bold text-slate-900 dark:text-white text-base mb-1 group-hover:text-primary-400 transition-colors">
-                      {action.label}
-                    </h3>
-                    <p className="text-slate-600 dark:text-white/40 text-xs leading-relaxed">
-                      {action.desc}
-                    </p>
-                  </div>
-                  <div className="mt-4 flex items-center justify-end text-slate-400 dark:text-white/30 group-hover:text-primary-400 transition-colors">
-                    <FiArrowRight className="group-hover:translate-x-1 transition-transform" size={18} />
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Explore Outings Categories Section */}
-        <div className="glass-card p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-white/10 animate-slide-up">
-          <div className="flex items-center justify-between mb-6">
+        {/* ─── MAIN PILLAR 1: INSTANT PLACE EXPLORER (Public / Solo Discovery) ─── */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-neon-teal">Outing Recommendation Categories</span>
-              <h3 className="font-display font-bold text-xl sm:text-2xl text-slate-900 dark:text-white mt-0.5">
-                Who are you hanging out with today?
-              </h3>
+              <span className="text-xs font-bold uppercase tracking-wider text-cyan-400">Pillar 1 Feature</span>
+              <h2 className="font-display font-bold text-2xl text-white flex items-center gap-2">
+                <span>📍 Place Exploration & Favorites</span>
+              </h2>
             </div>
-            <Link to="/explore" className="text-xs text-primary-400 hover:text-primary-300 font-bold hidden sm:flex items-center gap-1">
-              Explore All <FiArrowRight size={14} />
+            <Link to="/explore" className="text-xs text-cyan-400 hover:text-cyan-300 font-bold flex items-center gap-1">
+              Open Explorer <FiArrowRight size={14} />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              {
-                id: 'friends',
-                emoji: '👥',
-                title: 'Friends Squad',
-                subtitle: 'Malls, Concerts, Trekking & Street Food',
-                color: 'from-teal-500/10 to-cyan-500/10 border-teal-500/30 hover:border-teal-500',
-                to: '/explore',
-              },
-              {
-                id: 'couples',
-                emoji: '❤️',
-                title: 'Couples Romantic',
-                subtitle: 'Beaches, Cozy Cafes, Fine Dining & Sunsets',
-                color: 'from-pink-500/10 to-rose-500/10 border-pink-500/30 hover:border-pink-500',
-                to: '/explore',
-              },
-              {
-                id: 'family',
-                emoji: '👨‍👩‍👧‍👦',
-                title: 'Family Outings',
-                subtitle: 'Theme Parks, Malls, Zoos & Picnic Lawns',
-                color: 'from-amber-500/10 to-yellow-500/10 border-amber-500/30 hover:border-amber-500',
-                to: '/explore',
-              },
-            ].map((cat) => (
-              <Link
-                key={cat.id}
-                to={cat.to}
-                className={`p-5 rounded-2xl border bg-gradient-to-br ${cat.color} transition-all duration-300 hover:-translate-y-1 group flex flex-col justify-between cursor-pointer`}
-              >
-                <div>
-                  <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">{cat.emoji}</div>
-                  <h4 className="font-display font-bold text-slate-900 dark:text-white text-lg mb-1">{cat.title}</h4>
-                  <p className="text-slate-600 dark:text-white/50 text-xs leading-relaxed">{cat.subtitle}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Explore Spots */}
+            <Link to="/explore" className="glass-card p-6 border-cyan-500/30 hover:border-cyan-400/60 shadow-glow-teal/10 transition-all duration-300 group flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                    🧭
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-bold uppercase tracking-wider">
+                    Instant Search
+                  </span>
                 </div>
-                <div className="mt-4 flex items-center justify-between text-xs font-bold text-primary-400 group-hover:translate-x-1 transition-transform">
-                  <span>Discover Spots</span>
-                  <FiArrowRight size={14} />
+                <h3 className="font-display font-bold text-xl text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                  Explore Nearby Places
+                </h3>
+                <p className="text-white/60 text-xs leading-relaxed mb-4">
+                  Discover local cafes, scenic viewpoints, restaurants, and study spots with instant GPS distance, mood filters, and Google Maps ratings.
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 text-xs font-bold text-cyan-400 group-hover:translate-x-1 transition-transform">
+                <span>Start Exploring</span>
+                <FiArrowRight size={14} />
+              </div>
+            </Link>
+
+            {/* Saved Favorite Places */}
+            <Link to="/saved-places" className="glass-card p-6 border-rose-500/30 hover:border-rose-400/60 shadow-glow-pink/10 transition-all duration-300 group flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                    ❤️
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-bold uppercase tracking-wider">
+                    Your Bookmarks
+                  </span>
                 </div>
+                <h3 className="font-display font-bold text-xl text-white mb-2 group-hover:text-rose-300 transition-colors">
+                  Saved Favorite Places
+                </h3>
+                <p className="text-white/60 text-xs leading-relaxed mb-4">
+                  Access your bookmarked spots, view coordinate tags, and launch 1-click Google Maps directions anytime.
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 text-xs font-bold text-rose-400 group-hover:translate-x-1 transition-transform">
+                <span>View Saved List</span>
+                <FiArrowRight size={14} />
+              </div>
+            </Link>
+          </div>
+
+          {/* Outing Categories Bar */}
+          <div className="glass-card p-6 rounded-3xl border border-white/10 mt-4">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">Curated Collections</span>
+                <h3 className="font-display font-bold text-lg text-white">
+                  Who are you hanging out with today?
+                </h3>
+              </div>
+              <Link to="/explore" className="text-xs text-cyan-400 hover:text-cyan-300 font-bold hidden sm:flex items-center gap-1">
+                Explore All <FiArrowRight size={14} />
               </Link>
-            ))}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                {
+                  id: 'friends',
+                  emoji: '👥',
+                  title: 'Friends Squad',
+                  subtitle: 'Malls, Concerts, Street Food',
+                  color: 'from-teal-500/10 to-cyan-500/10 border-teal-500/30 hover:border-teal-400',
+                  to: '/explore',
+                },
+                {
+                  id: 'couples',
+                  emoji: '❤️',
+                  title: 'Couples Romantic',
+                  subtitle: 'Beaches, Cozy Cafes, Sunsets',
+                  color: 'from-pink-500/10 to-rose-500/10 border-pink-500/30 hover:border-pink-400',
+                  to: '/explore',
+                },
+                {
+                  id: 'family',
+                  emoji: '👨‍👩‍👧‍👦',
+                  title: 'Family Outings',
+                  subtitle: 'Theme Parks, Zoos, Picnic Lawns',
+                  color: 'from-amber-500/10 to-yellow-500/10 border-amber-500/30 hover:border-amber-400',
+                  to: '/explore',
+                },
+              ].map((cat) => (
+                <Link
+                  key={cat.id}
+                  to={cat.to}
+                  className={`p-4 rounded-2xl border bg-gradient-to-br ${cat.color} transition-all duration-300 hover:-translate-y-1 group flex flex-col justify-between cursor-pointer`}
+                >
+                  <div>
+                    <div className="text-3xl mb-2 group-hover:scale-110 transition-transform">{cat.emoji}</div>
+                    <h4 className="font-display font-bold text-white text-base mb-0.5">{cat.title}</h4>
+                    <p className="text-white/50 text-[11px] leading-relaxed">{cat.subtitle}</p>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between text-xs font-bold text-cyan-400 group-hover:translate-x-1 transition-transform">
+                    <span>Browse Category</span>
+                    <FiArrowRight size={12} />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ─── MAIN PILLAR 2: SQUAD COLLABORATION & SOCIAL (Rooms & DMs) ─── */}
+        <div className="space-y-4 pt-4 border-t border-white/5">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-primary-400">Pillar 2 Feature</span>
+              <h2 className="font-display font-bold text-2xl text-white flex items-center gap-2">
+                <span>👥 Squad Hangout Rooms & Direct DMs</span>
+              </h2>
+            </div>
+            <div className="flex gap-3">
+              <Link to="/create-room" className="text-xs text-primary-400 hover:text-primary-300 font-bold flex items-center gap-1">
+                Create Room <FiArrowRight size={14} />
+              </Link>
+              <Link to="/messages" className="text-xs text-teal-400 hover:text-teal-300 font-bold flex items-center gap-1">
+                Direct DMs <FiArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* Create Room */}
+            <Link to="/create-room" className="glass-card p-6 border-primary-500/30 hover:border-primary-400/60 shadow-glow-purple/10 transition-all duration-300 group flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-primary-500/10 border border-primary-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                    🏠
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-primary-500/20 text-primary-300 text-[10px] font-bold uppercase tracking-wider">
+                    Real-time
+                  </span>
+                </div>
+                <h3 className="font-display font-bold text-lg text-white mb-2 group-hover:text-primary-300 transition-colors">
+                  Create Hangout Room
+                </h3>
+                <p className="text-white/60 text-xs leading-relaxed mb-4">
+                  Start a room, generate a 6-digit code, compute squad midpoint, & vote on games & movies.
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 text-xs font-bold text-primary-400 group-hover:translate-x-1 transition-transform">
+                <span>Create Room</span>
+                <FiArrowRight size={14} />
+              </div>
+            </Link>
+
+            {/* Join Room */}
+            <Link to="/join-room" className="glass-card p-6 border-indigo-500/30 hover:border-indigo-400/60 shadow-glow-cyan/10 transition-all duration-300 group flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                    🔑
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-bold uppercase tracking-wider">
+                    Use Code
+                  </span>
+                </div>
+                <h3 className="font-display font-bold text-lg text-white mb-2 group-hover:text-indigo-300 transition-colors">
+                  Join with Room Code
+                </h3>
+                <p className="text-white/60 text-xs leading-relaxed mb-4">
+                  Enter a 6-digit code or browse active public lobbies to join your squad's live session.
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-400 group-hover:translate-x-1 transition-transform">
+                <span>Join Lobby</span>
+                <FiArrowRight size={14} />
+              </div>
+            </Link>
+
+            {/* Direct DMs */}
+            <Link to="/messages" className="glass-card p-6 border-teal-500/30 hover:border-teal-400/60 shadow-glow-teal/10 transition-all duration-300 group flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                    💬
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-300 text-[10px] font-bold uppercase tracking-wider">
+                    Private Chat
+                  </span>
+                </div>
+                <h3 className="font-display font-bold text-lg text-white mb-2 group-hover:text-teal-300 transition-colors">
+                  Direct Chats & DMs
+                </h3>
+                <p className="text-white/60 text-xs leading-relaxed mb-4">
+                  Search friends by handle, send chat requests, and message privately in real-time.
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 text-xs font-bold text-teal-400 group-hover:translate-x-1 transition-transform">
+                <span>Open Chats</span>
+                <FiArrowRight size={14} />
+              </div>
+            </Link>
           </div>
         </div>
 
         {/* Dashboard Grid: Active Lobbies & Upcoming Outings */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start pt-4 border-t border-white/5">
           
           {/* Active & Recent Lobbies */}
-          <div className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-white/10 animate-slide-up h-full flex flex-col justify-between">
+          <div className="glass-card p-6 rounded-3xl border border-white/10 animate-slide-up h-full flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                <h3 className="font-display font-bold text-lg text-white flex items-center gap-2">
                   <span>🏠</span> Your Active & Recent Lobbies
                 </h3>
-                <span className="text-[11px] text-slate-500 dark:text-white/40 font-medium">1-Click Rejoin</span>
+                <span className="text-[11px] text-white/40 font-medium">1-Click Rejoin</span>
               </div>
 
               {loading ? (
@@ -786,10 +874,10 @@ const UserHome = ({ user }) => {
                   <div className="w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
                 </div>
               ) : activeRooms.length === 0 ? (
-                <div className="text-center py-8 px-4 bg-slate-100 dark:bg-dark-800/80 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
+                <div className="text-center py-8 px-4 bg-dark-800/80 rounded-2xl border border-white/10 shadow-sm">
                   <span className="text-3xl block mb-2">🎮</span>
-                  <p className="text-slate-900 dark:text-white text-sm font-bold mb-1">No active lobbies yet</p>
-                  <p className="text-slate-600 dark:text-white/50 text-xs mb-4 font-medium">Create a room or join your friends with a 6-digit code!</p>
+                  <p className="text-white text-sm font-bold mb-1">No active lobbies yet</p>
+                  <p className="text-white/50 text-xs mb-4 font-medium">Create a room or join your friends with a 6-digit code!</p>
                   <Link to="/create-room" className="btn-primary py-2 px-4 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 shadow-sm">
                     <span>Create Room</span>
                     <FiArrowRight size={14} />
@@ -801,24 +889,24 @@ const UserHome = ({ user }) => {
                     const isMember = room.isCurrentMember !== false;
 
                     return (
-                      <div key={room._id} className="p-4 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-100/60 dark:bg-dark-800/80 hover:border-primary-500/40 transition-all duration-300 flex items-center justify-between gap-4">
+                      <div key={room._id} className="p-4 rounded-2xl border border-white/10 bg-dark-800/80 hover:border-primary-500/40 transition-all duration-300 flex items-center justify-between gap-4">
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <h4 className="font-display font-bold text-slate-900 dark:text-white text-sm truncate">
+                            <h4 className="font-display font-bold text-white text-sm truncate">
                               {room.name}
                             </h4>
                             {isMember ? (
-                              <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">Active</span>
+                              <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Active</span>
                             ) : (
-                              <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">Recently Left</span>
+                              <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20">Recently Left</span>
                             )}
                           </div>
                           {room.purpose && (
-                            <p className="text-primary-600 dark:text-primary-300 text-xs font-semibold truncate mb-1">
+                            <p className="text-primary-300 text-xs font-semibold truncate mb-1">
                               🎯 {room.purpose}
                             </p>
                           )}
-                          <p className="text-slate-500 dark:text-white/40 text-[11px]">
+                          <p className="text-white/40 text-[11px]">
                             Code: <span className="font-mono font-bold text-primary-500">{room.code}</span> · {room.members?.length || 1} member{room.members?.length !== 1 ? 's' : ''}
                           </p>
                         </div>
@@ -847,13 +935,13 @@ const UserHome = ({ user }) => {
           </div>
 
           {/* Upcoming Outings */}
-          <div className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-white/10 animate-slide-up h-full flex flex-col justify-between">
+          <div className="glass-card p-6 rounded-3xl border border-white/10 animate-slide-up h-full flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                <h3 className="font-display font-bold text-lg text-white flex items-center gap-2">
                   <span>📅</span> Upcoming Outings
                 </h3>
-                <span className="text-[11px] text-slate-500 dark:text-white/40 font-medium">Scheduled Plans</span>
+                <span className="text-[11px] text-white/40 font-medium">Scheduled Plans</span>
               </div>
 
               {loading ? (
@@ -861,10 +949,10 @@ const UserHome = ({ user }) => {
                   <div className="w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
                 </div>
               ) : plans.length === 0 ? (
-                <div className="text-center py-8 px-4 bg-slate-100 dark:bg-dark-800/80 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
+                <div className="text-center py-8 px-4 bg-dark-800/80 rounded-2xl border border-white/10 shadow-sm">
                   <span className="text-3xl block mb-2">🏖️</span>
-                  <p className="text-slate-900 dark:text-white text-sm font-bold mb-1">No scheduled outings yet</p>
-                  <p className="text-slate-600 dark:text-white/50 text-xs mb-4 font-medium">Propose a spot in an active hangout room lounge!</p>
+                  <p className="text-white text-sm font-bold mb-1">No scheduled outings yet</p>
+                  <p className="text-white/50 text-xs mb-4 font-medium">Propose a spot in an active hangout room lounge!</p>
                   <Link to="/explore" className="btn-secondary py-2 px-4 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 shadow-sm">
                     <span>Explore Spots</span>
                     <FiArrowRight size={14} />
@@ -873,28 +961,28 @@ const UserHome = ({ user }) => {
               ) : (
                 <div className="space-y-3">
                   {plans.slice(0, 3).map((plan) => (
-                    <div key={plan._id} className="p-4 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-100/60 dark:bg-dark-800/80 hover:border-emerald-500/40 transition-all duration-300">
+                    <div key={plan._id} className="p-4 rounded-2xl border border-white/10 bg-dark-800/80 hover:border-emerald-500/40 transition-all duration-300">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">Confirmed</span>
-                          <h4 className="font-display font-bold text-slate-900 dark:text-white text-sm mt-1 truncate">
+                          <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Confirmed</span>
+                          <h4 className="font-display font-bold text-white text-sm mt-1 truncate">
                             {plan.placeName}
                           </h4>
                         </div>
-                        <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                        <span className="text-xs font-bold text-emerald-400 flex items-center gap-1">
                           <FiClock size={12} className="animate-pulse" />
                           {getCountdownString(plan.dateTime)}
                         </span>
                       </div>
 
                       {plan.address && (
-                        <p className="text-slate-600 dark:text-white/50 text-xs truncate mb-2">
+                        <p className="text-white/50 text-xs truncate mb-2">
                           📍 {plan.address}
                         </p>
                       )}
 
-                      <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-white/5 text-xs">
-                        <span className="text-slate-500 dark:text-white/40 font-medium">
+                      <div className="flex items-center justify-between pt-2 border-t border-white/5 text-xs">
+                        <span className="text-white/40 font-medium">
                           ⏰ {new Date(plan.dateTime).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
                         </span>
 
@@ -902,7 +990,7 @@ const UserHome = ({ user }) => {
                           {(plan.creator === user?._id || plan.creator?._id === user?._id) && (
                             <button
                               onClick={() => handleCancelPlan(plan._id)}
-                              className="text-red-500 hover:text-red-600 text-[11px] font-bold cursor-pointer"
+                              className="text-red-500 hover:text-red-400 text-[11px] font-bold cursor-pointer"
                             >
                               Cancel
                             </button>
@@ -912,7 +1000,7 @@ const UserHome = ({ user }) => {
                               href={plan.mapsLink}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-emerald-600 dark:text-emerald-400 hover:underline font-bold flex items-center gap-1 text-xs"
+                              className="text-emerald-400 hover:underline font-bold flex items-center gap-1 text-xs"
                             >
                               Directions <FiExternalLink size={12} />
                             </a>

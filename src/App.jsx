@@ -10,7 +10,6 @@ import CreateRoom from './pages/CreateRoom';
 import JoinRoom from './pages/JoinRoom';
 import Room from './pages/Room';
 import DirectMessages from './pages/DirectMessages';
-import Feed from './pages/Feed';
 import OAuthSuccess from './pages/OAuthSuccess';
 import SavedPlaces from './pages/SavedPlaces';
 import Guide from './pages/Guide';
@@ -67,14 +66,6 @@ function App() {
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route
-            path="/feed"
-            element={
-              <ProtectedRoute>
-                <Feed />
-              </ProtectedRoute>
-            }
-          />
           <Route path="/explore" element={<Explore />} />
           <Route
             path="/login"

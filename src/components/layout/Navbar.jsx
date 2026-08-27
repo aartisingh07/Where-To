@@ -133,13 +133,6 @@ const Navbar = () => {
     { path: '/', label: 'Home', icon: <FiHome size={18} /> },
   ];
 
-  if (isAuthenticated) {
-    navLinks.push(
-      { path: '/feed', label: 'Feed', icon: <FiImage size={18} /> },
-      { path: '/join-room', label: 'Join Room', icon: <FiUsers size={18} /> }
-    );
-  }
-
   navLinks.push(
     { path: '/explore', label: 'Explore', icon: <FiCompass size={18} /> }
   );
