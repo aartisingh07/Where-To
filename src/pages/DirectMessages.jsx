@@ -7,6 +7,39 @@ import { toast } from 'react-toastify';
 import { handleAvatarError } from '../utils/avatarHelper';
 import { FiSend, FiUser, FiMessageSquare, FiClock, FiPlusCircle, FiCheck, FiX, FiTrash2, FiEdit2, FiArrowLeft, FiUserX, FiSearch } from 'react-icons/fi';
 
+const getDateDividerLabel = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  const now = new Date();
+
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  const targetDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+  if (targetDate.getTime() === today.getTime()) {
+    return 'Today';
+  } else if (targetDate.getTime() === yesterday.getTime()) {
+    return 'Yesterday';
+  } else {
+    return date.toLocaleDateString([], {
+      weekday: 'long',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  }
+};
+
+const formatMessageTime = (dateString) => {
+  if (!dateString) return '';
+  return new Date(dateString).toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};
+
 const DirectMessages = () => {
   const { user } = useAuth();
   const { socket } = useSocket();
@@ -614,12 +647,29 @@ const DirectMessages = () => {
                   <p className="text-xs mt-1 text-white/10">Start the conversation with {activeChat.user.username}.</p>
                 </div>
               ) : (
-                messages.map((msg) => {
-                  const isMe = msg.sender.toString() === user?._id.toString();
-                  const isEditable = Date.now() - new Date(msg.createdAt).getTime() < 30 * 60 * 1000;
+                (() => {
+                  let lastDateLabel = null;
+                  return messages.map((msg) => {
+                    const dateLabel = getDateDividerLabel(msg.createdAt);
+                    const showDateDivider = Boolean(dateLabel && dateLabel !== lastDateLabel);
+                    if (showDateDivider) {
+                      lastDateLabel = dateLabel;
+                    }
+                    const isMe = msg.sender.toString() === user?._id.toString();
+                    const isEditable = Date.now() - new Date(msg.createdAt).getTime() < 30 * 60 * 1000;
 
-                  return (
-                    <div key={msg._id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'} group relative mb-2`}>
+                    return (
+                      <div key={msg._id} className="w-full">
+                        {/* WhatsApp-Style Centered Date Divider */}
+                        {showDateDivider && (
+                          <div className="flex items-center justify-center my-4 animate-fade-in">
+                            <span className="px-3.5 py-1 rounded-full bg-dark-800/90 border border-white/10 text-white/70 text-[11px] font-semibold tracking-wide shadow-md flex items-center gap-1.5">
+                              <span>📅</span> {dateLabel}
+                            </span>
+                          </div>
+                        )}
+
+                        <div className={`flex flex-col ${isMe ? 'items-end' : 'items-start'} group relative mb-2`}>
                       <div className={`flex items-center gap-1.5 sm:gap-2 max-w-[88%] sm:max-w-[75%] ${isMe ? 'flex-row-reverse' : 'flex-row'}`}>
                         
                         {/* Action buttons (only for own messages) */}
@@ -699,12 +749,14 @@ const DirectMessages = () => {
                       </div>
 
                       <span className="text-[9px] text-white/20 font-mono mt-1 px-1">
-                        {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        {formatMessageTime(msg.createdAt)}
                       </span>
                     </div>
+                  </div>
                   );
-                })
-              )}
+                });
+              })()
+            )}
               <div ref={messagesEndRef} />
             </div>
 
