@@ -850,6 +850,56 @@ const UserHome = ({ user }) => {
                   </div>
                 </Link>
               </div>
+
+              {/* Squad Room Multi-Lounges Showcase */}
+              <div className="pt-2">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-bold uppercase tracking-wider text-primary-400">Live Room Lounges & Tools</span>
+                  <Link to="/create-room" className="text-xs text-primary-400 hover:underline font-bold">Start Session →</Link>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {[
+                    {
+                      emoji: '🎯',
+                      title: 'Midpoint Finder',
+                      subtitle: 'Auto-computes central squad spot',
+                      color: 'from-purple-500/10 to-indigo-500/10 border-purple-500/30 hover:border-purple-400',
+                      to: '/create-room',
+                    },
+                    {
+                      emoji: '🎬',
+                      title: 'Watch & Games',
+                      subtitle: 'TMDB movie & game polling',
+                      color: 'from-indigo-500/10 to-blue-500/10 border-indigo-500/30 hover:border-indigo-400',
+                      to: '/create-room',
+                    },
+                    {
+                      emoji: '📚',
+                      title: 'Study Lounge',
+                      subtitle: 'Synced Pomodoro timer & todo',
+                      color: 'from-emerald-500/10 to-teal-500/10 border-emerald-500/30 hover:border-emerald-400',
+                      to: '/create-room',
+                    },
+                  ].map((lounge, idx) => (
+                    <Link
+                      key={idx}
+                      to={lounge.to}
+                      className={`p-3.5 rounded-xl border bg-gradient-to-br ${lounge.color} transition-all duration-300 hover:-translate-y-0.5 group flex flex-col justify-between cursor-pointer`}
+                    >
+                      <div>
+                        <div className="text-2xl mb-1.5 group-hover:scale-110 transition-transform">{lounge.emoji}</div>
+                        <h4 className="font-display font-bold text-white text-sm mb-0.5">{lounge.title}</h4>
+                        <p className="text-white/50 text-[10px] leading-relaxed">{lounge.subtitle}</p>
+                      </div>
+                      <div className="mt-2 text-[11px] font-bold text-primary-400 group-hover:translate-x-1 transition-transform flex items-center justify-between">
+                        <span>Launch</span>
+                        <FiArrowRight size={10} />
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
