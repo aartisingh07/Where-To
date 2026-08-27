@@ -652,8 +652,8 @@ const Profile = () => {
               <div>
                 <label className="block text-xs font-semibold text-white/50 mb-2 uppercase tracking-wider flex justify-between">
                   <span>About Me</span>
-                  <span className={`${editForm.bio.trim().split(/\s+/).filter(Boolean).length > 300 ? 'text-red-400 font-bold' : 'text-white/30'}`}>
-                    {editForm.bio.trim().split(/\s+/).filter(Boolean).length} / 300 words
+                  <span className={`${editForm.bio.length > 300 ? 'text-red-400 font-bold' : 'text-white/30'}`}>
+                    {editForm.bio.length} / 300 characters
                   </span>
                 </label>
                 <textarea
@@ -661,6 +661,7 @@ const Profile = () => {
                   onChange={(e) => setEditForm(prev => ({ ...prev, bio: e.target.value }))}
                   placeholder="Tell others about yourself, your favorite travel styles, vibes, etc..."
                   rows={3}
+                  maxLength={300}
                   className="input-field py-2 resize-none text-xs"
                 />
               </div>
