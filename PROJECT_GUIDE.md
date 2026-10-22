@@ -297,7 +297,7 @@ flowchart TD
     
     OutingHandler -->|Centroid Places Search| Geoapify
     Cron -->|Query 24h Plans| MongoDB
-    Cron -->|Emit notification-{userId}| Socket_Handlers
+    Cron -->|Emit notification by userId| Socket_Handlers
 ```
 
 ### Communication Protocols Breakdown
